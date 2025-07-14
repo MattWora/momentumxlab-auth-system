@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | MomentumXLab</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
+
+  <!-- Font & Style -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: #0d0d0d;
+      color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    input {
+      padding: 10px;
+      margin: 10px;
+      width: 280px;
+      background: #1f1f1f;
+      color: #fff;
+      border: 1px solid #888;
+    }
+    button {
+      padding: 10px 20px;
+      background: linear-gradient(45deg, #222, #444);
+      color: #ffd700;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+    button:hover {
+      background: #ffd700;
+      color: #111;
+    }
+    a { color: #00baff; }
+  </style>
+</head>
+<body>
+
+  <h2>Login to Your Account</h2>
+  <input type="email" id="login-email" placeholder="Email" />
+  <input type="password" id="login-password" placeholder="Password" />
+  <button onclick="login()">Log In</button>
+  <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNfqO5DKWuWzikiru1Mv0SuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2",
+      storageBucket: "momentumxlab-37ce2.appspot.com",
+      messagingSenderId: "694396547272",
+      appId: "1:694396547272:web:609d61458591cff3ccb1",
+      measurementId: "G-WD2CC9GPB8"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function login() {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert("Login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch(error => alert(error.message));
+    }
+  </script>
+
+</body>
+</html>
