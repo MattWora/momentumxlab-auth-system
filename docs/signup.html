@@ -8,7 +8,7 @@
     body {
       font-family: 'Orbitron', sans-serif;
       background: linear-gradient(145deg, #1c1c1c, #2e2e2e);
-      color: #f2f2f2;
+      color: #f0f0f0;
       text-align: center;
       padding-top: 60px;
     }
@@ -38,6 +38,7 @@
       text-transform: uppercase;
       box-shadow: 0 0 10px #0af;
       cursor: pointer;
+      transition: 0.3s;
     }
     button:hover {
       background-color: #08d;
@@ -55,6 +56,7 @@
   <button onclick="signup()">Sign Up</button>
   <p id="status"></p>
 
+  <!-- Firebase SDK via CDN -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -83,7 +85,7 @@
           });
         })
         .then(() => {
-          status.textContent = "Signup complete!";
+          status.textContent = "Signup complete! ✅";
           status.style.color = "lightgreen";
         })
         .catch(err => {
