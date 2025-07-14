@@ -22,7 +22,7 @@
       margin-top: 30px;
       font-size: 18px;
     }
-    button {
+    .button {
       margin-top: 20px;
       padding: 12px 20px;
       font-size: 16px;
@@ -33,19 +33,32 @@
       cursor: pointer;
       box-shadow: 0 0 10px #0af;
       transition: 0.3s;
+      display: inline-block;
     }
-    button:hover {
+    .button:hover {
       background-color: #08d;
       box-shadow: 0 0 16px #0cf;
+    }
+    #expiredMsg {
+      margin-top: 20px;
+      color: orange;
     }
   </style>
 </head>
 <body>
   <h1>MomentumXLab Dashboard</h1>
   <div id="content">Loading your subscription details...</div>
-  <button id="downloadBtn" onclick="download()">Download Pro-4 Trial</button>
+  <button class="button" id="downloadBtn" onclick="download()">Download Pro-4 Trial</button>
   <p id="downloadStatus"></p>
-  <button onclick="logout()">Logout</button>
+  <p id="expiredMsg"></p>
+  <button class="button" onclick="logout()">Logout</button>
+
+  <!-- Upgrade Plan Buttons -->
+  <div id="upgradeOptions" style="margin-top:40px; display:none;">
+    <h2>Upgrade Your Plan</h2>
+    <button class="button" onclick="upgradeTo('Pro-5')">Upgrade to Pro-5</button>
+    <button class="button" onclick="upgradeTo('Core-X')">Upgrade to Core-X</button>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -60,6 +73,10 @@
     firebase.initializeApp(firebaseConfig);
 
     let uid = null;
+    const stripeLinks = {
+      "Pro-5": "https://buy.stripe.com/test_Pro5Link",
+      "Core-X": "https://buy.stripe.com/test_CoreXLink"
+    };
 
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -75,9 +92,17 @@
               <p><strong>Expires:</strong> ${data.expires || "Not set"}</p>
             `;
 
+            const expiredDate = new Date(data.expires);
+            const now = new Date();
+
             if (data.pro4TrialDownloaded) {
               document.getElementById("downloadBtn").style.display = "none";
               document.getElementById("downloadStatus").textContent = "✅ คุณเคยดาวน์โหลด Pro-4 trial ไปแล้ว";
+            }
+
+            if (now > expiredDate && data.plan === "Free") {
+              document.getElementById("expiredMsg").textContent = "❌ ทดลองใช้ครบแล้ว กรุณาอัปเกรดแพ็กเกจเพื่อใช้งานต่อ";
+              document.getElementById("upgradeOptions").style.display = "block";
             }
           }
         });
@@ -87,16 +112,18 @@
     });
 
     function download() {
-      const link = "https://your-storage-url.com/pro-4-trial.zip"; // เปลี่ยนเป็นลิงก์ของจริง
+      const link = "https://your-storage-url.com/pro-4-trial.zip"; // เปลี่ยนเป็นลิงก์ของคุณ
       window.open(link, "_blank");
-
       firebase.firestore().collection("users").doc(uid).update({
         pro4TrialDownloaded: true,
         downloadedAt: new Date().toISOString()
       });
-
       document.getElementById("downloadBtn").style.display = "none";
       document.getElementById("downloadStatus").textContent = "✅ ดาวน์โหลดเรียบร้อยแล้ว";
+    }
+
+    function upgradeTo(plan) {
+      window.open(stripeLinks[plan], "_blank");
     }
 
     function logout() {
