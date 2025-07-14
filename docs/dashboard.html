@@ -97,11 +97,11 @@
 
             if (data.pro4TrialDownloaded) {
               document.getElementById("downloadBtn").style.display = "none";
-              document.getElementById("downloadStatus").textContent = "✅ คุณเคยดาวน์โหลด Pro-4 trial ไปแล้ว";
+              document.getElementById("downloadStatus").textContent = "✅ You've already downloaded the Pro-4 trial";
             }
 
             if (now > expiredDate && data.plan === "Free") {
-              document.getElementById("expiredMsg").textContent = "❌ ทดลองใช้ครบแล้ว กรุณาอัปเกรดแพ็กเกจเพื่อใช้งานต่อ";
+              document.getElementById("expiredMsg").textContent = "❌ Your trial has expired. Please upgrade your plan to continue";
               document.getElementById("upgradeOptions").style.display = "block";
             }
           }
@@ -119,7 +119,7 @@
         downloadedAt: new Date().toISOString()
       });
       document.getElementById("downloadBtn").style.display = "none";
-      document.getElementById("downloadStatus").textContent = "✅ ดาวน์โหลดเรียบร้อยแล้ว";
+      document.getElementById("downloadStatus").textContent = "✅ Download completed";
     }
 
     function upgradeTo(plan) {
