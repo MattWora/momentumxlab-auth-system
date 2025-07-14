@@ -35,37 +35,33 @@
   <button onclick="signup()">สมัครสมาชิก</button>
   <p id="status"></p>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+  <!-- ✅ Firebase SDK แบบ Non-Module -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // ✅ เชื่อม Firebase SDK อย่างถูกต้อง
+    // ✅ Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDeUaFNrqO5DKQWuw21kIru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2"
     };
-
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
 
-    // ✅ วางฟังก์ชัน signup หลังประกาศตัวแปร auth/db
     function signup() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       const status = document.getElementById("status");
 
-      auth.createUserWithEmailAndPassword(email, password)
+      firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userCred) => {
           const uid = userCred.user.uid;
-          return db.collection("users").doc(uid).set({
+          return firebase.firestore().collection("users").doc(uid).set({
             activated: true,
             plan: "Free",
             paidDate: new Date().toISOString(),
-            expires: "" // จะใส่ logic หมดอายุภายหลัง
+            expires: ""
           });
         })
         .then(() => {
