@@ -102,7 +102,6 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // 🔒 แสดงอีเมลผู้ใช้
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById("user-email").textContent = user.email;
@@ -111,14 +110,12 @@
       }
     });
 
-    // 🔓 Logout
     document.getElementById("logout-btn").onclick = () => {
       auth.signOut().then(() => {
         location.href = "index.html";
       });
     };
 
-    // 🎯 Download Trial
     document.getElementById("download-trial").onclick = () => {
       if (!auth.currentUser) {
         alert("Please log in to download the trial.");
@@ -127,8 +124,8 @@
       }
 
       const link = document.createElement('a');
-      link.href = "downloads/ApexXAU_Intelligent_Pro-4_Trial.ex5"; // ปรับ path ตรงนี้ถ้าไฟล์ชื่อไม่ตรง
-      link.download = "ApexXAU_Intelligent_Pro-4_Trial.ex5";
+      link.href = "downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5"; // Encoded spaces
+      link.download = "ApexXAU Intelligent Pro-4 Trial Version.ex5";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
