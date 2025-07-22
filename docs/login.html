@@ -161,16 +161,16 @@ btnLogin.addEventListener('click', async () => {
   btnLogin.disabled = true;
 
   try {
-    // ✅ 1) ให้ Auth จำ session ด้วย localStorage (ไม่หายข้ามหน้า)
+    // ✅ ให้ Firebase เก็บ session login ไว้ใน localStorage
     await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-    // ✅ 2) ดำเนินการล็อกอินตามปกติ
+    // ✅ ดำเนินการล็อกอิน
     await auth.signInWithEmailAndPassword(email, password);
 
-    // ✅ 3) Popup ยืนยันว่าล็อกอินสำเร็จ
-    await Swal.fire('Success', 'Login successful!', 'success');
+    // ✅ Popup แจ้งว่าล็อกอินสำเร็จ
+    await Swal.fire('Success','Login successful!','success');
 
-    // ✅ 4) Redirect ไปหน้าที่ส่งมาด้วย redirect=...
+    // ✅ Redirect กลับหน้าที่ระบุไว้ใน ?redirect=
     window.location.href = redirectUrl;
   }
   catch (err) {
