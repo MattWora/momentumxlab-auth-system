@@ -123,17 +123,16 @@
     </div>
   </footer>
 
-  <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
+    <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script>
-    // Base URL for your auth pages repo
+    // บล็อกนี้ให้วางต่อจากการ include SDK ด้านบนเลย
     const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
 
-    // Firebase config (replace with your own)
     const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      apiKey: "AIzaSy…",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2",
       storageBucket: "momentumxlab-37ce2.appspot.com",
@@ -141,38 +140,36 @@
       appId: "1:1234567890:web:abcdef"
     };
     firebase.initializeApp(firebaseConfig);
-
     const auth = firebase.auth();
 
-    // Handle subscribe button clicks
-    document.querySelectorAll('.pro4-checkout-btn').forEach(button => {
-      button.addEventListener('click', async e => {
-        e.preventDefault();
-        const plan = button.dataset.plan;
-        const user = auth.currentUser;
+    // รอให้ Firebase โหลดสถานะ user เสร็จ
+    firebase.auth().onAuthStateChanged(user => {
+      document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+        btn.onclick = async e => {
+          e.preventDefault();
+          const plan = btn.dataset.plan;
 
-        if (!user) {
-          // Prompt login or signup
-          const result = await Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          });
-
-          if (result.isConfirmed) {
-            window.location.href = `${AUTH_BASE_URL}/login.html`;
-          } else if (result.isDenied) {
-            window.location.href = `${AUTH_BASE_URL}/signup.html`;
+          if (!user) {
+            // ยังไม่ล็อกอิน → โชว์ SweetAlert แล้ว redirect
+            const result = await Swal.fire({
+              title: 'Please Sign Up or Login',
+              text: 'You must sign in before choosing a package.',
+              icon: 'info',
+              showDenyButton: true,
+              confirmButtonText: 'Login',
+              denyButtonText: 'Signup'
+            });
+            const me = encodeURIComponent(location.href);
+            if (result.isConfirmed) {
+              location.href = `${AUTH_BASE_URL}/login.html?redirect=${me}`;
+            } else if (result.isDenied) {
+              location.href = `${AUTH_BASE_URL}/signup.html?redirect=${me}`;
+            }
+          } else {
+            // ล็อกอินแล้ว → ไป confirm-order.html
+            location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
           }
-
-        } else {
-          // User is signed in → go to confirm-order
-          window.location.href = 
-            `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-        }
+        };
       });
     });
   </script>
