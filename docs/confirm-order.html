@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirm Order – MomentumXLab</title>
+  <title>Login – MomentumXLab</title>
+
   <link rel="icon" href="favicon.ico" type="image/x-icon"/>
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
@@ -16,180 +17,124 @@
       background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
       color: #f0f0f0;
       text-align: center;
-      padding: 40px 0;
+      padding: 60px 0;
     }
     h1 {
-      font-size: 28px;
+      font-size: 32px;
       color: #00ffff;
-      margin-bottom: 16px;
       text-shadow: 0 0 8px #0ff;
     }
-    .plan-summary {
-      margin-bottom: 24px;
-      font-size: 18px;
-    }
-    form {
-      display: inline-block;
-      text-align: left;
-      max-width: 360px;
-      width: 90%;
-    }
-    label {
-      display: block;
-      margin: 12px 0 6px;
-      font-size: 14px;
+    input, button {
+      width: 280px; max-width: 90%;
+      margin: 8px 0; padding: 12px;
+      font-size: 16px; border: none; border-radius: 6px;
     }
     input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 6px;
-      background: #333;
-      color: #fff;
+      background: #333; color: #fff;
       box-shadow: inset 0 0 6px #000;
     }
-    .note {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 4px;
-    }
-    .total {
-      margin: 24px 0;
-      font-size: 20px;
-      font-weight: bold;
-    }
     button {
-      width: 100%;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      text-transform: uppercase;
-      background-color: #0af;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #0af;
+      background-color: #0af; color: #fff;
+      font-weight: bold; text-transform: uppercase;
+      box-shadow: 0 0 10px #0af; cursor: pointer;
       transition: 0.3s;
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
+    button:disabled { opacity: 0.6; cursor: default; }
     button:hover:not(:disabled) {
-      background-color: #08d;
-      box-shadow: 0 0 16px #0cf;
+      background-color: #08d; box-shadow: 0 0 16px #0cf;
     }
     #status {
-      margin-top: 16px;
-      min-height: 1.2em;
-      color: #f90;
+      margin-top: 20px; min-height: 1.2em; color: orange;
+    }
+    .forgot-link { margin-top: 12px; font-size: 14px; }
+    .forgot-note {
+      font-size: 12px; color: #aaa; margin-top: 4px;
+    }
+    .signup-link {
+      margin-top: 20px; font-size: 14px;
+    }
+    .signup-link a {
+      color: #0af; text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
+  <h1>Log In to Your Account</h1>
+  <input id="email" type="email" placeholder="Email" required /><br/>
+  <input id="password" type="password" placeholder="Password" required /><br/>
+  <button id="btn-login">Log In</button>
 
-  <h1>Confirm Your Order</h1>
-
-  <div class="plan-summary" id="plan-summary">
-    <!-- Filled by JS -->
-    Loading your selection…
+  <div class="forgot-link">
+    <button id="btn-forgot">Forgot Password?</button>
+    <p class="forgot-note">
+      If you don’t see the reset email, please check your junk/spam folder.
+    </p>
   </div>
 
-  <form id="order-form">
-    <label for="fullName">Full Name</label>
-    <input type="text" id="fullName" placeholder="John Doe" required/>
+  <p id="status"></p>
+  <p class="signup-link">
+    Don't have an account? <a href="signup.html">Sign up here</a>.
+  </p>
 
-    <label for="phone">Phone Number</label>
-    <input type="tel" id="phone" placeholder="+1-234-567-8901" required/>
-
-    <label for="mt5Account">MT5 Account Number</label>
-    <input
-      type="text"
-      id="mt5Account"
-      placeholder="12345678"
-      pattern="\d+"
-      required
-    />
-    <p class="note">Your license will be valid only on this one MT5 account.</p>
-
-    <div class="total" id="order-total">
-      <!-- Filled by JS -->
-    </div>
-
-    <button type="submit" id="btn-confirm">Confirm Order</button>
-    <p id="status"></p>
-  </form>
-
-  <!-- Firebase & SweetAlert -->
+  <!-- SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // Firebase config (TODO: replace)
+    // Firebase config (MomentumXLab)
     const firebaseConfig = {
-      apiKey: "AIzaSy…",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      appId: "1:1234567890:web:abcdef"
+      apiKey:            "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain:        "momentumxlab-37ce2.firebaseapp.com",
+      projectId:         "momentumxlab-37ce2",
+      storageBucket:     "momentumxlab-37ce2.appspot.com",
+      messagingSenderId: "694369524772",
+      appId:             "1:694369524772:web:60961d9548591c1ff3ccb1"
     };
     firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    // Packages data
-    const packages = {
-      monthly: { name: 'Pro-4 Monthly', price: 29.99, period: '1 month' },
-      '6m':     { name: 'Pro-4 6-Month', price: 149.99, period: '6 months' },
-      annual:  { name: 'Pro-4 Annual', price: 249.99, period: '12 months' }
-    };
+    // อ่าน redirect จาก ?redirect=...
+    const params      = new URLSearchParams(location.search);
+    const redirectUrl = params.get('redirect') || 'pro4.html';
 
-    // Elements
-    const params       = new URLSearchParams(location.search);
-    const planKey      = params.get('plan') || 'monthly';
-    const selectedPlan = packages[planKey] || packages.monthly;
-    const summaryEl    = document.getElementById('plan-summary');
-    const totalEl      = document.getElementById('order-total');
-    const form         = document.getElementById('order-form');
-    const btnConfirm   = document.getElementById('btn-confirm');
-    const statusEl     = document.getElementById('status');
-    const functions    = firebase.functions();
+    const emailInput  = document.getElementById('email');
+    const passInput   = document.getElementById('password');
+    const btnLogin    = document.getElementById('btn-login');
+    const statusEl    = document.getElementById('status');
+    const btnForgot   = document.getElementById('btn-forgot');
 
-    // Render plan info
-    summaryEl.textContent = 
-      `Package: ${selectedPlan.name} (${selectedPlan.period})`;
-    totalEl.textContent = `Total: $${selectedPlan.price.toFixed(2)}`;
-
-    // Handle form submission
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
+    // Login
+    btnLogin.addEventListener('click', async () => {
+      const email    = emailInput.value.trim();
+      const password = passInput.value;
       statusEl.textContent = '';
-      btnConfirm.disabled = true;
-
-      // Collect data
-      const payload = {
-        plan: planKey,
-        price: selectedPlan.price,
-        fullName: document.getElementById('fullName').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        mt5Account: document.getElementById('mt5Account').value.trim()
-      };
+      btnLogin.disabled = true;
 
       try {
-        // Call Cloud Function to create license
-        const createLicense = functions.httpsCallable('createLicense');
-        const res = await createLicense(payload);
-
-        // On success, redirect to success page with licenseKey
-        Swal.fire('Order Confirmed','Your license is on the way!','success');
-        location.href = `success.html?license=${res.data.licenseKey}`;
-      }
-      catch (err) {
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        await auth.signInWithEmailAndPassword(email, password);
+        await Swal.fire('Success','Login successful!','success');
+        window.location.href = redirectUrl;
+      } catch (err) {
         statusEl.textContent = err.message;
+      } finally {
+        btnLogin.disabled = false;
       }
-      finally {
-        btnConfirm.disabled = false;
+    });
+
+    // Forgot Password
+    btnForgot.addEventListener('click', async () => {
+      const email = prompt('Enter your sign-up email:');
+      if (!email) return;
+      try {
+        await auth.sendPasswordResetEmail(email.trim());
+        Swal.fire('Email Sent','Check your inbox to reset your password','success');
+      } catch (err) {
+        Swal.fire('Error','Could not send reset email: ' + err.message,'error');
       }
     });
   </script>
