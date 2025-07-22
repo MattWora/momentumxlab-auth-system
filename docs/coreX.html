@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Core-X – MomentumXLab</title>
+  <link rel="icon" href="favicon.ico"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <section class="pro4-section">
+    <div class="left-content">
+      <h2>Key Features of ApexXAU Core-X</h2>
+      <ul class="feature-list">
+        <li><strong>AI-Powered Filtering:</strong> Multi-layer neural filters for noise reduction</li>
+        <li><strong>Adaptive Risk Management:</strong> Dynamic position sizing per VPU suggestions</li>
+        <li><strong>Edge-Optimized:</strong> Low-latency execution logic tailor-made for XAUUSD</li>
+        <li><strong>Performance Calibration:</strong> Live-data backtesting and self-tuning module</li>
+        <li><strong>One-Click Integration:</strong> Plug-and-play on MT5 with minimal setup</li>
+      </ul>
+
+      <h3>Subscription Plans</h3>
+      <table class="info-table">
+        <thead>
+          <tr><th>Plan</th><th>Price</th><th>Period</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Core-X Monthly</td><td>$29.99</td><td>1 month</td></tr>
+          <tr><td>Core-X 6-Month</td><td>$159.99</td><td>6 months</td></tr>
+          <tr><td>Core-X Annual</td><td>$279.99</td><td>12 months</td></tr>
+        </tbody>
+      </table>
+
+      <div class="btn-group">
+        <button class="cta-btn pro4-checkout-btn" data-plan="corex">Subscribe Core-X</button>
+      </div>
+    </div>
+
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img src="CoreX_PerformanceEdition_whiteBG.png" alt="Core-X Mockup"/>
+        <p class="edition corex">Currently in calibration and testing</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- include same Firebase + SweetAlert scripts as pro4.html -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // Firebase config (แทนที่ค่าจริง)
+    firebase.initializeApp({
+      apiKey: "AIzaSy…",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2",
+      appId: "1:…:web:…"
+    });
+    const auth      = firebase.auth();
+    const funcs     = firebase.functions();
+    document.querySelectorAll('.pro4-checkout-btn')
+      .forEach(btn => btn.addEventListener('click', async () => {
+        const plan = btn.dataset.plan; // "corex"
+        const user = auth.currentUser;
+        if (!user) {
+          // redirect to login พร้อม save redirect
+          location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
+          return;
+        }
+        // ถ้าล็อกอินแล้ว → confirm-order
+        location.href = `confirm-order.html?plan=${plan}`;
+      }));
+  </script>
+</body>
+</html>
