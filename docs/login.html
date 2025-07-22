@@ -58,22 +58,24 @@
       margin-top: 20px;
       min-height: 1.2em;
     }
-    .signup-link, .forgot-link {
+    .forgot-link {
       margin-top: 12px;
       font-size: 14px;
     }
-    .signup-link a,
-    .forgot-link button {
-      background: none;
-      border: none;
+    .forgot-note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .signup-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .signup-link a {
       color: #0af;
       text-decoration: none;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0;
     }
-    .signup-link a:hover,
-    .forgot-link button:hover {
+    .signup-link a:hover {
       text-decoration: underline;
     }
   </style>
@@ -100,6 +102,9 @@
 
   <div class="forgot-link">
     <button id="btn-forgot">Forgot Password?</button>
+    <p class="forgot-note">
+      If you don’t see the reset email in your inbox, please check your junk or spam folder.
+    </p>
   </div>
 
   <p id="status"></p>
@@ -143,7 +148,6 @@
       try {
         await auth.signInWithEmailAndPassword(email, password);
         await Swal.fire('Success','Login successful!','success');
-        // Redirect back to Pro-4 page
         window.location.href = 'pro4.html';
       }
       catch (err) {
