@@ -65,52 +65,40 @@
   <script>
     // เปลี่ยนเป็น URL ของ auth repo คุณ
     const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
+let isLoggedIn = false;
 
-    // Firebase config (แทนที่ด้วยของจริงจาก Console)
-    const firebaseConfig = {
-      apiKey: "AIzaSy…",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
+auth.onAuthStateChanged(user => {
+  isLoggedIn = !!user;
+
+  document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+    btn.onclick = async e => {
+      e.preventDefault();
+      const plan = btn.dataset.plan;
+
+      if (!isLoggedIn) {
+        const result = await Swal.fire({
+          title: 'Please Sign Up or Login',
+          text: 'You must sign in before choosing a package.',
+          icon: 'info',
+          showDenyButton: true,
+          confirmButtonText: 'Login',
+          denyButtonText: 'Signup'
+        });
+
+        const me = encodeURIComponent(location.href);
+        if (result.isConfirmed) {
+          location.href = `${AUTH_BASE_URL}/login.html?redirect=${me}`;
+        } else if (result.isDenied) {
+          location.href = `${AUTH_BASE_URL}/signup.html?redirect=${me}`;
+        }
+        return;
+      }
+
+      // ✅ ล็อกอินแล้ว → ไป confirm-order.html
+      location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
     };
-    firebase.initializeApp(firebaseConfig);
+  });
+});
 
-    const auth = firebase.auth();
-    let isLoggedIn = false;
-
-    // รอสถานะล็อกอินก่อน assign event handlers
-    auth.onAuthStateChanged(user => {
-      isLoggedIn = !!user;
-
-      document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-        btn.onclick = async e => {
-          e.preventDefault();
-          const plan = btn.dataset.plan;
-
-          if (!isLoggedIn) {
-            const result = await Swal.fire({
-              title: 'Please Sign Up or Login',
-              text: 'You must sign in before choosing a package.',
-              icon: 'info',
-              showDenyButton: true,
-              confirmButtonText: 'Login',
-              denyButtonText: 'Signup'
-            });
-            const me = encodeURIComponent(location.href);
-            if (result.isConfirmed) {
-              location.href = `${AUTH_BASE_URL}/login.html?redirect=${me}`;
-            } else if (result.isDenied) {
-              location.href = `${AUTH_BASE_URL}/signup.html?redirect=${me}`;
-            }
-          } else {
-            // เลือกแพ็กเกจแล้ว → ไป confirm-order.html
-            location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-          }
-        };
-      });
-    });
-  </script>
 </body>
 </html>
