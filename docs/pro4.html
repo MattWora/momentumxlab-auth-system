@@ -112,60 +112,59 @@
 
   <!-- Load SweetAlert2 & Firebase (compat) -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-  <script>
-    // Firebase config (MomentumXLab)
-    const firebaseConfig = {
-      apiKey:            "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain:        "momentumxlab-37ce2.firebaseapp.com",
-      projectId:         "momentumxlab-37ce2",
-      storageBucket:     "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "694369524772",
-      appId:             "1:694369524772:web:60961d9548591c1ff3ccb1"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
+<script>
+  // 1) Firebase init (unchanged)
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+    authDomain:        "momentumxlab-37ce2.firebaseapp.com",
+    projectId:         "momentumxlab-37ce2",
+    storageBucket:     "momentumxlab-37ce2.appspot.com",
+    messagingSenderId: "694369524772",
+    appId:             "1:694369524772:web:60961d9548591c1ff3ccb1"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
 
-    // Helper: รอ Firebase Auth state ก่อนตรวจ
-    function getCurrentUser() {
-      return new Promise(resolve => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user);
-        });
-      });
-    }
+  // 2) รอ Firebase Auth state ก่อน (set global flag)
+  let currentUser = null;
+  auth.onAuthStateChanged(u => {
+    currentUser = u;
+  });
 
-    // ผูกปุ่ม Subscribe ให้ตรวจล็อกอินก่อนทุกครั้ง
-    document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-      btn.addEventListener('click', async e => {
-        e.preventDefault();
-        const plan = btn.dataset.plan;
-        const user = await getCurrentUser();
+  // 3) ผูกปุ่ม Subscribe — ใช้ flag แทน auth.currentUser ตรงๆ
+  document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const plan = btn.dataset.plan;
 
-        if (!user) {
-          const result = await Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          });
+      if (!currentUser) {
+        // ยังไม่ล็อกอิน → prompt login/signup
+        Swal.fire({
+          title: 'Please Sign Up or Login',
+          text: 'You must sign in before choosing a package.',
+          icon: 'info',
+          showDenyButton: true,
+          confirmButtonText: 'Login',
+          denyButtonText: 'Signup'
+        }).then(r => {
           const back = encodeURIComponent(location.href);
-          if (result.isConfirmed) {
+          if (r.isConfirmed) {
             window.location.href = `${AUTH_BASE_URL}/login.html?redirect=${back}`;
-          } else {
+          } else if (r.isDenied) {
             window.location.href = `${AUTH_BASE_URL}/signup.html?redirect=${back}`;
           }
-        } else {
-          window.location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-        }
-      });
+        });
+      } else {
+        // ล็อกอินแล้ว → ไป confirm-order
+        window.location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
+      }
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
