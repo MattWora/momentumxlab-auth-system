@@ -154,25 +154,33 @@
     const statusEl  = document.getElementById('status');
 
     // 4) Log In handler
-    btnLogin.addEventListener('click', async () => {
-      const email    = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value;
-      statusEl.textContent = '';
-      btnLogin.disabled = true;
+btnLogin.addEventListener('click', async () => {
+  const email    = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  statusEl.textContent = '';
+  btnLogin.disabled = true;
 
-      try {
-        await auth.signInWithEmailAndPassword(email, password);
-        await Swal.fire('Success','Login successful!','success');
-        // 5) Redirect กลับไปยัง URL ที่ระบุ หรือหน้าเว็บหลัก
-        window.location.href = redirectUrl;
-      }
-      catch (err) {
-        statusEl.textContent = 'Error: ' + err.message;
-      }
-      finally {
-        btnLogin.disabled = false;
-      }
-    });
+  try {
+    // ✅ 1) ให้ Auth จำ session ด้วย localStorage (ไม่หายข้ามหน้า)
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+    // ✅ 2) ดำเนินการล็อกอินตามปกติ
+    await auth.signInWithEmailAndPassword(email, password);
+
+    // ✅ 3) Popup ยืนยันว่าล็อกอินสำเร็จ
+    await Swal.fire('Success', 'Login successful!', 'success');
+
+    // ✅ 4) Redirect ไปหน้าที่ส่งมาด้วย redirect=...
+    window.location.href = redirectUrl;
+  }
+  catch (err) {
+    statusEl.textContent = 'Error: ' + err.message;
+  }
+  finally {
+    btnLogin.disabled = false;
+  }
+});
+
 
     // 6) Forgot Password handler
     btnForgot.addEventListener('click', async () => {
