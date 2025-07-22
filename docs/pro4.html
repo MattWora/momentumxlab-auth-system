@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pro-4 | MomentumXLab</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
   <section class="pro4-section">
@@ -35,13 +34,13 @@
       </table>
 
       <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">
+        <button class="pro4-checkout-btn" data-plan="monthly">Subscribe Monthly</button>
           Subscribe Monthly
         </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">
+        <button class="pro4-checkout-btn" data-plan="6m">Subscribe 6 Months</button>
           Subscribe 6 Months
         </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">
+        <button class="pro4-checkout-btn" data-plan="annual">Subscribe Annual</button>
           Subscribe 12 Months
         </button>
       </div>
@@ -63,42 +62,46 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 
   <script>
-    // เปลี่ยนเป็น URL ของ auth repo คุณ
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
-let isLoggedIn = false;
+    // 1) Init Firebase
+    firebase.initializeApp({
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2",
+      appId: "1:…:web:…"
+    });
+    const auth = firebase.auth();
+    const AUTH_BASE = 'https://mattwora.github.io/momentumxlab-auth-system';
 
-auth.onAuthStateChanged(user => {
-  isLoggedIn = !!user;
+    // 2) ผูกทุกปุ่ม Subscribe ให้ตรวจ user ณ เวลาคลิก
+    document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+      btn.addEventListener('click', async e => {
+        e.preventDefault();
+        const plan = btn.dataset.plan;
+        const user = auth.currentUser;  // ตรวจสถานะล็อกอินปัจจุบัน
 
-  document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-    btn.onclick = async e => {
-      e.preventDefault();
-      const plan = btn.dataset.plan;
-
-      if (!isLoggedIn) {
-        const result = await Swal.fire({
-          title: 'Please Sign Up or Login',
-          text: 'You must sign in before choosing a package.',
-          icon: 'info',
-          showDenyButton: true,
-          confirmButtonText: 'Login',
-          denyButtonText: 'Signup'
-        });
-
-        const me = encodeURIComponent(location.href);
-        if (result.isConfirmed) {
-          location.href = `${AUTH_BASE_URL}/login.html?redirect=${me}`;
-        } else if (result.isDenied) {
-          location.href = `${AUTH_BASE_URL}/signup.html?redirect=${me}`;
+        if (!user) {
+          // ยังไม่ล็อกอิน → เด้ง SweetAlert ให้ Login/Signup
+          const result = await Swal.fire({
+            title: 'Please Sign Up or Login',
+            text: 'You must sign in before choosing a package.',
+            icon: 'info',
+            showDenyButton: true,
+            confirmButtonText: 'Login',
+            denyButtonText: 'Signup'
+          });
+          const me = encodeURIComponent(location.href);
+          if (result.isConfirmed) {
+            location.href = `${AUTH_BASE}/login.html?redirect=${me}`;
+          } else if (result.isDenied) {
+            location.href = `${AUTH_BASE}/signup.html?redirect=${me}`;
+          }
         }
-        return;
-      }
-
-      // ✅ ล็อกอินแล้ว → ไป confirm-order.html
-      location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-    };
-  });
-});
-
+        else {
+          // ล็อกอินแล้ว → ไป confirm-order.html
+          location.href = `${AUTH_BASE}/confirm-order.html?plan=${plan}`;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
