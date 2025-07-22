@@ -1,103 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pro-4 | MomentumXLab</title>
-
-  <!-- ฟอนต์ + สไตล์หลัก -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
-
-  <!-- SweetAlert2 CSS (theme dark) -->
-  <link rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
-
-  <!-- SDKs แบบ defer ให้ DOM โหลดก่อน JS -->
-  <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
-  <script defer>
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1) Init Firebase
-      firebase.initializeApp({
-        apiKey:      "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-        authDomain:  "momentumxlab-37ce2.firebaseapp.com",
-        projectId:   "momentumxlab-37ce2",
-        storageBucket: "momentumxlab-37ce2.appspot.com",
-        messagingSenderId: "1234567890",
-        appId:       "1:1234567890:web:abcdef123456"
-      });
-      const auth = firebase.auth();
-      const BASE = 'https://mattwora.github.io/momentumxlab-auth-system';
-
-      // 2) Helper: รอให้ Auth โหลดสถานะก่อนทุกครั้ง
-      const getUser = () => new Promise(res => {
-        const off = auth.onAuthStateChanged(u => {
-          off();
-          res(u);
-        });
-      });
-
-      // 3) ผูกปุ่ม Subscribe
-      document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-        btn.addEventListener('click', async e => {
-          e.preventDefault();
-          const plan = btn.dataset.plan;
-          const user = await getUser();
-
-          if (!user) {
-            // ยังไม่ล็อกอิน → SweetAlert prompt
-            const r = await Swal.fire({
-              title: 'Please Sign Up or Login',
-              text: 'You must sign in before choosing a package.',
-              icon: 'info',
-              showDenyButton: true,
-              confirmButtonText: 'Login',
-              denyButtonText: 'Signup'
-            });
-            const back = encodeURIComponent(location.href);
-            if (r.isConfirmed) {
-              return location.href = `${BASE}/login.html?redirect=${back}`;
-            }
-            if (r.isDenied) {
-              return location.href = `${BASE}/signup.html?redirect=${back}`;
-            }
-          }
-
-          // ล็อกอินแล้ว → ไป confirm-order
-          location.href = `${BASE}/confirm-order.html?plan=${plan}`;
-        });
-      });
-
-      // ----- Debugging: ลองดูใน console ว่าไฟล์ CSS/JS โหลดเรียบร้อยไหม -----
-      console.log('Firebase SDK version:', firebase.SDK_VERSION);
-      console.log('Buttons bound:', document.querySelectorAll('.pro4-checkout-btn').length);
-    });
-  </script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Pro-4 Main Section -->
   <section class="pro4-section">
     <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5</h2>
+      <h2>Key Features of ApexXAU Pro-4 for MT5 platform</h2>
       <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic</strong>: CCI, MACD, RSI + ADX filter</li>
-        <li><strong>Adaptive Exit</strong>: ATR-based trailing stop</li>
-        <li><strong>Grouped Closure</strong>: Float-down drawdown handler</li>
-        <li><strong>Zero-Overlap</strong>: One entry per condition</li>
-        <li><strong>Backtested Optimization</strong>: Low-capital XAUUSDc</li>
+        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX threshold</li>
+        <li><strong>Adaptive Exit Strategy:</strong> ATR-based trailing stop & dynamic TP</li>
+        <li><strong>Intelligent Closure:</strong> Closes grouped positions at floating drawdown</li>
+        <li><strong>Risk Adjustment:</strong> ADX-based modulation of entry & trailing</li>
+        <li><strong>Zero-Redundancy Filtering:</strong> Prevents trade overlap for precision</li>
       </ul>
+
+      <h3>Backtest Performance</h3>
+      <table class="info-table">
+        <thead>
+          <tr>
+            <th>Test Period</th>
+            <th>Initial Deposit</th>
+            <th>Total Net Profit</th>
+            <th>% Growth</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jan–Dec 2024</td>
+            <td>USDc 5,000.00</td>
+            <td>USDc 39,851.78</td>
+            <td>+797.04%</td>
+          </tr>
+          <tr>
+            <td>Jan–Jun 2025</td>
+            <td>USDc 5,000.00</td>
+            <td>USDc 9,842.60</td>
+            <td>+196.85%</td>
+          </tr>
+        </tbody>
+      </table>
 
       <h3>Subscription Plans</h3>
       <table class="info-table">
         <thead>
-          <tr><th>Plan</th><th>Price</th><th>Period</th></tr>
+          <tr>
+            <th>Plan</th>
+            <th>Price</th>
+            <th>Avg/Month</th>
+            <th>Discount</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>Monthly</td><td>$19.99</td><td>1 month</td></tr>
-          <tr><td>6-Month</td><td>$106.99</td><td>6 months</td></tr>
-          <tr><td>Annual</td><td>$193.99</td><td>12 months</td></tr>
+          <tr>
+            <td>Monthly</td>
+            <td>$19.99</td>
+            <td>$19.99</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>6-Month</td>
+            <td>$106.99</td>
+            <td>$17.83</td>
+            <td>~10.8%</td>
+          </tr>
+          <tr>
+            <td>12-Month</td>
+            <td>$193.99</td>
+            <td>$16.17</td>
+            <td>~19.1%</td>
+          </tr>
         </tbody>
       </table>
 
@@ -109,17 +89,92 @@
           Subscribe 6 Months
         </button>
         <button class="cta-btn pro4-checkout-btn" data-plan="annual">
-          Subscribe Annual
+          Subscribe 12 Months
         </button>
       </div>
+
+      <p class="roi-note">
+        Backtested monthly return: <strong>$33.20</strong> — keep over 50% of your gains.
+      </p>
     </div>
 
     <div class="right-content">
       <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup"/>
-        <p class="edition custom">Ideal for low-drawdown XAUUSDc strategies.</p>
+        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup" />
+        <p class="edition custom">
+          Ideal for XAUUSDc with minimal starting capital (5,000 USDc) — fully
+          compatible with XAUUSD at $5,000 deposit.
+        </p>
       </div>
     </div>
   </section>
+
+  <!-- Footer -->
+  <footer class="footer-section">
+    <div class="footer-logo-left">
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
+    </div>
+    <div class="footer-text">
+      <p>
+        Past performance does not guarantee future results.<br />
+        Use with discretion and risk management.
+      </p>
+      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script>
+    // Base URL for your auth pages repo
+    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
+
+    // Firebase config (replace with your own)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2",
+      storageBucket: "momentumxlab-37ce2.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+
+    // Handle subscribe button clicks
+    document.querySelectorAll('.pro4-checkout-btn').forEach(button => {
+      button.addEventListener('click', async e => {
+        e.preventDefault();
+        const plan = button.dataset.plan;
+        const user = auth.currentUser;
+
+        if (!user) {
+          // Prompt login or signup
+          const result = await Swal.fire({
+            title: 'Please Sign Up or Login',
+            text: 'You must sign in before choosing a package.',
+            icon: 'info',
+            showDenyButton: true,
+            confirmButtonText: 'Login',
+            denyButtonText: 'Signup'
+          });
+
+          if (result.isConfirmed) {
+            window.location.href = `${AUTH_BASE_URL}/login.html`;
+          } else if (result.isDenied) {
+            window.location.href = `${AUTH_BASE_URL}/signup.html`;
+          }
+
+        } else {
+          // User is signed in → go to confirm-order
+          window.location.href = 
+            `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
+        }
+      });
+    });
+  </script>
 </body>
 </html>
