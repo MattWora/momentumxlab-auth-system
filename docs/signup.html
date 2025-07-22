@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta charset="UTF-8">
   <title>Sign Up – MomentumXLab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+    rel="stylesheet"
+  >
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
@@ -49,20 +52,52 @@
     #status {
       margin-top: 20px;
     }
+    .login-link {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .login-link a {
+      color: #0af;
+      text-decoration: none;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
+
   <h1>Create Your Account</h1>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
+
+  <input
+    type="email"
+    id="email"
+    placeholder="Email"
+    required
+  ><br>
+
+  <input
+    type="password"
+    id="password"
+    placeholder="Password"
+    required
+  ><br>
+
   <button onclick="signup()">Sign Up</button>
+
   <p id="status"></p>
 
+  <p class="login-link">
+    Already have an account? <a href="login.html">Log in here</a>.
+  </p>
+
+  <!-- Firebase SDK v8 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
+    // TODO: replace with your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
@@ -71,27 +106,31 @@
     firebase.initializeApp(firebaseConfig);
 
     function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const status = document.getElementById("status");
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const status   = document.getElementById('status');
+      status.textContent = '';
 
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(userCred => {
           const uid = userCred.user.uid;
-          return firebase.firestore().collection("users").doc(uid).set({
-            activated: true,
-            plan: "Free",
-            paidDate: new Date().toISOString(),
-            expires: ""
-          });
+          return firebase.firestore()
+            .collection('users')
+            .doc(uid)
+            .set({
+              activated: true,
+              plan: 'Free',
+              paidDate: new Date().toISOString(),
+              expires: ''
+            });
         })
         .then(() => {
-          status.textContent = "Signup complete! ✅";
-          status.style.color = "lightgreen";
+          status.textContent = 'Signup complete! ✅';
+          status.style.color = 'lightgreen';
         })
         .catch(err => {
-          status.textContent = "Error: " + err.message;
-          status.style.color = "orange";
+          status.textContent = 'Error: ' + err.message;
+          status.style.color = 'orange';
         });
     }
   </script>
