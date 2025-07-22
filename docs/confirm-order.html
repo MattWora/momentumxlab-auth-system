@@ -15,66 +15,60 @@
   <!-- Confirm Section with Layout Style -->
   <section class="pro4-section">
     <div class="left-content">
-      <h2>Confirm Your Order</h2>
+  <h2>Confirm Your Order</h2>
 
-      <!-- Summary box styled like Pro4 -->
-      <ul class="feature-list" id="license-summary">
-        <li><strong>Plan:</strong> …</li>
-        <li><strong>Price:</strong> …</li>
-        <li><strong>License Period:</strong> … → …</li>
-      </ul>
+  <ul class="feature-list" id="license-summary">
+    <!-- summary injected by JS -->
+  </ul>
 
-      <!-- Form starts -->
-      <form id="order-form">
-        <label for="email">Email (readonly)</label>
-        <input type="email" id="email" name="email" readonly required/>
-
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" name="fullName" required/>
-
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" name="phone" required/>
-
-        <label for="mt5Account">MT5 Account Number</label>
-        <input type="text" id="mt5Account" name="mt5Account" pattern="\\d+" required/>
-
-        <label for="brokerServer">Broker Server</label>
-        <select id="brokerServer" name="brokerServer" required>
-          <option value="">-- Select Server --</option>
-          <option value="Exness-Real1">Exness-Real1</option>
-          <option value="Exness-Real2">Exness-Real2</option>
-          <option value="XM-MT5Live">XM-MT5Live</option>
-          <option value="FBS-Real">FBS-Real</option>
-          <option value="ICMarkets-Live">ICMarkets-Live</option>
-        </select>
-        <p class="note">
-          License will be bound to this MT5 account and server only.
-        </p>
-
-        <!-- Checkbox Terms -->
-        <div style="margin:20px 0;">
-          <input type="checkbox" id="agree" />
-          <label for="agree">
-            I acknowledge the terms and certify that the above information is accurate.
-          </label>
-        </div>
-
-        <button class="cta-btn" type="submit" id="btn-confirm" disabled>
-          Confirm and Generate License
-        </button>
-        <p id="status" style="margin-top:14px;"></p>
-      </form>
+  <form id="order-form" class="order-form">
+    <div class="form-group">
+      <label for="email">Email (readonly)</label>
+      <input type="email" id="email" name="email" readonly required/>
     </div>
 
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro4 Visual"/>
-        <p class="edition custom">
-          Your license will activate upon payment and remain valid until its expiration date.
-        </p>
-      </div>
+    <div class="form-group">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" name="fullName" required/>
     </div>
-  </section>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="mt5Account">MT5 Account Number</label>
+      <input type="text" id="mt5Account" name="mt5Account" pattern="\d+" required/>
+    </div>
+
+    <div class="form-group">
+      <label for="brokerServer">Broker Server</label>
+      <select id="brokerServer" name="brokerServer" required>
+        <option value="">-- Select Server --</option>
+        <option value="Exness-Real1">Exness-Real1</option>
+        <option value="Exness-Real2">Exness-Real2</option>
+        <option value="XM-MT5Live">XM-MT5Live</option>
+        <option value="FBS-Real">FBS-Real</option>
+        <option value="ICMarkets-Live">ICMarkets-Live</option>
+      </select>
+    </div>
+
+    <p class="note">License will be bound to this MT5 account and server only.</p>
+
+    <div class="form-group checkbox-group">
+      <input type="checkbox" id="agree"/>
+      <label for="agree">
+        I acknowledge the terms and certify that the above information is accurate.
+      </label>
+    </div>
+
+    <button class="cta-btn" type="submit" id="btn-confirm" disabled>
+      Confirm and Generate License
+    </button>
+    <p id="status" class="status-text"></p>
+  </form>
+</div>
 
   <footer class="footer-section">
     <div class="footer-logo-left">
