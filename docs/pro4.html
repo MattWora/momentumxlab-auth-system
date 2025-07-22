@@ -1,176 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pro-4 | MomentumXLab</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – MomentumXLab</title>
+
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #121212;
+      background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+      color: #f0f0f0;
+      text-align: center;
+      padding: 60px 0;
+    }
+    h1 {
+      font-size: 32px;
+      color: #00ffff;
+      text-shadow: 0 0 8px #0ff;
+    }
+    input, button {
+      width: 280px; max-width: 90%;
+      margin: 8px 0; padding: 12px;
+      font-size: 16px; border: none; border-radius: 6px;
+    }
+    input {
+      background: #333; color: #fff;
+      box-shadow: inset 0 0 6px #000;
+    }
+    button {
+      background-color: #0af; color: #fff;
+      font-weight: bold; text-transform: uppercase;
+      box-shadow: 0 0 10px #0af; cursor: pointer;
+      transition: 0.3s;
+    }
+    button:disabled { opacity: 0.6; cursor: default; }
+    button:hover:not(:disabled) {
+      background-color: #08d; box-shadow: 0 0 16px #0cf;
+    }
+    #status {
+      margin-top: 20px; min-height: 1.2em; color: orange;
+    }
+    .forgot-link { margin-top: 12px; font-size: 14px; }
+    .forgot-note {
+      font-size: 12px; color: #aaa; margin-top: 4px;
+    }
+    .signup-link {
+      margin-top: 20px; font-size: 14px;
+    }
+    .signup-link a {
+      color: #0af; text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <!-- Pro-4 Main Section -->
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5 platform</h2>
-      <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX threshold</li>
-        <li><strong>Adaptive Exit Strategy:</strong> ATR-based trailing stop & dynamic TP</li>
-        <li><strong>Intelligent Closure:</strong> Closes grouped positions at floating drawdown</li>
-        <li><strong>Risk Adjustment:</strong> ADX-based modulation of entry & trailing</li>
-        <li><strong>Zero-Redundancy Filtering:</strong> Prevents trade overlap for precision</li>
-      </ul>
+  <h1>Log In to Your Account</h1>
+  <input id="email" type="email" placeholder="Email" required /><br/>
+  <input id="password" type="password" placeholder="Password" required /><br/>
+  <button id="btn-login">Log In</button>
 
-      <h3>Backtest Performance</h3>
-      <table class="info-table">
-        <thead>
-          <tr>
-            <th>Test Period</th>
-            <th>Initial Deposit</th>
-            <th>Total Net Profit</th>
-            <th>% Growth</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Jan–Dec 2024</td>
-            <td>USDc 5,000.00</td>
-            <td>USDc 39,851.78</td>
-            <td>+797.04%</td>
-          </tr>
-          <tr>
-            <td>Jan–Jun 2025</td>
-            <td>USDc 5,000.00</td>
-            <td>USDc 9,842.60</td>
-            <td>+196.85%</td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="forgot-link">
+    <button id="btn-forgot">Forgot Password?</button>
+    <p class="forgot-note">
+      If you don’t see the reset email, please check your junk/spam folder.
+    </p>
+  </div>
 
-      <h3>Subscription Plans</h3>
-      <table class="info-table">
-        <thead>
-          <tr>
-            <th>Plan</th>
-            <th>Price</th>
-            <th>Avg/Month</th>
-            <th>Discount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Monthly</td>
-            <td>$19.99</td>
-            <td>$19.99</td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td>6-Month</td>
-            <td>$106.99</td>
-            <td>$17.83</td>
-            <td>~10.8%</td>
-          </tr>
-          <tr>
-            <td>12-Month</td>
-            <td>$193.99</td>
-            <td>$16.17</td>
-            <td>~19.1%</td>
-          </tr>
-        </tbody>
-      </table>
+  <p id="status"></p>
+  <p class="signup-link">
+    Don't have an account? <a href="signup.html">Sign up here</a>.
+  </p>
 
-      <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">
-          Subscribe Monthly
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">
-          Subscribe 6 Months
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">
-          Subscribe 12 Months
-        </button>
-      </div>
-
-      <p class="roi-note">
-        Backtested monthly return: <strong>$33.20</strong> — keep over 50% of your gains.
-      </p>
-    </div>
-
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup" />
-        <p class="edition custom">
-          Ideal for XAUUSDc with minimal starting capital (5,000 USDc) — fully
-          compatible with XAUUSD at $5,000 deposit.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
-    </div>
-    <div class="footer-text">
-      <p>
-        Past performance does not guarantee future results.<br />
-        Use with discretion and risk management.
-      </p>
-      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
-    </div>
-  </footer>
-
-      <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
+  <!-- SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    // บล็อกนี้ให้วางต่อจากการ include SDK ด้านบนเลย
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
 
+  <script>
+    // Firebase config (MomentumXLab)
     const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
+      apiKey:            "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain:        "momentumxlab-37ce2.firebaseapp.com",
+      projectId:         "momentumxlab-37ce2",
+      storageBucket:     "momentumxlab-37ce2.appspot.com",
+      messagingSenderId: "694369524772",
+      appId:             "1:694369524772:web:60961d9548591c1ff3ccb1"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // รอให้ Firebase โหลดสถานะ user เสร็จ
-    firebase.auth().onAuthStateChanged(user => {
-      document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-        btn.onclick = async e => {
-          e.preventDefault();
-          const plan = btn.dataset.plan;
+    // อ่าน redirect จาก ?redirect=...
+    const params      = new URLSearchParams(location.search);
+    const redirectUrl = params.get('redirect') || 'pro4.html';
 
-          if (!user) {
-            // ยังไม่ล็อกอิน → โชว์ SweetAlert แล้ว redirect
-            const result = await Swal.fire({
-              title: 'Please Sign Up or Login',
-              text: 'You must sign in before choosing a package.',
-              icon: 'info',
-              showDenyButton: true,
-              confirmButtonText: 'Login',
-              denyButtonText: 'Signup'
-            });
-            const me = encodeURIComponent(location.href);
-            if (result.isConfirmed) {
-              location.href = `${AUTH_BASE_URL}/login.html?redirect=${me}`;
-            } else if (result.isDenied) {
-              location.href = `${AUTH_BASE_URL}/signup.html?redirect=${me}`;
-            }
-          } else {
-            // ล็อกอินแล้ว → ไป confirm-order.html
-            location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-          }
-        };
-      });
+    const emailInput  = document.getElementById('email');
+    const passInput   = document.getElementById('password');
+    const btnLogin    = document.getElementById('btn-login');
+    const statusEl    = document.getElementById('status');
+    const btnForgot   = document.getElementById('btn-forgot');
+
+    // Login
+    btnLogin.addEventListener('click', async () => {
+      const email    = emailInput.value.trim();
+      const password = passInput.value;
+      statusEl.textContent = '';
+      btnLogin.disabled = true;
+
+      try {
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        await auth.signInWithEmailAndPassword(email, password);
+        await Swal.fire('Success','Login successful!','success');
+        window.location.href = redirectUrl;
+      } catch (err) {
+        statusEl.textContent = err.message;
+      } finally {
+        btnLogin.disabled = false;
+      }
+    });
+
+    // Forgot Password
+    btnForgot.addEventListener('click', async () => {
+      const email = prompt('Enter your sign-up email:');
+      if (!email) return;
+      try {
+        await auth.sendPasswordResetEmail(email.trim());
+        Swal.fire('Email Sent','Check your inbox to reset your password','success');
+      } catch (err) {
+        Swal.fire('Error','Could not send reset email: ' + err.message,'error');
+      }
     });
   </script>
 </body>
