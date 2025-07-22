@@ -72,9 +72,6 @@
       font-size: 14px;
       padding: 0;
     }
-    .forgot-link button:hover {
-      text-decoration: underline;
-    }
     .forgot-note {
       font-size: 12px;
       color: #aaa;
@@ -133,26 +130,30 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // 1) กำหนด URL ของหน้า Landing Page หรือเว็บหลัก
+    // 1) URL หน้า Landing หรือเว็บหลัก (default redirect)
     const SITE_BASE_URL = 'https://www.momentumxlab.com';
 
-    // 2) Firebase config (แทนที่ด้วยค่าใน Console ของคุณ)
+    // 2) ดึง redirect param ถ้ามี (เช่น ?redirect=...)
+    const params      = new URLSearchParams(location.search);
+    const redirectUrl = params.get('redirect') || SITE_BASE_URL;
+
+    // 3) Firebase config (แทนที่ด้วยค่าจริงจาก Console)
     const firebaseConfig = {
       apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2",
       storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "9876543210",
-      appId: "1:9876543210:web:1234abcd5678efgh"
-      };
-firebase.initializeApp(firebaseConfig);
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef"
+    };
+    firebase.initializeApp(firebaseConfig);
 
     const auth      = firebase.auth();
     const btnLogin  = document.getElementById('btn-login');
     const btnForgot = document.getElementById('btn-forgot');
     const statusEl  = document.getElementById('status');
 
-    // 3) Log In handler
+    // 4) Log In handler
     btnLogin.addEventListener('click', async () => {
       const email    = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
@@ -162,8 +163,8 @@ firebase.initializeApp(firebaseConfig);
       try {
         await auth.signInWithEmailAndPassword(email, password);
         await Swal.fire('Success','Login successful!','success');
-        // 4) Redirect ไปเว็บหลัก
-        window.location.href = SITE_BASE_URL;
+        // 5) Redirect กลับไปยัง URL ที่ระบุ หรือหน้าเว็บหลัก
+        window.location.href = redirectUrl;
       }
       catch (err) {
         statusEl.textContent = 'Error: ' + err.message;
@@ -173,7 +174,7 @@ firebase.initializeApp(firebaseConfig);
       }
     });
 
-    // 5) Forgot Password handler
+    // 6) Forgot Password handler
     btnForgot.addEventListener('click', async () => {
       const email = prompt('Please enter your sign-up email:').trim();
       if (!email) return;
