@@ -123,36 +123,27 @@
     </div>
   </footer>
 
-  <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    // Base URL for your auth pages repo
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
+<script>
+  const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
 
-    // Firebase config (replace with your own)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
-    };
-    firebase.initializeApp(firebaseConfig);
+  const firebaseConfig = {
+    apiKey: "AIzaSyDJeANrqO5DKQwvlz1kiru1MVOSuRHDmk",
+    authDomain: "momentumxlab-37ce2.firebaseapp.com",
+    projectId: "momentumxlab-37ce2",
+    storageBucket: "momentumxlab-37ce2.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcdef"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-    const auth = firebase.auth();
-
-    // Handle subscribe button clicks
+  firebase.auth().onAuthStateChanged(user => {
     document.querySelectorAll('.pro4-checkout-btn').forEach(button => {
-      button.addEventListener('click', async e => {
+      button.onclick = async e => {
         e.preventDefault();
         const plan = button.dataset.plan;
-        const user = auth.currentUser;
 
         if (!user) {
-          // Prompt login or signup
           const result = await Swal.fire({
             title: 'Please Sign Up or Login',
             text: 'You must sign in before choosing a package.',
@@ -162,19 +153,21 @@
             denyButtonText: 'Signup'
           });
 
+          const redirectParam = encodeURIComponent(location.href);
           if (result.isConfirmed) {
-            window.location.href = `${AUTH_BASE_URL}/login.html`;
+            location.href = `${AUTH_BASE_URL}/login.html?redirect=${redirectParam}`;
           } else if (result.isDenied) {
-            window.location.href = `${AUTH_BASE_URL}/signup.html`;
+            location.href = `${AUTH_BASE_URL}/signup.html?redirect=${redirectParam}`;
           }
-
-        } else {
-          // User is signed in → go to confirm-order
-          window.location.href = 
-            `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
+          return;
         }
-      });
+
+        // ถ้าล็อกอินแล้ว → ไป confirm-order.html
+        location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
+      };
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
