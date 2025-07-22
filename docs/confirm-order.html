@@ -4,50 +4,193 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Order – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: #121212;
+      background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.png');
+      color: #f0f0f0;
+      text-align: center;
+      padding: 40px 0;
+    }
+    h1 {
+      font-size: 28px;
+      color: #00ffff;
+      margin-bottom: 16px;
+      text-shadow: 0 0 8px #0ff;
+    }
+    .plan-summary {
+      margin-bottom: 24px;
+      font-size: 18px;
+    }
+    form {
+      display: inline-block;
+      text-align: left;
+      max-width: 360px;
+      width: 90%;
+    }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #333;
+      color: #fff;
+      box-shadow: inset 0 0 6px #000;
+    }
+    .note {
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 4px;
+    }
+    .total {
+      margin: 24px 0;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      background-color: #0af;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0af;
+      transition: 0.3s;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    button:hover:not(:disabled) {
+      background-color: #08d;
+      box-shadow: 0 0 16px #0cf;
+    }
+    #status {
+      margin-top: 16px;
+      min-height: 1.2em;
+      color: #f90;
+    }
+  </style>
 </head>
 <body>
+
   <h1>Confirm Your Order</h1>
-  <div id="order-summary"></div>
-  <button id="btn-pay">Proceed to Payment</button>
+
+  <div class="plan-summary" id="plan-summary">
+    <!-- Filled by JS -->
+    Loading your selection…
+  </div>
+
+  <form id="order-form">
+    <label for="fullName">Full Name</label>
+    <input type="text" id="fullName" placeholder="John Doe" required/>
+
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" placeholder="+1-234-567-8901" required/>
+
+    <label for="mt5Account">MT5 Account Number</label>
+    <input
+      type="text"
+      id="mt5Account"
+      placeholder="12345678"
+      pattern="\d+"
+      required
+    />
+    <p class="note">Your license will be valid only on this one MT5 account.</p>
+
+    <div class="total" id="order-total">
+      <!-- Filled by JS -->
+    </div>
+
+    <button type="submit" id="btn-confirm">Confirm Order</button>
+    <p id="status"></p>
+  </form>
+
+  <!-- Firebase & SweetAlert -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    // 1) Init Firebase
-    firebase.initializeApp({
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+    // Firebase config (TODO: replace)
+    const firebaseConfig = {
+      apiKey: "AIzaSy…",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2",
-      appId: "1:1234567890:web:abcdef123456"
-    });
-    const auth = firebase.auth();
-
-    // 2) ดึง plan จาก URL
-    const pkgMap = {
-      monthly: { name: 'Pro-4 Monthly', price: 19.99 },
-      '6m':     { name: 'Pro-4 6-Month', price: 106.99 },
-      annual:  { name: 'Pro-4 Annual', price: 193.99 }
+      appId: "1:1234567890:web:abcdef"
     };
-    const params = new URLSearchParams(location.search);
-    const plan   = params.get('plan');
-    const pkg    = pkgMap[plan] || {};
+    firebase.initializeApp(firebaseConfig);
 
-    // 3) แสดงสรุปออเดอร์
-    document.getElementById('order-summary').innerHTML = `
-      <p>Product: ${pkg.name}</p>
-      <p>Price: $${pkg.price}</p>
-    `;
+    // Packages data
+    const packages = {
+      monthly: { name: 'Pro-4 Monthly', price: 29.99, period: '1 month' },
+      '6m':     { name: 'Pro-4 6-Month', price: 149.99, period: '6 months' },
+      annual:  { name: 'Pro-4 Annual', price: 249.99, period: '12 months' }
+    };
 
-    // 4) ปุ่มจ่าย (เชื่อมต่อ Stripe Webhook / Cloud Function ตามจริง)
-    document.getElementById('btn-pay').addEventListener('click', () => {
-      if (!auth.currentUser) {
-        alert('Session expired, please login again.');
-        location.href = 'login.html?redirect=' + encodeURIComponent(location.href);
-        return;
+    // Elements
+    const params       = new URLSearchParams(location.search);
+    const planKey      = params.get('plan') || 'monthly';
+    const selectedPlan = packages[planKey] || packages.monthly;
+    const summaryEl    = document.getElementById('plan-summary');
+    const totalEl      = document.getElementById('order-total');
+    const form         = document.getElementById('order-form');
+    const btnConfirm   = document.getElementById('btn-confirm');
+    const statusEl     = document.getElementById('status');
+    const functions    = firebase.functions();
+
+    // Render plan info
+    summaryEl.textContent = 
+      `Package: ${selectedPlan.name} (${selectedPlan.period})`;
+    totalEl.textContent = `Total: $${selectedPlan.price.toFixed(2)}`;
+
+    // Handle form submission
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      statusEl.textContent = '';
+      btnConfirm.disabled = true;
+
+      // Collect data
+      const payload = {
+        plan: planKey,
+        price: selectedPlan.price,
+        fullName: document.getElementById('fullName').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        mt5Account: document.getElementById('mt5Account').value.trim()
+      };
+
+      try {
+        // Call Cloud Function to create license
+        const createLicense = functions.httpsCallable('createLicense');
+        const res = await createLicense(payload);
+
+        // On success, redirect to success page with licenseKey
+        Swal.fire('Order Confirmed','Your license is on the way!','success');
+        location.href = `success.html?license=${res.data.licenseKey}`;
       }
-      // TODO: call Firebase Function to create Checkout session
-      alert(`Proceed to Stripe for ${pkg.name}`);
+      catch (err) {
+        statusEl.textContent = err.message;
+      }
+      finally {
+        btnConfirm.disabled = false;
+      }
     });
   </script>
 </body>
