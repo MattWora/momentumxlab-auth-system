@@ -5,27 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pro-4 | MomentumXLab</title>
 
-  <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Your custom styles -->
+  <!-- ฟอนต์ + สไตล์หลัก -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
 
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+  <!-- SweetAlert2 CSS (theme dark) -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@5/dark.css"/>
+
+  <!-- SDKs แบบ defer ให้ DOM โหลดก่อน JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1) Init Firebase
+      firebase.initializeApp({
+        apiKey:      "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+        authDomain:  "momentumxlab-37ce2.firebaseapp.com",
+        projectId:   "momentumxlab-37ce2",
+        storageBucket: "momentumxlab-37ce2.appspot.com",
+        messagingSenderId: "1234567890",
+        appId:       "1:1234567890:web:abcdef123456"
+      });
+      const auth = firebase.auth();
+      const BASE = 'https://mattwora.github.io/momentumxlab-auth-system';
+
+      // 2) Helper: รอให้ Auth โหลดสถานะก่อนทุกครั้ง
+      const getUser = () => new Promise(res => {
+        const off = auth.onAuthStateChanged(u => {
+          off();
+          res(u);
+        });
+      });
+
+      // 3) ผูกปุ่ม Subscribe
+      document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+        btn.addEventListener('click', async e => {
+          e.preventDefault();
+          const plan = btn.dataset.plan;
+          const user = await getUser();
+
+          if (!user) {
+            // ยังไม่ล็อกอิน → SweetAlert prompt
+            const r = await Swal.fire({
+              title: 'Please Sign Up or Login',
+              text: 'You must sign in before choosing a package.',
+              icon: 'info',
+              showDenyButton: true,
+              confirmButtonText: 'Login',
+              denyButtonText: 'Signup'
+            });
+            const back = encodeURIComponent(location.href);
+            if (r.isConfirmed) {
+              return location.href = `${BASE}/login.html?redirect=${back}`;
+            }
+            if (r.isDenied) {
+              return location.href = `${BASE}/signup.html?redirect=${back}`;
+            }
+          }
+
+          // ล็อกอินแล้ว → ไป confirm-order
+          location.href = `${BASE}/confirm-order.html?plan=${plan}`;
+        });
+      });
+
+      // ----- Debugging: ลองดูใน console ว่าไฟล์ CSS/JS โหลดเรียบร้อยไหม -----
+      console.log('Firebase SDK version:', firebase.SDK_VERSION);
+      console.log('Buttons bound:', document.querySelectorAll('.pro4-checkout-btn').length);
+    });
+  </script>
 </head>
 <body>
   <section class="pro4-section">
     <div class="left-content">
       <h2>Key Features of ApexXAU Pro-4 for MT5</h2>
       <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX filter</li>
-        <li><strong>Adaptive Exit:</strong> ATR-based trailing stop</li>
-        <li><strong>Grouped Closure:</strong> Float-down drawdown handler</li>
-        <li><strong>Zero-Overlap:</strong> One entry per condition</li>
-        <li><strong>Backtested Optimization:</strong> Low-capital XAUUSDc</li>
+        <li><strong>Multi-Signal Entry Logic</strong>: CCI, MACD, RSI + ADX filter</li>
+        <li><strong>Adaptive Exit</strong>: ATR-based trailing stop</li>
+        <li><strong>Grouped Closure</strong>: Float-down drawdown handler</li>
+        <li><strong>Zero-Overlap</strong>: One entry per condition</li>
+        <li><strong>Backtested Optimization</strong>: Low-capital XAUUSDc</li>
       </ul>
 
       <h3>Subscription Plans</h3>
@@ -41,13 +102,13 @@
       </table>
 
       <div class="btn-group">
-        <button class="cta-btn" data-plan="monthly">
+        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">
           Subscribe Monthly
         </button>
-        <button class="cta-btn" data-plan="6m">
+        <button class="cta-btn pro4-checkout-btn" data-plan="6m">
           Subscribe 6 Months
         </button>
-        <button class="cta-btn" data-plan="annual">
+        <button class="cta-btn pro4-checkout-btn" data-plan="annual">
           Subscribe Annual
         </button>
       </div>
@@ -56,75 +117,9 @@
     <div class="right-content">
       <div class="mockup-wrapper">
         <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup"/>
-        <p class="edition custom">
-          Ideal for low-drawdown XAUUSDc strategies.
-        </p>
+        <p class="edition custom">Ideal for low-drawdown XAUUSDc strategies.</p>
       </div>
     </div>
   </section>
-
-  <!-- Load SDKs in this order -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-  <script>
-    // 1) Firebase config & init
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // 2) Helper: wait for Auth state (ensures currentUser is set)
-    function getCurrentUser () {
-      return new Promise(resolve => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-          unsubscribe();
-          resolve(user);
-        });
-      });
-    }
-
-    // 3) Attach click handlers
-    document.querySelectorAll('.cta-btn').forEach(btn => {
-      btn.addEventListener('click', async e => {
-        e.preventDefault();
-        const plan = btn.dataset.plan;
-        const user = await getCurrentUser();
-
-        // not logged in → SweetAlert prompt
-        if (!user) {
-          const result = await Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          });
-
-          const back = encodeURIComponent(location.href);
-          if (result.isConfirmed) {
-            location.href = `${AUTH_BASE_URL}/login.html?redirect=${back}`;
-          }
-          else if (result.isDenied) {
-            location.href = `${AUTH_BASE_URL}/signup.html?redirect=${back}`;
-          }
-          return;
-        }
-
-        // logged in → proceed to confirm-order
-        location.href =
-          `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-      });
-    });
-  </script>
 </body>
 </html>
