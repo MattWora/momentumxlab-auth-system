@@ -161,16 +161,14 @@ btnLogin.addEventListener('click', async () => {
   btnLogin.disabled = true;
 
   try {
-    // ✅ ให้ Firebase เก็บ session login ไว้ใน localStorage
+    // ✅ ให้ Firebase จำ session ข้าม reload ด้วย localStorage
     await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-    // ✅ ดำเนินการล็อกอิน
+    // ✅ ล็อกอิน
     await auth.signInWithEmailAndPassword(email, password);
-
-    // ✅ Popup แจ้งว่าล็อกอินสำเร็จ
     await Swal.fire('Success','Login successful!','success');
 
-    // ✅ Redirect กลับหน้าที่ระบุไว้ใน ?redirect=
+    // ✅ ย้อนกลับหน้าก่อนล็อกอิน
     window.location.href = redirectUrl;
   }
   catch (err) {
@@ -180,7 +178,6 @@ btnLogin.addEventListener('click', async () => {
     btnLogin.disabled = false;
   }
 });
-
 
     // 6) Forgot Password handler
     btnForgot.addEventListener('click', async () => {
