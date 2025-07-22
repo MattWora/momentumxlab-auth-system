@@ -3,97 +3,56 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pro-4 | MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="icon" href="favicon.ico"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
-</head>
-<body>
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5</h2>
-      <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX filter</li>
-        <li><strong>Adaptive Exit:</strong> ATR-based trailing stop</li>
-        <li><strong>Grouped Closure:</strong> Intelligent float-down drawdown handler</li>
-        <li><strong>Zero-Overlap:</strong> Single-entry per condition</li>
-        <li><strong>Backtested Optimization:</strong> for XAUUSDc on low starting capital</li>
-      </ul>
-
-      <h3>Subscription Plans</h3>
-      <table class="info-table">
-        <thead>
-          <tr><th>Plan</th><th>Price</th><th>Period</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Monthly</td><td>$19.99</td><td>1 month</td></tr>
-          <tr><td>6-Month</td><td>$106.99</td><td>6 months</td></tr>
-          <tr><td>Annual</td><td>$193.99</td><td>12 months</td></tr>
-        </tbody>
-      </table>
-
-      <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">Subscribe Monthly</button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">Subscribe 6 Months</button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">Subscribe Annual</button>
-      </div>
-    </div>
-
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup"/>
-        <p class="edition custom">For low-drawdown XAUUSDc strategies.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Firebase + SweetAlert -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <title>Login – MomentumXLab</title>
+  <!-- สไตล์ต่างๆ ตามเดิม -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- ฟอร์มล็อกอิน ตามเดิม -->
+  <input id="email" type="email" placeholder="Email"/>
+  <input id="password" type="password" placeholder="Password"/>
+  <button id="btn-login">Log In</button>
+  <p id="status"></p>
 
   <script>
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
-
+    // 1) Firebase init
     firebase.initializeApp({
       apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2",
-      appId: "1:1234567890:web:abcdef"
+      appId: "1:…:web:…"
     });
-
     const auth = firebase.auth();
 
-    // ใช้ currentUser แบบสดทุกครั้งที่คลิก
-    document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-      btn.onclick = async e => {
-        e.preventDefault();
-        const plan = btn.dataset.plan;
-        const user = auth.currentUser;
+    // 2) ดึง redirect URL จาก ?redirect=...
+    const urlParams   = new URLSearchParams(location.search);
+    const redirectUrl = urlParams.get('redirect') || 'pro4.html';
 
-        if (!user) {
-          const result = await Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          });
+    // 3) Login handler
+    document.getElementById('btn-login').addEventListener('click', async () => {
+      const email    = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const statusEl = document.getElementById('status');
+      statusEl.textContent = '';
+      document.getElementById('btn-login').disabled = true;
 
-          const redirectBack = encodeURIComponent(location.href);
-          if (result.isConfirmed) {
-            location.href = `${AUTH_BASE_URL}/login.html?redirect=${redirectBack}`;
-          } else if (result.isDenied) {
-            location.href = `${AUTH_BASE_URL}/signup.html?redirect=${redirectBack}`;
-          }
-        } else {
-          location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-        }
-      };
+      try {
+        // ให้ Firebase จำ session ข้าม reload ด้วย localStorage
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        // ทำการล็อกอิน
+        await auth.signInWithEmailAndPassword(email, password);
+        await Swal.fire('Success','Login successful!','success');
+        // redirect กลับไปหน้าเดิม
+        location.href = redirectUrl;
+      }
+      catch(err) {
+        statusEl.textContent = err.message;
+      }
+      finally {
+        document.getElementById('btn-login').disabled = false;
+      }
     });
   </script>
 </body>
