@@ -1,81 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pro-4 | MomentumXLab</title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5 platform</h2>
-      <!-- ... รายละเอียดเหมือนเดิม ... -->
-
-      <h3>Subscription Plans</h3>
-      <table class="info-table">
-        <!-- ... ตารางราคา ... -->
-      </table>
-
-      <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">
-          Subscribe Monthly
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">
-          Subscribe 6 Months
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">
-          Subscribe 12 Months
-        </button>
-      </div>
-    </div>
-    <div class="right-content">
-      <!-- ... ภาพ mockup ... -->
-    </div>
-  </section>
-
-  <!-- Firebase SDK + SweetAlert2 -->
+  <title>Confirm Order – MomentumXLab</title>
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <h1>Confirm Your Order</h1>
+  <div id="order-summary"></div>
+  <button id="btn-pay">Proceed to Payment</button>
 
   <script>
-    // 1) Firebase Config (แทนที่ด้วยค่าจริงของคุณ)
-    const firebaseConfig = {
+    // 1) Init Firebase
+    firebase.initializeApp({
       apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
-    };
-    firebase.initializeApp(firebaseConfig);
-
+      appId: "1:1234567890:web:abcdef123456"
+    });
     const auth = firebase.auth();
 
-    // 2) ดึง URL ปัจจุบัน เพื่อใช้ใน redirect หลังล็อกอิน
-    const currentUrl = location.href;
+    // 2) ดึง plan จาก URL
+    const pkgMap = {
+      monthly: { name: 'Pro-4 Monthly', price: 19.99 },
+      '6m':     { name: 'Pro-4 6-Month', price: 106.99 },
+      annual:  { name: 'Pro-4 Annual', price: 193.99 }
+    };
+    const params = new URLSearchParams(location.search);
+    const plan   = params.get('plan');
+    const pkg    = pkgMap[plan] || {};
 
-    // 3) กำหนด action ให้ปุ่ม Subscribe ทุกปุ่ม
-    document.querySelectorAll('.pro4-checkout-btn')
-      .forEach(button => button.addEventListener('click', () => {
-        const plan = button.dataset.plan;
+    // 3) แสดงสรุปออเดอร์
+    document.getElementById('order-summary').innerHTML = `
+      <p>Product: ${pkg.name}</p>
+      <p>Price: $${pkg.price}</p>
+    `;
 
-        // ถ้ายังไม่ล็อกอิน → ส่งไปหน้า login.html เก็บ redirect กลับมาที่หน้านี้
-        if (!auth.currentUser) {
-          const loginUrl = `login.html?redirect=${encodeURIComponent(currentUrl)}`;
-          location.href = loginUrl;
-          return;
-        }
-
-        // ถ้าล็อกอินแล้ว → ไปหน้า confirm-order.html พร้อม plan
-        location.href = `confirm-order.html?plan=${plan}`;
-      }));
+    // 4) ปุ่มจ่าย (เชื่อมต่อ Stripe Webhook / Cloud Function ตามจริง)
+    document.getElementById('btn-pay').addEventListener('click', () => {
+      if (!auth.currentUser) {
+        alert('Session expired, please login again.');
+        location.href = 'login.html?redirect=' + encodeURIComponent(location.href);
+        return;
+      }
+      // TODO: call Firebase Function to create Checkout session
+      alert(`Proceed to Stripe for ${pkg.name}`);
+    });
   </script>
 </body>
 </html>
