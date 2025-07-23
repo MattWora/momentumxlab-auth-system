@@ -118,13 +118,56 @@
         await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
         await auth.signInWithEmailAndPassword(email, password);
         await Swal.fire('Success','Login successful!','success');
-        window.location.href = redirectUrl;
-      } catch (err) {
-        statusEl.textContent = err.message;
-      } finally {
-        btnLogin.disabled = false;
+        <script>
+  // --- 1) อ่านพารามิเตอร์ redirect จาก URL ---
+  const params      = new URLSearchParams(location.search);
+  const redirectUrl = params.get('redirect') || 'dashboard.html';
+
+  // --- 2) Initialize Firebase & Auth ---
+  // (กรณียังไม่ได้ initialize ด้านบน)
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // --- 3) Login Button Handler ---
+  document.getElementById("btnLogin").addEventListener("click", async () => {
+    const email    = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      await Swal.fire("Success", "Login successful!", "success");
+
+      // --- 4) ส่ง postMessage แจ้งหน้า Landing ให้ reload ---
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(
+          "login-success",
+          "https://www.momentumxlab.com"
+        );
       }
-    });
+
+      // --- 5) Redirect ตัวเองไปหน้า Dashboard ---
+      window.location.href = redirectUrl;
+    } catch (err) {
+      Swal.fire("Error", err.message, "error");
+    }
+  });
+</script>
+       if (window.opener && !window.opener.closed) {
+      window.opener.postMessage(
+        'login-success',
+        'https://www.momentumxlab.com'
+      );
+    }
+
+    // redirect ตัวเองไป Dashboard
+    window.location.href = redirectUrl;
+
+  } catch (err) {
+    statusEl.textContent = err.message;
+  } finally {
+    btnLogin.disabled = false;
+  }
+});
 
     // Forgot Password
     btnForgot.addEventListener('click', async () => {
