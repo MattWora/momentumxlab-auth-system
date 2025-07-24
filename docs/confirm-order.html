@@ -78,6 +78,12 @@
 
       const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
 
+      const planImages = {
+        pro4: "Pro4_CollectorEdition_whiteBG.png",
+        pro5: "Pro5_CollectorEdition_whiteBG.png",
+        corex: "CoreX_PerformanceEdition_whiteBG.png"
+      };
+
       if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
         Swal.fire("Invalid Parameters", "Please check your package link.", "error");
         return;
@@ -85,12 +91,13 @@
 
       const name = planNames[plan];
       const price = packagePrices[plan][pkg];
-      const expiry = new Date(); expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
+      const expiry = new Date();
+      expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
 
       document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
       document.getElementById("price").value = `$${price.toFixed(2)}`;
       document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
-      document.getElementById("product-image").src = `assets/box-${plan}.png`;
+      document.getElementById("product-image").src = planImages[plan];
       document.getElementById("product-image").alt = name;
       document.getElementById("download-btn").href = `downloads/${plan}.zip`;
 
