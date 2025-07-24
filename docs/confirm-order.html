@@ -26,7 +26,7 @@
         </div>
         <div class="form-group">
           <label for="mt5Account">MT5 Account Number</label>
-          <input type="text" id="mt5Account" name="mt5Account" required pattern="\\d+"/>
+          <input type="text" id="mt5Account" name="mt5Account" required pattern="\d+"/>
         </div>
         <div class="form-group">
           <label for="brokerServer">Broker Server</label>
@@ -90,19 +90,13 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(window.location.search);
-      const plan = params.get("plan") || "pro4";
-      const pkg = params.get("package") || "monthly";
+      const plan = params.get("plan")?.toLowerCase();
+      const pkg = params.get("package")?.toLowerCase();
 
       const planNames = {
-        pro4: "PRO-4",
-        pro5: "PRO-5",
-        corex: "CORE-X"
-      };
-
-      const packageDurations = {
-        monthly: 30,
-        "6m": 180,
-        "12m": 365
+        pro4: "ApexXAU Intelligent Pro-4",
+        pro5: "ApexXAU Intelligent Pro-5",
+        corex: "ApexXAU Intelligent Core-X"
       };
 
       const packagePrices = {
@@ -111,18 +105,18 @@
         corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
       };
 
-      const durationDays = packageDurations[pkg] || 30;
-      const price = packagePrices[plan]?.[pkg] || 0;
+      const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
 
-      const expiryDate = new Date();
-      expiryDate.setDate(expiryDate.getDate() + durationDays);
+      const productName = planNames[plan];
+      const price = packagePrices[plan]?.[pkg];
+      const expiry = new Date();
+      expiry.setMonth(expiry.getMonth() + (monthOffset[pkg] || 1));
 
-      document.getElementById("package").value = `${planNames[plan]} – ${pkg.toUpperCase()}`;
-      document.getElementById("price").value = `$${price.toLocaleString()}`;
-      document.getElementById("expiry").value = expiryDate.toISOString().split("T")[0];
-
+      document.getElementById("package").value = `${productName} – ${pkg.toUpperCase()}`;
+      document.getElementById("price").value = price ? `$${price.toFixed(2)}` : "Price not found";
+      document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
       document.getElementById("product-image").src = `assets/box-${plan}.png`;
-      document.getElementById("product-image").alt = `Momentum Lab ${planNames[plan]}`;
+      document.getElementById("product-image").alt = productName;
 
       const agree = document.getElementById("agree");
       const confirmBtn = document.getElementById("btn-confirm");
@@ -146,7 +140,7 @@
               phone: document.getElementById("phone").value,
               mt5: document.getElementById("mt5Account").value,
               server: document.getElementById("brokerServer").value,
-              package: `${planNames[plan]} – ${pkg.toUpperCase()}`,
+              package: `${productName} – ${pkg.toUpperCase()}`,
               price: price,
               expiryDate: document.getElementById("expiry").value,
               confirmedAt: Date.now()
