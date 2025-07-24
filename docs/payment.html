@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment – MomentumXLab</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <section class="pro4-section">
+    <div class="left-content">
+      <h2>Confirm Payment</h2>
+      <div class="info-box">
+        <p><strong>Product:</strong> <span id="package-name">—</span></p>
+        <p><strong>Price:</strong> <span id="package-price">—</span></p>
+        <p><strong>Status:</strong> Pending</p>
+      </div>
+
+      <button class="cta-btn" id="pay-btn">Pay Now</button>
+      <p class="note">Your license will activate immediately after payment is completed.</p>
+    </div>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img id="product-image" src="" alt="Product Visual" />
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer-section">
+    <div class="footer-logo-left">
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
+    </div>
+    <div class="footer-text">
+      <p>Please ensure the accuracy of your order before payment.</p>
+      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const plan = params.get("plan")?.toLowerCase();
+    const pkg = params.get("package")?.toLowerCase();
+
+    const planNames = {
+      pro4: "ApexXAU Intelligent Pro-4",
+      pro5: "ApexXAU Intelligent Pro-5",
+      corex: "ApexXAU Intelligent Core-X"
+    };
+
+    const packagePrices = {
+      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+      corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
+    };
+
+    const planImages = {
+      pro4: "Pro4_CollectorEdition_whiteBG.png",
+      pro5: "Pro5_CollectorEdition_whiteBG.png",
+      corex: "CoreX_PerformanceEdition_whiteBG.png"
+    };
+
+    if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
+      document.querySelector(".info-box").innerHTML = "<p>Error loading package. Please check your link.</p>";
+      document.getElementById("pay-btn").style.display = "none";
+    } else {
+      const name = planNames[plan];
+      const price = packagePrices[plan][pkg];
+      document.getElementById("package-name").textContent = `${name} – ${pkg.toUpperCase()}`;
+      document.getElementById("package-price").textContent = `$${price.toFixed(2)}`;
+      document.getElementById("product-image").src = planImages[plan];
+      document.getElementById("product-image").alt = name;
+
+      document.getElementById("pay-btn").addEventListener("click", () => {
+        // จำลองการชำระเงินเสร็จ → กลับไป confirm-order พร้อม status=paid
+        const redirectURL = `confirm-order.html?plan=${plan}&package=${pkg}&status=paid`;
+        location.href = redirectURL;
+      });
+    }
+  </script>
+</body>
+</html>
