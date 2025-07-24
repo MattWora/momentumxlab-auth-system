@@ -4,26 +4,13 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
-  <link rel="icon" href="favicon.ico"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rajdhani:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
   <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet"/>
 </head>
 <body>
-
-  <!-- Confirm Section -->
   <section class="pro4-section">
-
-    <!-- ซ้าย: ฟอร์มเรียงแนวดิ่ง -->
     <div class="left-content">
       <h2>Confirm Your Order</h2>
-
-      <ul class="feature-list" id="license-summary">
-        <!-- JS จะ inject summary ตรงนี้ -->
-      </ul>
-
       <form id="order-form" class="order-form">
         <div class="form-group">
           <label for="email">Email (readonly)</label>
@@ -39,56 +26,48 @@
         </div>
         <div class="form-group">
           <label for="mt5Account">MT5 Account Number</label>
-          <input type="text" id="mt5Account" name="mt5Account" pattern="\d+" required/>
+          <input type="text" id="mt5Account" name="mt5Account" required pattern="\\d+"/>
         </div>
         <div class="form-group">
           <label for="brokerServer">Broker Server</label>
-          <select id="brokerServer" name="brokerServer" required>
-            <option value="">-- Select Server --</option>
-            <option value="Exness-Real1">Exness-Real1</option>
-            <option value="Exness-Real2">Exness-Real2</option>
-            <option value="XM-MT5Live">XM-MT5Live</option>
-            <option value="FBS-Real">FBS-Real</option>
-            <option value="ICMarkets-Live">ICMarkets-Live</option>
-          </select>
+          <input type="text" id="brokerServer" name="brokerServer" placeholder="e.g. Exness-Real104" required />
+        </div>
+        <div class="form-group">
+          <label for="package">Package</label>
+          <input type="text" id="package" name="package" readonly/>
+        </div>
+        <div class="form-group">
+          <label for="price">Price (USD)</label>
+          <input type="text" id="price" name="price" readonly/>
+        </div>
+        <div class="form-group">
+          <label for="expiry">Expiry Date</label>
+          <input type="date" id="expiry" name="expiry" readonly required/>
         </div>
         <p class="note">License will be bound to this MT5 account and server only.</p>
-
         <div class="form-group checkbox-group">
           <input type="checkbox" id="agree"/>
-          <label for="agree">
-            I acknowledge the terms and certify that the above information is accurate.
-          </label>
+          <label for="agree"> I acknowledge the terms and certify that the above information is accurate. </label>
         </div>
-
-        <button class="cta-btn" type="submit" id="btn-confirm" disabled>
-          Confirm and Generate License
-        </button>
+        <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
         <p id="status" class="status-text"></p>
+        <a id="download-btn" href="downloads/pro4.zip" style="display:none;" class="cta-btn">Download PRO-4</a>
       </form>
     </div>
-
-    <!-- ขวา: mockup และข้อความใต้ภาพ -->
     <div class="right-content">
       <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="License Visual"/>
-        <p class="edition custom">
-          Your license will activate upon payment and remain valid until its expiration date.
-        </p>
+        <img id="product-image" src="assets/box-pro4.png" alt="License Visual"/>
+        <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
       </div>
     </div>
+  </section>
 
-  </section>  <!-- อย่าลืมปิด section ก่อน footer -->
-
-  <!-- Footer อยู่ข้างล่างสุด -->
   <footer class="footer-section">
     <div class="footer-logo-left">
       <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
     </div>
     <div class="footer-text">
-      <p>
-        By submitting this form, you acknowledge the terms and certify accuracy of the information.
-      </p>
+      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
       <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
     </div>
   </footer>
@@ -97,9 +76,92 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
   <script>
-    // Firebase init + summary injection + form logic เหมือนเดิม
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const plan = params.get("plan") || "pro4";
+      const pkg = params.get("package") || "monthly";
+
+      const planNames = {
+        pro4: "PRO-4",
+        pro5: "PRO-5",
+        corex: "CORE-X"
+      };
+
+      const packageDurations = {
+        monthly: 30,
+        "6m": 180,
+        "12m": 365
+      };
+
+      const packagePrices = {
+        pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+        pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+        corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
+      };
+
+      const durationDays = packageDurations[pkg] || 30;
+      const price = packagePrices[plan]?.[pkg] || 0;
+
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + durationDays);
+
+      document.getElementById("package").value = `${planNames[plan]} – ${pkg.toUpperCase()}`;
+      document.getElementById("price").value = `$${price.toLocaleString()}`;
+      document.getElementById("expiry").value = expiryDate.toISOString().split("T")[0];
+
+      document.getElementById("product-image").src = `assets/box-${plan}.png`;
+      document.getElementById("product-image").alt = `Momentum Lab ${planNames[plan]}`;
+
+      const agree = document.getElementById("agree");
+      const confirmBtn = document.getElementById("btn-confirm");
+      agree.addEventListener("change", () => {
+        confirmBtn.disabled = !agree.checked;
+      });
+
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          location.href = "login.html?redirect=confirm-order.html";
+        } else {
+          document.getElementById("email").value = user.email;
+
+          document.getElementById("order-form").addEventListener("submit", e => {
+            e.preventDefault();
+
+            const data = {
+              uid: user.uid,
+              email: user.email,
+              fullName: document.getElementById("fullName").value,
+              phone: document.getElementById("phone").value,
+              mt5: document.getElementById("mt5Account").value,
+              server: document.getElementById("brokerServer").value,
+              package: `${planNames[plan]} – ${pkg.toUpperCase()}`,
+              price: price,
+              expiryDate: document.getElementById("expiry").value,
+              confirmedAt: Date.now()
+            };
+
+            firestore.collection("orders").add(data)
+              .then(() => {
+                Swal.fire("License Activated!", "Your license is confirmed.", "success");
+                document.getElementById("download-btn").style.display = "inline-block";
+              })
+              .catch(err => Swal.fire("Error", err.message, "error"));
+          });
+        }
+      });
+    });
   </script>
 </body>
 </html>
