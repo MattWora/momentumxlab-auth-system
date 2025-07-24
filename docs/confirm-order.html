@@ -11,42 +11,17 @@
     <div class="left-content">
       <h2>Confirm Your Order</h2>
       <form id="order-form" class="order-form">
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" readonly required />
-        </div>
-        <div class="form-group">
-          <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" name="fullName" required />
-        </div>
-        <div class="form-group">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" name="phone" required />
-        </div>
-        <div class="form-group">
-          <label for="mt5Account">MT5 Account Number</label>
-          <input type="text" id="mt5Account" name="mt5Account" required pattern="\d+" />
-        </div>
-        <div class="form-group">
-          <label for="brokerServer">Broker Server</label>
-          <input type="text" id="brokerServer" name="brokerServer" required />
-        </div>
-        <div class="form-group">
-          <label for="package">Package</label>
-          <input type="text" id="package" name="package" readonly />
-        </div>
-        <div class="form-group">
-          <label for="price">Price (USD)</label>
-          <input type="text" id="price" name="price" readonly />
-        </div>
-        <div class="form-group">
-          <label for="expiry">Expiry Date</label>
-          <input type="date" id="expiry" name="expiry" readonly required />
-        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
+        <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\d+"/></div>
+        <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
+        <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
+        <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
+        <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
         <p class="note">License will be bound to this MT5 account and server only.</p>
         <div class="form-group checkbox-group">
-          <input type="checkbox" id="agree" />
-          <label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
+          <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
         </div>
         <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
         <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
@@ -54,16 +29,14 @@
     </div>
     <div class="right-content">
       <div class="mockup-wrapper">
-        <img id="product-image" src="" alt="Product Box" />
+        <img id="product-image" src="" alt="Product Box"/>
         <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
       </div>
     </div>
   </section>
 
   <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
-    </div>
+    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
     <div class="footer-text">
       <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
       <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
@@ -88,8 +61,8 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const params = new URLSearchParams(location.search);
-      const plan = params.get("plan")?.toLowerCase();       // รุ่น: pro4 / pro5 / corex
-      const pkg = params.get("package")?.toLowerCase();     // แพ็กเกจ: monthly / 6m / 12m
+      const plan = params.get("plan")?.toLowerCase();
+      const pkg = params.get("package")?.toLowerCase();
 
       const planNames = {
         pro4: "ApexXAU Intelligent Pro-4",
@@ -110,16 +83,15 @@
         return;
       }
 
-      const productName = planNames[plan];
+      const name = planNames[plan];
       const price = packagePrices[plan][pkg];
-      const expiry = new Date();
-      expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
+      const expiry = new Date(); expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
 
-      document.getElementById("package").value = `${productName} – ${pkg.toUpperCase()}`;
+      document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
       document.getElementById("price").value = `$${price.toFixed(2)}`;
       document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
       document.getElementById("product-image").src = `assets/box-${plan}.png`;
-      document.getElementById("product-image").alt = productName;
+      document.getElementById("product-image").alt = name;
       document.getElementById("download-btn").href = `downloads/${plan}.zip`;
 
       document.getElementById("agree").addEventListener("change", e => {
@@ -134,7 +106,6 @@
 
           document.getElementById("order-form").addEventListener("submit", e => {
             e.preventDefault();
-
             const data = {
               uid: user.uid,
               email: user.email,
@@ -142,12 +113,11 @@
               phone: document.getElementById("phone").value,
               mt5: document.getElementById("mt5Account").value,
               server: document.getElementById("brokerServer").value,
-              package: `${productName} – ${pkg.toUpperCase()}`,
-              price: price,
+              package: `${name} – ${pkg.toUpperCase()}`,
+              price,
               expiryDate: document.getElementById("expiry").value,
               confirmedAt: Date.now()
             };
-
             firestore.collection("orders").add(data)
               .then(() => {
                 Swal.fire("License Activated!", "Your license is confirmed.", "success");
