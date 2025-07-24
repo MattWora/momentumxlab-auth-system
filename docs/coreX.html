@@ -5,10 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Core-X – MomentumXLab</title>
   <link rel="icon" href="favicon.ico"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -29,14 +26,16 @@
           <tr><th>Plan</th><th>Price</th><th>Period</th></tr>
         </thead>
         <tbody>
-          <tr><td>Core-X Monthly</td><td>$XX.XX</td><td>1 month</td></tr>
-          <tr><td>Core-X 6-Month</td><td>$XXX.XX</td><td>6 months</td></tr>
-          <tr><td>Core-X Annual</td><td>$XXX.XX</td><td>12 months</td></tr>
+          <tr><td>Core-X Monthly</td><td>$49.99</td><td>1 month</td></tr>
+          <tr><td>Core-X 6-Month</td><td>$267.49</td><td>6 months</td></tr>
+          <tr><td>Core-X Annual</td><td>$485.42</td><td>12 months</td></tr>
         </tbody>
       </table>
 
       <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="corex">Subscribe Core-X</button>
+        <a class="cta-btn" href="confirm-order.html?plan=corex&package=monthly">Subscribe Monthly</a>
+        <a class="cta-btn" href="confirm-order.html?plan=corex&package=6m">Subscribe 6 Months</a>
+        <a class="cta-btn" href="confirm-order.html?plan=corex&package=12m">Subscribe 12 Months</a>
       </div>
     </div>
 
@@ -48,33 +47,14 @@
     </div>
   </section>
 
-  <!-- include same Firebase + SweetAlert scripts as pro4.html -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    // Firebase config (แทนที่ค่าจริง)
-    firebase.initializeApp({
-      apiKey: "AIzaSy…",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      appId: "1:…:web:…"
-    });
-    const auth      = firebase.auth();
-    const funcs     = firebase.functions();
-    document.querySelectorAll('.pro4-checkout-btn')
-      .forEach(btn => btn.addEventListener('click', async () => {
-        const plan = btn.dataset.plan; // "corex"
-        const user = auth.currentUser;
-        if (!user) {
-          // redirect to login พร้อม save redirect
-          location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
-          return;
-        }
-        // ถ้าล็อกอินแล้ว → confirm-order
-        location.href = `confirm-order.html?plan=${plan}`;
-      }));
-  </script>
+  <footer class="footer-section">
+    <div class="footer-logo-left">
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
+    </div>
+    <div class="footer-text">
+      <p>Past performance does not guarantee future results.<br/> Use with discretion and risk management.</p>
+      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+  </footer>
 </body>
 </html>
