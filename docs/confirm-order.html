@@ -1,172 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Confirm Your Order – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<section class="pro4-section">
-  <div class="left-content">
-    <h2>Confirm Your Order</h2>
-    <form id="order-form" class="order-form">
-      <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
-      <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
-      <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
-      <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\\d+"/></div>
-      <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
-      <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
-      <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
-      <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
-      <p class="note">License will be bound to this MT5 account and server only.</p>
-      <div class="form-group checkbox-group">
-        <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
-      </div>
-      <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
-      <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
-    </form>
-  </div>
-  <div class="right-content">
-    <div class="mockup-wrapper">
-      <img id="product-image" src="" alt="Product Box"/>
-      <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
+  <section class="pro4-section">
+    <div class="left-content">
+      <h2>Confirm Your Order</h2>
+      <form id="order-form" class="order-form">
+        <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
+        <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\\d+"/></div>
+        <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
+        <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
+        <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
+        <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
+        <p class="note">License will be bound to this MT5 account and server only.</p>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
+        </div>
+        <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
+        <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
+      </form>
     </div>
-  </div>
-</section>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img id="product-image" src="" alt="Product Box"/>
+        <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
+      </div>
+    </div>
+  </section>
 
-<footer class="footer-section">
-  <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
-  <div class="footer-text">
-    <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
-    <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
-  </div>
-</footer>
+  <footer class="footer-section">
+    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
+    <div class="footer-text">
+      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
+      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+  </footer>
 
-<!-- SDKs -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+  <!-- SDKs -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-  authDomain: "momentumxlab-37ce2.firebaseapp.com",
-  projectId: "momentumxlab-37ce2"
-};
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const firestore = firebase.firestore();
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
 
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(location.search);
-  const plan = params.get("plan")?.toLowerCase();
-  const pkg = params.get("package")?.toLowerCase();
-  const status = params.get("status");
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(location.search);
+      const plan = params.get("plan")?.toLowerCase();
+      const pkg = params.get("package")?.toLowerCase();
+      const status = params.get("status");
 
-  const planNames = {
-    pro4: "ApexXAU Intelligent Pro-4",
-    pro5: "ApexXAU Intelligent Pro-5",
-    corex: "ApexXAU Intelligent Core-X"
-  };
-  const planImages = {
-    pro4: "Pro4_CollectorEdition_whiteBG.png",
-    pro5: "Pro5_CollectorEdition_whiteBG.png",
-    corex: "CoreX_PerformanceEdition_whiteBG.png"
-  };
-  const packagePrices = {
-    pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-    pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-    corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
-  };
-  const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
-  const launchDates = {
-    pro4: new Date("2024-01-01"),
-    pro5: new Date("2025-09-01"),
-    corex: new Date("2025-12-01")
-  };
+      const planNames = {
+        pro4: "ApexXAU Intelligent Pro-4",
+        pro5: "ApexXAU Intelligent Pro-5",
+        corex: "ApexXAU Intelligent Core-X"
+      };
+      const planImages = {
+        pro4: "Pro4_CollectorEdition_whiteBG.png",
+        pro5: "Pro5_CollectorEdition_whiteBG.png",
+        corex: "CoreX_PerformanceEdition_whiteBG.png"
+      };
+      const packagePrices = {
+        pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+        pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+        corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
+      };
+      const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
+      const launchDates = {
+        pro4: new Date("2024-01-01"),
+        pro5: new Date("2025-09-01"),
+        corex: new Date("2025-12-01")
+      };
 
-  const today = new Date();
-  if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
-    Swal.fire("Invalid Parameters", "Please check your package link.", "error");
-    return;
-  }
+      const today = new Date();
 
-  if (today < launchDates[plan]) {
-    const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-    Swal.fire({
-      title: "Coming Soon!",
-      html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`,
-      icon: "info"
-    });
-    return;
-  }
-
-  const name = planNames[plan];
-  const price = packagePrices[plan][pkg];
-  const expiry = new Date(); expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
-  document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
-  document.getElementById("price").value = `$${price.toFixed(2)}`;
-  document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
-  document.getElementById("product-image").src = planImages[plan];
-  document.getElementById("product-image").alt = name;
-  document.getElementById("download-btn").href = `downloads/${plan}.zip`;
-
-  document.getElementById("agree").addEventListener("change", e => {
-    document.getElementById("btn-confirm").disabled = !e.target.checked;
-  });
-
-  auth.onAuthStateChanged(async user => {
-    if (!user) {
-      location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
-      return;
-    }
-
-    document.getElementById("email").value = user.email;
-    const userRef = firestore.collection("users").doc(user.uid);
-    const snapshot = await userRef.get();
-    if (!snapshot.exists) {
-      await userRef.set({ fullName: "", phone: "", createdAt: Date.now() });
-    }
-    const userDoc = await userRef.get();
-    const data = userDoc.data();
-    document.getElementById("fullName").value = data.fullName || "";
-    document.getElementById("phone").value = data.phone || "";
-
-    document.getElementById("order-form").addEventListener("submit", async e => {
-      e.preventDefault();
-      if (status !== "paid") {
-        Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
+      if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
+        Swal.fire("Invalid Parameters", "Please check your package link.", "error");
         return;
       }
 
-      const license = {
-        uid: user.uid,
-        email: user.email,
-        fullName: document.getElementById("fullName").value,
-        phone: document.getElementById("phone").value,
-        mt5: document.getElementById("mt5Account").value,
-        server: document.getElementById("brokerServer").value,
-        package: `${name} – ${pkg.toUpperCase()}`,
-        price,
-        expiryDate: document.getElementById("expiry").value,
-        confirmedAt: Date.now()
-      };
-
-      try {
-                await firestore.collection("orders").add(license);
-        Swal.fire("License Activated!", "Your license is confirmed.", "success").then(() => {
-          // ✅ Redirect หรือแสดงปุ่มดาวน์โหลด
-          document.getElementById("download-btn").style.display = "inline-block";
-          document.getElementById("btn-confirm").disabled = true;
-        });
-      } catch (err) {
-        Swal.fire("Error", `Unable to save license: ${err.message}`, "error");
+      if (today < launchDates[plan]) {
+        const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+        Swal.fire({ title: "Coming Soon!", html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`, icon: "info" });
+        return;
       }
+
+      const name = planNames[plan];
+      const price = packagePrices[plan][pkg];
+      const expiry = new Date();
+      expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
+
+      document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
+      document.getElementById("price").value = `$${price.toFixed(2)}`;
+      document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
+      document.getElementById("product-image").src = planImages[plan];
+      document.getElementById("product-image").alt = name;
+      document.getElementById("download-btn").href = `downloads/${plan}.zip`;
+
+      document.getElementById("agree").addEventListener("change", e => {
+        document.getElementById("btn-confirm").disabled = !e.target.checked;
+      });
+
+      auth.onAuthStateChanged(async user => {
+        if (!user) {
+          location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
+          return;
+        }
+
+        document.getElementById("email").value = user.email;
+
+        const userRef = firestore.collection("users").doc(user.uid);
+        const snapshot = await userRef.get();
+        if (!snapshot.exists) {
+          await userRef.set({ fullName: "", phone: "", createdAt: Date.now() });
+        }
+
+        const userDoc = await userRef.get();
+        const data = userDoc.data();
+
+        document.getElementById("fullName").value = data.fullName || "";
+        document.getElementById("phone").value = data.phone || "";
+
+        document.getElementById("order-form").addEventListener("submit", async e => {
+          e.preventDefault();
+          if (status !== "paid") {
+            Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
+            return;
+          }
+
+          const license = {
+            uid: user.uid,
+            email: user.email,
+            fullName: document.getElementById("fullName").value,
+            phone: document.getElementById("phone").value,
+            mt5: document.getElementById("mt5Account").value,
+            server: document.getElementById("brokerServer").value,
+            package: `${name} – ${pkg.toUpperCase()}`,
+            price,
+            expiryDate: document.getElementById("expiry").value,
+            confirmedAt: Date.now()
+          };
+
+          try {
+            await firestore.collection("orders").add(license);
+            Swal.fire("License Activated!", "Your license is confirmed.", "success").then(() => {
+              document.getElementById("download-btn").style.display = "inline-block";
+              document.getElementById("btn-confirm").disabled = true;
+            });
+          } catch (err) {
+            Swal.fire("Error", `Unable to save license: ${err.message}`, "error");
+          }
+        });
+      });
     });
-  });
-});
-</script>
+  </script>
 </body>
 </html>
+``
