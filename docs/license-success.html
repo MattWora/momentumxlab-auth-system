@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>License Activated – MomentumXLab</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <section class="success-section">
+    <div class="success-card">
+      <h2>✅ License Activated Successfully!</h2>
+      <p class="subtext">Thank you <span id="fullName">Trader</span> — Your license for <strong id="package"></strong> is now active.</p>
+      <div class="license-details">
+        <p><strong>License Key:</strong> <span id="licenseKey">Loading...</span></p>
+        <p><strong>MT5 Account:</strong> <span id="mt5Account"></span></p>
+        <p><strong>Broker Server:</strong> <span id="brokerServer"></span></p>
+        <p><strong>Valid Until:</strong> <span id="expiryDate"></span></p>
+      </div>
+      <a href="downloads/" class="cta-btn" id="downloadLink">📦 Download Package</a>
+      <a href="dashboard.html" class="link-btn">📂 View My Orders</a>
+    </div>
+  </section>
+
+  <footer class="footer-section">
+    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
+    <div class="footer-text">
+      <p>&copy; 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      auth.onAuthStateChanged(async user => {
+        if (!user) {
+          location.href = "login.html?redirect=license-success.html";
+          return;
+        }
+
+        const snapshot = await firestore.collection("orders")
+          .where("uid", "==", user.uid)
+          .orderBy("confirmedAt", "desc")
+          .limit(1)
+          .get();
+
+        if (snapshot.empty) {
+          document.querySelector(".success-card").innerHTML = "<h3>No license found</h3><p>Please complete the purchase again.</p>";
+          return;
+        }
+
+        const license = snapshot.docs[0].data();
+
+        document.getElementById("fullName").textContent = license.fullName;
+        document.getElementById("package").textContent = license.package;
+        document.getElementById("licenseKey").textContent = license.uid.slice(0, 10).toUpperCase(); // temporary key format
+        document.getElementById("mt5Account").textContent = license.mt5;
+        document.getElementById("brokerServer").textContent = license.server;
+        document.getElementById("expiryDate").textContent = license.expiryDate;
+        document.getElementById("downloadLink").href = `downloads/${license.package.toLowerCase().split(" ")[0]}.zip`;
+      });
+    });
+  </script>
+</body>
+</html>
