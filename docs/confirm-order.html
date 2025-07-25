@@ -155,5 +155,18 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        await firestore.collection("orders").add(license);
-        Swal.fire("License Activated!", "Your license is confirmed.", "success");
+                await firestore.collection("orders").add(license);
+        Swal.fire("License Activated!", "Your license is confirmed.", "success").then(() => {
+          // ✅ Redirect หรือแสดงปุ่มดาวน์โหลด
+          document.getElementById("download-btn").style.display = "inline-block";
+          document.getElementById("btn-confirm").disabled = true;
+        });
+      } catch (err) {
+        Swal.fire("Error", `Unable to save license: ${err.message}`, "error");
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
