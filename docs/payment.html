@@ -44,19 +44,17 @@
   <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-    // Replace with your own Publishable Key from Stripe Dashboard
-    const stripe = Stripe("pk_test_YOUR_PUBLISHABLE_KEY");
+    // ✅ Replace this with your actual Stripe Publishable Key
+    const stripe = Stripe("pk_test_YOUR_REAL_PUBLISHABLE_KEY");
 
-    // Read plan & package from URL
-    const params = new URLSearchParams(window.location.search);
-    const plan = (params.get("plan") || "").toLowerCase();
-    const pkg  = (params.get("package") || "").toLowerCase();
+    const params = new URLSearchParams(location.search);
+    const plan   = (params.get("plan") || "").toLowerCase();
+    const pkg    = (params.get("package") || "").toLowerCase();
 
-    // Mappings
     const planNames = {
-      pro4:  "ApexXAU Intelligent Pro-4",
-      pro5:  "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
+      pro4: "ApexXAU Intelligent Pro-4",
+      pro5: "ApexXAU Intelligent Pro-5",
+      corex:"ApexXAU Intelligent Core-X"
     };
     const packagePrices = {
       pro4:  { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
@@ -69,34 +67,25 @@
       corex: "CoreX_PerformanceEdition_whiteBG.png"
     };
 
-    const infoBox     = document.querySelector(".info-box");
-    const nameEl      = document.getElementById("package-name");
-    const priceEl     = document.getElementById("package-price");
-    const imageEl     = document.getElementById("product-image");
-    const payBtn      = document.getElementById("pay-btn");
+    const nameEl  = document.getElementById("package-name");
+    const priceEl = document.getElementById("package-price");
+    const imageEl = document.getElementById("product-image");
+    const payBtn  = document.getElementById("pay-btn");
 
-    // Validate inputs & populate UI
     if (!planNames[plan] || !packagePrices[plan]?.[pkg]) {
-      infoBox.innerHTML = `
-        <p>Error loading package. Please check your link.</p>
-      `;
+      document.querySelector(".info-box").innerHTML = `<p>Invalid package selection. Please check your link.</p>`;
       payBtn.style.display = "none";
     } else {
-      const displayName = `${planNames[plan]} – ${pkg.toUpperCase()}`;
-      const displayPrice = `$${packagePrices[plan][pkg].toFixed(2)}`;
-
-      nameEl.textContent  = displayName;
-      priceEl.textContent = displayPrice;
-      imageEl.src         = planImages[plan];
-      imageEl.alt         = planNames[plan];
-
+      nameEl.textContent   = `${planNames[plan]} – ${pkg.toUpperCase()}`;
+      priceEl.textContent  = `$${packagePrices[plan][pkg].toFixed(2)}`;
+      imageEl.src          = planImages[plan];
+      imageEl.alt          = planNames[plan];
       payBtn.addEventListener("click", onPayNow);
     }
 
     async function onPayNow() {
       payBtn.disabled = true;
       try {
-        // Call your backend to create a Stripe Checkout session
         const res = await fetch(
           "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
           {
@@ -106,27 +95,17 @@
           }
         );
 
-        if (!res.ok) {
-          throw new Error("Failed to initiate payment.");
-        }
-
+        if (!res.ok) throw new Error(`Server returned ${res.status}`);
         const { sessionId } = await res.json();
 
-        // Redirect to Stripe Checkout
         const { error } = await stripe.redirectToCheckout({ sessionId });
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
       } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "Payment Error",
-          text: err.message || "Please try again later."
-        });
+        console.error("Stripe Error:", err);
+        Swal.fire("Payment Error", err.message || "Please try again later", "error");
         payBtn.disabled = false;
       }
     }
   </script>
 </body>
 </html>
-```
