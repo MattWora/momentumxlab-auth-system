@@ -49,114 +49,125 @@
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
   
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const firestore = firebase.firestore();
+  <!-- แก้เฉพาะสคริปต์ด้านล่างใน confirm-order.html -->
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+  authDomain: "momentumxlab-37ce2.firebaseapp.com",
+  projectId: "momentumxlab-37ce2"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const firestore = firebase.firestore();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const params = new URLSearchParams(location.search);
-      const plan = params.get("plan")?.toLowerCase();
-      const pkg = params.get("package")?.toLowerCase();
-      const status = params.get("status");
-      
-      const planNames = {
-        pro4: "ApexXAU Intelligent Pro-4",
-        pro5: "ApexXAU Intelligent Pro-5",
-        corex: "ApexXAU Intelligent Core-X"
-      };
-      const planImages = {
-        pro4: "Pro4_CollectorEdition_whiteBG.png",
-        pro5: "Pro5_CollectorEdition_whiteBG.png",
-        corex: "CoreX_PerformanceEdition_whiteBG.png"
-      };
-      const packagePrices = {
-        pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-        pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-        corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
-      };
-      const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
-      const launchDates = {
-        pro4: new Date("2024-01-01"),
-        pro5: new Date("2025-09-01"),
-        corex: new Date("2025-12-01")
-      };
+document.addEventListener("DOMContentLoaded", () => {
+  const params = new URLSearchParams(location.search);
+  const plan = params.get("plan")?.toLowerCase();
+  const pkg = params.get("package")?.toLowerCase();
+  const status = params.get("status");
 
-      const today = new Date();
-      if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
-        Swal.fire("Invalid Parameters", "Please check your package link.", "error");
-        return;
-      }
-      if (today < launchDates[plan]) {
-        const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-        Swal.fire({
-          title: "Coming Soon!",
-          html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`,
-          icon: "info"
-        });
-        return;
-      }
+  const planNames = {
+    pro4: "ApexXAU Intelligent Pro-4",
+    pro5: "ApexXAU Intelligent Pro-5",
+    corex: "ApexXAU Intelligent Core-X"
+  };
+  const planImages = {
+    pro4: "Pro4_CollectorEdition_whiteBG.png",
+    pro5: "Pro5_CollectorEdition_whiteBG.png",
+    corex: "CoreX_PerformanceEdition_whiteBG.png"
+  };
+  const packagePrices = {
+    pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+    pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+    corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
+  };
+  const monthOffset = { monthly: 1, "6m": 6, "12m": 12 };
+  const launchDates = {
+    pro4: new Date("2024-01-01"),
+    pro5: new Date("2025-09-01"),
+    corex: new Date("2025-12-01")
+  };
 
-      const name = planNames[plan];
-      const price = packagePrices[plan][pkg];
-      const expiry = new Date(); expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
-      document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
-      document.getElementById("price").value = `$${price.toFixed(2)}`;
-      document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
-      document.getElementById("product-image").src = planImages[plan];
-      document.getElementById("product-image").alt = name;
-      document.getElementById("download-btn").href = `downloads/${plan}.zip`;
-      document.getElementById("agree").addEventListener("change", e => {
-        document.getElementById("btn-confirm").disabled = !e.target.checked;
-      });
-
-      auth.onAuthStateChanged(async user => {
-        if (!user) {
-          location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
-          return;
-        }
-        document.getElementById("email").value = user.email;
-
-        const doc = await firestore.collection("users").doc(user.uid).get();
-        if (doc.exists) {
-          const data = doc.data();
-          document.getElementById("fullName").value = data.fullName || "";
-          document.getElementById("phone").value = data.phone || "";
-        }
-
-        document.getElementById("order-form").addEventListener("submit", async e => {
-          e.preventDefault();
-          if (status !== "paid") {
-            Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
-            return;
-          }
-          const license = {
-            uid: user.uid,
-            email: user.email,
-            fullName: document.getElementById("fullName").value,
-            phone: document.getElementById("phone").value,
-            mt5: document.getElementById("mt5Account").value,
-            server: document.getElementById("brokerServer").value,
-            package: `${name} – ${pkg.toUpperCase()}`,
-            price,
-            expiryDate: document.getElementById("expiry").value,
-            confirmedAt: Date.now()
-          };
-          try {
-            await firestore.collection("orders").add(license);
-            Swal.fire("License Activated!", "Your license is confirmed.", "success");
-            document.getElementById("download-btn").style.display = "inline-block";
-          } catch (err) {
-            Swal.fire("Error", err.message, "error");
-          }
-        });
-      });
+  const today = new Date();
+  if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
+    Swal.fire("Invalid Parameters", "Please check your package link.", "error");
+    return;
+  }
+  if (today < launchDates[plan]) {
+    const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    Swal.fire({
+      title: "Coming Soon!",
+      html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`,
+      icon: "info"
     });
-  </script>
+    return;
+  }
+
+  const name = planNames[plan];
+  const price = packagePrices[plan][pkg];
+  const expiry = new Date();
+  expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
+
+  document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
+  document.getElementById("price").value = `$${price.toFixed(2)}`;
+  document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
+  document.getElementById("product-image").src = planImages[plan];
+  document.getElementById("product-image").alt = name;
+  document.getElementById("download-btn").href = `downloads/${plan}.zip`;
+
+  document.getElementById("agree").addEventListener("change", e => {
+    document.getElementById("btn-confirm").disabled = !e.target.checked;
+  });
+
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
+      location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
+      return;
+    }
+    document.getElementById("email").value = user.email;
+
+    const userRef = firestore.collection("users").doc(user.uid);
+    const snapshot = await userRef.get();
+    if (!snapshot.exists) {
+      await userRef.set({
+        fullName: "",
+        phone: "",
+        createdAt: Date.now()
+      });
+    }
+    const userDoc = await userRef.get();
+    const userData = userDoc.data();
+    document.getElementById("fullName").value = userData.fullName || "";
+    document.getElementById("phone").value = userData.phone || "";
+
+    document.getElementById("order-form").addEventListener("submit", async e => {
+      e.preventDefault();
+      if (status !== "paid") {
+        Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
+        return;
+      }
+      const license = {
+        uid: user.uid,
+        email: user.email,
+        fullName: document.getElementById("fullName").value,
+        phone: document.getElementById("phone").value,
+        mt5: document.getElementById("mt5Account").value,
+        server: document.getElementById("brokerServer").value,
+        package: `${name} – ${pkg.toUpperCase()}`,
+        price,
+        expiryDate: document.getElementById("expiry").value,
+        confirmedAt: Date.now()
+      };
+      try {
+        await firestore.collection("orders").add(license);
+        Swal.fire("License Activated!", "Your license is confirmed.", "success");
+        document.getElementById("download-btn").style.display = "inline-block";
+      } catch (err) {
+        Swal.fire("Error", err.message, "error");
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>
