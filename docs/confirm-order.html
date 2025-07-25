@@ -83,25 +83,36 @@
         document.getElementById("btn-confirm").disabled = !e.target.checked;
       });
   
-      // 6. Fill user profile fields
+      // 6. Fill user profile fields with proper fallbacks
       auth.onAuthStateChanged(async user => {
         if (!user) {
           location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
           return;
         }
   
-        document.getElementById("email").value = user.email;
+        // Email always from auth
+        document.getElementById("email").value = user.email || "";
+  
+        // Fetch or create user doc
         const userRef  = firestore.collection("users").doc(user.uid);
         let snapshot   = await userRef.get();
   
         if (!snapshot.exists) {
-          await userRef.set({ fullName: "", phone: "", createdAt: Date.now() });
+          await userRef.set({
+            fullName: "",
+            phone: "",
+            createdAt: Date.now()
+          });
           snapshot = await userRef.get();
         }
   
         const data = snapshot.data() || {};
-        document.getElementById("fullName").value = data.fullName;
-        document.getElementById("phone").value    = data.phone;
+        // Use firestore fullName, fallback to auth.displayName, then empty string
+        const fullName = data.fullName ?? user.displayName ?? "";
+        const phone    = data.phone    ?? "";
+  
+        document.getElementById("fullName").value = fullName;
+        document.getElementById("phone").value    = phone;
       });
   
       // 7. Handle form submission
@@ -142,3 +153,4 @@
   
 </body>
 </html>
+```
