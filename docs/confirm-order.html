@@ -7,49 +7,48 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Confirm Your Order</h2>
-      <form id="order-form" class="order-form">
-        <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
-        <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\\d+"/></div>
-        <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
-        <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
-        <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
-        <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
-        <p class="note">License will be bound to this MT5 account and server only.</p>
-        <div class="form-group checkbox-group">
-          <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
-        </div>
-        <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
-        <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
-      </form>
-    </div>
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img id="product-image" src="" alt="Product Box"/>
-        <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
+<section class="pro4-section">
+  <div class="left-content">
+    <h2>Confirm Your Order</h2>
+    <form id="order-form" class="order-form">
+      <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
+      <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
+      <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
+      <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\\d+"/></div>
+      <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
+      <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
+      <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
+      <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
+      <p class="note">License will be bound to this MT5 account and server only.</p>
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
       </div>
+      <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
+      <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
+    </form>
+  </div>
+  <div class="right-content">
+    <div class="mockup-wrapper">
+      <img id="product-image" src="" alt="Product Box"/>
+      <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer class="footer-section">
-    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
-    <div class="footer-text">
-      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
-      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
-    </div>
-  </footer>
+<footer class="footer-section">
+  <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
+  <div class="footer-text">
+    <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
+    <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+  </div>
+</footer>
 
-  <!-- SDKs -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
-  
-  <!-- แก้เฉพาะสคริปต์ด้านล่างใน confirm-order.html -->
+<!-- SDKs -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
@@ -93,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Swal.fire("Invalid Parameters", "Please check your package link.", "error");
     return;
   }
+
   if (today < launchDates[plan]) {
     const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
     Swal.fire({
@@ -105,9 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const name = planNames[plan];
   const price = packagePrices[plan][pkg];
-  const expiry = new Date();
-  expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
-
+  const expiry = new Date(); expiry.setMonth(expiry.getMonth() + monthOffset[pkg]);
   document.getElementById("package").value = `${name} – ${pkg.toUpperCase()}`;
   document.getElementById("price").value = `$${price.toFixed(2)}`;
   document.getElementById("expiry").value = expiry.toISOString().split("T")[0];
@@ -124,21 +122,17 @@ document.addEventListener("DOMContentLoaded", () => {
       location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
       return;
     }
-    document.getElementById("email").value = user.email;
 
+    document.getElementById("email").value = user.email;
     const userRef = firestore.collection("users").doc(user.uid);
     const snapshot = await userRef.get();
     if (!snapshot.exists) {
-      await userRef.set({
-        fullName: "",
-        phone: "",
-        createdAt: Date.now()
-      });
+      await userRef.set({ fullName: "", phone: "", createdAt: Date.now() });
     }
     const userDoc = await userRef.get();
-    const userData = userDoc.data();
-    document.getElementById("fullName").value = userData.fullName || "";
-    document.getElementById("phone").value = userData.phone || "";
+    const data = userDoc.data();
+    document.getElementById("fullName").value = data.fullName || "";
+    document.getElementById("phone").value = data.phone || "";
 
     document.getElementById("order-form").addEventListener("submit", async e => {
       e.preventDefault();
@@ -146,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
         Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
         return;
       }
+
       const license = {
         uid: user.uid,
         email: user.email,
@@ -158,16 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
         expiryDate: document.getElementById("expiry").value,
         confirmedAt: Date.now()
       };
+
       try {
         await firestore.collection("orders").add(license);
         Swal.fire("License Activated!", "Your license is confirmed.", "success");
-        document.getElementById("download-btn").style.display = "inline-block";
-      } catch (err) {
-        Swal.fire("Error", err.message, "error");
-      }
-    });
-  });
-});
-</script>
-</body>
-</html>
