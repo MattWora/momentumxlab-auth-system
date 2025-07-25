@@ -4,12 +4,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirm Order</title>
+  <title>Confirm Your Order</title>
   <style>
     body {
       font-family: sans-serif;
       padding: 2rem;
-      max-width: 500px;
+      max-width: 480px;
       margin: auto;
     }
     label, input, button {
@@ -24,6 +24,7 @@
     .checkbox-group {
       display: flex;
       align-items: center;
+      margin-bottom: 1rem;
     }
     .checkbox-group label {
       margin-left: .5rem;
@@ -66,109 +67,106 @@
     <button type="submit">Confirm</button>
   </form>
 
-  <!-- Firebase SDK (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
     // 1. Firebase config
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      // ... ของคุณจาก Firebase console
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
     };
     firebase.initializeApp(firebaseConfig);
 
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // 2. แผน ราค และระยะเวลา
+    // 2. Pricing & plans
     const planNames = {
-      pro3: 'EA Pro 3',
-      pro4: 'EA Pro 4',
-      core: 'EA Core X'
+      pro4: "ApexXAU Intelligent Pro-4",
+      pro5: "ApexXAU Intelligent Pro-5",
+      corex: "ApexXAU Intelligent Core-X"
     };
     const priceMap = {
-      monthly: 100,
-      '6m': 540,
-      '12m': 1000
+      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+      corex: { monthly: 49.99, "6m": 267.49, "12m": 485.42 }
     };
-    const monthMap = {
-      monthly: 1,
-      '6m': 6,
-      '12m': 12
-    };
+    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
 
-    // 3. ตรวจสอบล็อกอิน
+    // 3. Check login once on load
     auth.onAuthStateChanged(user => {
-      if (!user) {
-        Swal.fire({
-          icon: 'warning',
-          title: 'กรุณาเข้าสู่ระบบ',
-          text: 'คุณต้องล็อกอินก่อนดำเนินการ',
-          confirmButtonText: 'ไปยังหน้าเข้าสู่ระบบ'
-        }).then(() => {
-          const redirect = encodeURIComponent(window.location.href);
-          window.location.href = `login.html?redirect=${redirect}`;
-        });
-      } else {
+      if (user) {
         initForm(user);
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "กรุณาเข้าสู่ระบบ",
+          text: "คุณต้องล็อกอินก่อนดำเนินการ",
+          confirmButtonText: "ไปหน้าเข้าสู่ระบบ"
+        }).then(() => {
+          const backTo = encodeURIComponent(window.location.href);
+          window.location.href = `login.html?redirect=${backTo}`;
+        });
       }
     });
 
-    // 4. ดึง params, เติมฟอร์ม และตั้ง handler
+    // 4. Fill form and wire up submit
     function initForm(user) {
       const qs      = new URLSearchParams(window.location.search);
-      const planKey = qs.get('plan')    || '';
-      const pkgKey  = qs.get('package') || '';
+      const planKey = (qs.get("plan") || "").toLowerCase();
+      const pkgKey  = (qs.get("package") || "").toLowerCase();
 
-      // เติมค่าฟอร์ม
-      document.getElementById('email').value     = user.email;
-      document.getElementById('planName').value = planNames[planKey] || planKey;
-      document.getElementById('pkg').value       = pkgKey;
-      const priceVal = priceMap[pkgKey] || 0;
-      document.getElementById('price').value     = priceVal + ' USD';
+      // fill auth data
+      document.getElementById("email").value    = user.email || "";
+      document.getElementById("planName").value = planNames[planKey] || planKey;
+      document.getElementById("pkg").value      = pkgKey;
 
-      // คำนวณวันหมดอายุ
-      const expiry = new Date();
-      expiry.setMonth(expiry.getMonth() + (monthMap[pkgKey] || 0));
-      document.getElementById('expiry').value = expiry.toLocaleDateString('th-TH');
+      // price + expiry
+      const priceVal = (priceMap[planKey] || {})[pkgKey] || 0;
+      document.getElementById("price").value = `$${priceVal.toFixed(2)}`;
 
-      // 5. สร้าง order เมื่อ submit
-      document.getElementById('confirm-form').addEventListener('submit', async e => {
+      const expDate = new Date();
+      expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey] || 0));
+      document.getElementById("expiry").value = expDate.toLocaleDateString("th-TH");
+
+      // submit handler
+      document.getElementById("confirm-form").addEventListener("submit", async e => {
         e.preventDefault();
-
-        if (!document.getElementById('agree').checked) {
-          return Swal.fire('กรุณายอมรับเงื่อนไขก่อน');
+        if (!auth.currentUser) {
+          return Swal.fire("คุณยังไม่ได้ล็อกอิน", "", "warning");
         }
-        const mt5Acc = document.getElementById('mt5acc').value.trim();
-        const broker = document.getElementById('broker').value.trim();
-        if (!mt5Acc || !broker) {
-          return Swal.fire('กรุณากรอก MT5 Account และ Broker Server ให้ครบ');
+        if (!document.getElementById("agree").checked) {
+          return Swal.fire("กรุณายอมรับเงื่อนไขก่อน");
+        }
+        const mt5   = document.getElementById("mt5acc").value.trim();
+        const broker= document.getElementById("broker").value.trim();
+        if (!mt5 || !broker) {
+          return Swal.fire("กรุณากรอก MT5 Account และ Broker Server ให้ครบ");
         }
 
         try {
-          await db.collection('orders').add({
+          await db.collection("orders").add({
             uid:       user.uid,
             email:     user.email,
             plan:      planKey,
             package:   pkgKey,
             price:     priceVal,
-            expiry:    firebase.firestore.Timestamp.fromDate(expiry),
-            mt5Acc,
-            broker,
+            expiry:    firebase.firestore.Timestamp.fromDate(expDate),
+            mt5Account:mt5,
+            brokerServer: broker,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
           });
-
-          Swal.fire('สำเร็จ', 'สร้างคำสั่งซื้อเรียบร้อย', 'success')
-            .then(() => window.location.href = 'dashboard.html');
+          Swal.fire("สำเร็จ", "สร้างคำสั่งซื้อเรียบร้อย", "success")
+            .then(() => window.location.href = "dashboard.html");
         } catch (err) {
           console.error(err);
-          Swal.fire('เกิดข้อผิดพลาด', err.message, 'error');
+          Swal.fire("เกิดข้อผิดพลาด", err.message, "error");
         }
       });
     }
