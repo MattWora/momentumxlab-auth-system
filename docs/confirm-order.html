@@ -11,51 +11,96 @@
     <div class="left-content">
       <h2>Confirm Your Order</h2>
       <form id="order-form" class="order-form">
-        <div class="form-group"><label>Email</label><input type="email" id="email" readonly required/></div>
-        <div class="form-group"><label>Full Name</label><input type="text" id="fullName" required/></div>
-        <div class="form-group"><label>Phone Number</label><input type="tel" id="phone" required/></div>
-        <div class="form-group"><label>MT5 Account Number</label><input type="text" id="mt5Account" required pattern="\\d+"/></div>
-        <div class="form-group"><label>Broker Server</label><input type="text" id="brokerServer" required/></div>
-        <div class="form-group"><label>Package</label><input type="text" id="package" readonly/></div>
-        <div class="form-group"><label>Price (USD)</label><input type="text" id="price" readonly/></div>
-        <div class="form-group"><label>Expiry Date</label><input type="date" id="expiry" readonly required/></div>
-        <p class="note">License will be bound to this MT5 account and server only.</p>
-        <div class="form-group checkbox-group">
-          <input type="checkbox" id="agree"/><label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="email" readonly required/>
         </div>
-        <button class="cta-btn" type="submit" id="btn-confirm" disabled>Confirm and Generate License</button>
-        <a id="download-btn" href="#" style="display:none;" class="cta-btn">Download</a>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="fullName" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" required/>
+        </div>
+        <div class="form-group">
+          <label>MT5 Account Number</label>
+          <input type="text" id="mt5Account" required pattern="\\d+"/>
+        </div>
+        <div class="form-group">
+          <label>Broker Server</label>
+          <input type="text" id="brokerServer" required/>
+        </div>
+        <div class="form-group">
+          <label>Package</label>
+          <input type="text" id="package" readonly/>
+        </div>
+        <div class="form-group">
+          <label>Price (USD)</label>
+          <input type="text" id="price" readonly/>
+        </div>
+        <div class="form-group">
+          <label>Expiry Date</label>
+          <input type="date" id="expiry" readonly required/>
+        </div>
+        <p class="note">
+          License will be bound to this MT5 account and server only.
+        </p>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="agree"/>
+          <label for="agree">
+            I acknowledge the terms and certify that the above information is accurate.
+          </label>
+        </div>
+        <button class="cta-btn" type="submit" id="btn-confirm" disabled>
+          Confirm and Generate License
+        </button>
+        <a id="download-btn" href="#" style="display:none;" class="cta-btn">
+          Download
+        </a>
       </form>
     </div>
     <div class="right-content">
       <div class="mockup-wrapper">
         <img id="product-image" src="" alt="Product Box"/>
-        <p class="edition custom">Your license will activate upon payment and remain valid until its expiration date.</p>
+        <p class="edition custom">
+          Your license will activate upon payment and remain valid until its expiration date.
+        </p>
       </div>
     </div>
   </section>
 
   <footer class="footer-section">
-    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
+    <div class="footer-logo-left">
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
+    </div>
     <div class="footer-text">
-      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
-      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+      <p>
+        By submitting this form, you acknowledge the terms and certify accuracy of the information.
+      </p>
+      <p class="copyright">
+        © 2025 MomentumXLab. All rights reserved.
+      </p>
     </div>
   </footer>
 
-  <!-- SDKs -->
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
 
   <script>
+    // กำหนด Config
     const firebaseConfig = {
       apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
       authDomain: "momentumxlab-37ce2.firebaseapp.com",
       projectId: "momentumxlab-37ce2"
     };
     firebase.initializeApp(firebaseConfig);
+
     const auth = firebase.auth();
     const firestore = firebase.firestore();
 
@@ -88,15 +133,19 @@
       };
 
       const today = new Date();
-
       if (!plan || !pkg || !planNames[plan] || !packagePrices[plan]?.[pkg]) {
         Swal.fire("Invalid Parameters", "Please check your package link.", "error");
         return;
       }
-
       if (today < launchDates[plan]) {
-        const launch = launchDates[plan].toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-        Swal.fire({ title: "Coming Soon!", html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`, icon: "info" });
+        const launch = launchDates[plan].toLocaleDateString("en-US", {
+          year: "numeric", month: "long", day: "numeric"
+        });
+        Swal.fire({
+          title: "Coming Soon!",
+          html: `<b>${planNames[plan]}</b> will be available on <span style="color:#e91e63">${launch}</span>.`,
+          icon: "info"
+        });
         return;
       }
 
@@ -118,21 +167,18 @@
 
       auth.onAuthStateChanged(async user => {
         if (!user) {
-          location.href = `login.html?redirect=${encodeURIComponent(location.pathname + location.search)}`;
+          location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
           return;
         }
 
         document.getElementById("email").value = user.email;
-
         const userRef = firestore.collection("users").doc(user.uid);
-        const snapshot = await userRef.get();
+        let snapshot = await userRef.get();
         if (!snapshot.exists) {
           await userRef.set({ fullName: "", phone: "", createdAt: Date.now() });
+          snapshot = await userRef.get();
         }
-
-        const userDoc = await userRef.get();
-        const data = userDoc.data();
-
+        const data = snapshot.data();
         document.getElementById("fullName").value = data.fullName || "";
         document.getElementById("phone").value = data.phone || "";
 
@@ -142,7 +188,6 @@
             Swal.fire("Payment Pending", "Please complete the payment before confirming.", "warning");
             return;
           }
-
           const license = {
             uid: user.uid,
             email: user.email,
@@ -155,13 +200,13 @@
             expiryDate: document.getElementById("expiry").value,
             confirmedAt: Date.now()
           };
-
           try {
             await firestore.collection("orders").add(license);
-            Swal.fire("License Activated!", "Your license is confirmed.", "success").then(() => {
-              document.getElementById("download-btn").style.display = "inline-block";
-              document.getElementById("btn-confirm").disabled = true;
-            });
+            Swal.fire("License Activated!", "Your license is confirmed.", "success")
+              .then(() => {
+                document.getElementById("download-btn").style.display = "inline-block";
+                document.getElementById("btn-confirm").disabled = true;
+              });
           } catch (err) {
             Swal.fire("Error", `Unable to save license: ${err.message}`, "error");
           }
@@ -171,4 +216,3 @@
   </script>
 </body>
 </html>
-``
