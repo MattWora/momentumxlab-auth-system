@@ -58,12 +58,17 @@
     <p>Status: Active</p>
     <p>Status: No payment made yet</p>
   </div>
-  
+
+  <!-- ปุ่มดาวน์โหลด Trial Version -->
   <a href="#" class="download-link" id="btn-pro4">Download Pro-4 Trial</a>
-  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" download class="download-link">
+
+  <!-- ลิงก์ Optimization Guide ที่แก้แล้ว -->
+  <a href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" 
+     download 
+     class="download-link">
     Download Optimization Guide
   </a>
-  
+
   <div class="logout" id="logout-btn">Logout</div>
 
   <!-- Firebase & SweetAlert2 -->
@@ -96,8 +101,7 @@
             text: 'You must be logged in to view this dashboard.',
             confirmButtonText: 'Go to Login'
           }).then(result => {
-            if (result.isConfirmed)
-              window.location.href = 'login.html?redirect=dashboard.html';
+            if (result.isConfirmed) window.location.href = 'login.html?redirect=dashboard.html';
           });
         }
       });
@@ -125,7 +129,7 @@
         });
 
         if (result.isConfirmed) {
-          window.open("https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5", "_blank");
+          window.open("https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5", "_blank");
         }
       });
 
