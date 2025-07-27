@@ -1,103 +1,75 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirm Your Order – MomentumXLab</title>
+  <title>Login – MomentumXLab</title>
+  <link rel="icon" href="favicon.ico"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="style.css"/>
+
+  <!-- Firebase & SweetAlert2 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+  <h1>Log In to Your Account</h1>
+  <input id="email"    type="email"    placeholder="Email"    required/>
+  <input id="password" type="password" placeholder="Password" required/>
+  <button id="btn-login">Log In</button>
+  <p id="status"></p>
 
-<section id="order-section" class="order-section">
-  <div class="left-content">
-    <h2 id="order-title">Confirm Your Order</h2>
-    <form id="order-form" class="order-form">
-      <!-- ฟิลด์ต่างๆ เหมือนเดิม -->
-      <!-- … -->
-      <button class="cta-btn" type="submit" id="btn-confirm" disabled>
-        Confirm and Generate License
-      </button>
-      <a id="download-btn" href="#" class="cta-btn" style="display:none;">
-        Download
-      </a>
-    </form>
-  </div>
+  <script>
+    // 1) Firebase config
+    const firebaseConfig = {
+      apiKey:      "YOUR_API_KEY",
+      authDomain:  "momentumxlab-37ce2.firebaseapp.com",
+      projectId:   "momentumxlab-37ce2",
+      storageBucket: "momentumxlab-37ce2.appspot.com",
+      messagingSenderId: "1234567890",
+      appId:       "1:1234567890:web:YOUR_APPID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-  <div class="right-content">
-    <div class="mockup-wrapper">
-      <img id="product-image" src="" alt="Product Mockup"/>
-      <p class="edition custom" id="edition-text">
-        Your license will activate upon payment and remain valid until its expiration date.
-      </p>
-    </div>
-  </div>
-</section>
+    // 2) อ่าน redirect URL จาก ?redirect=
+    const urlParams   = new URLSearchParams(location.search);
+    const redirectUrl = urlParams.get('redirect') || 'pro4.html';
 
-<footer class="footer-section">
-  <!-- footer เหมือนเดิม -->
-</footer>
+    // 3) Login handler
+    const emailInput = document.getElementById('email');
+    const passInput  = document.getElementById('password');
+    const btnLogin   = document.getElementById('btn-login');
+    const statusEl   = document.getElementById('status');
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
-<script>
-  // … Firebase init, planNames, priceMap, monthMap เหมือนเดิม
+    btnLogin.addEventListener('click', async () => {
+      const email    = emailInput.value.trim();
+      const password = passInput.value;
+      statusEl.textContent = '';
+      btnLogin.disabled = true;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    auth.onAuthStateChanged(user => {
-      if (!user) redirectToLogin();
-      else initForm(user);
+      try {
+        // ให้จำ session ข้ามหน้า
+        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+        // ล็อกอิน
+        await auth.signInWithEmailAndPassword(email, password);
+
+        // แจ้งสำเร็จ
+        await Swal.fire('Success', 'Login successful!', 'success');
+
+        // ย้อนกลับไปหน้าเดิม
+        window.location.href = redirectUrl;
+      } catch (err) {
+        statusEl.textContent = err.message;
+      } finally {
+        btnLogin.disabled = false;
+      }
     });
-  });
-
-  function initForm(user) {
-    const qs       = new URLSearchParams(location.search);
-    const rawPlan  = (qs.get("plan")||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-    const rawPkg   = (qs.get("package")||"").toLowerCase();
-    const pkgMap   = { "6months":"6m", "12months":"12m", monthly:"monthly", "6m":"6m", "12m":"12m" };
-    const planKey  = rawPlan;
-    const pkgKey   = pkgMap[rawPkg] || rawPkg;
-
-    // เปลี่ยน class บน <section> ตาม plan (ถ้าต้องการใช้ CSS แยก)
-    document.getElementById("order-section").className = `order-section ${planKey}-section`;
-
-    // เปลี่ยนหัวข้อให้ระบุชื่อแพลน
-    document.getElementById("order-title").innerText = 
-      `Confirm Your Order: ${planNames[planKey]||planKey}`;
-
-    // เติมข้อมูลฟอร์มฝั่งซ้าย
-    document.getElementById("email").value    = user.email;
-    document.getElementById("planName").value = planNames[planKey];
-    document.getElementById("pkg").value      = pkgKey;
-    const priceVal = (priceMap[planKey]||{})[pkgKey]||0;
-    document.getElementById("price").value    = `$${priceVal.toFixed(2)}`;
-
-    // คำนวณวันหมดอายุ (ปี ค.ศ.)
-    const expDate = new Date();
-    expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey]||0));
-    const dd   = String(expDate.getDate()).padStart(2,"0");
-    const mm   = String(expDate.getMonth()+1).padStart(2,"0");
-    const yyyy = expDate.getFullYear();
-    document.getElementById("expiry").value   = `${dd}/${mm}/${yyyy}`;
-
-    // โหลดรูป mockup ฝั่งขวา
-    const img = document.getElementById("product-image");
-    img.src = planImages[planKey] || "";
-    img.alt = planNames[planKey] || "";
-
-    // (ส่วน event handler checkbox + submit เหมือนเดิม)
-  }
-
-  function redirectToLogin() {
-    Swal.fire({
-      icon: "warning",
-      title: "กรุณาเข้าสู่ระบบ",
-      confirmButtonText: "ไปหน้าเข้าสู่ระบบ"
-    }).then(() => {
-      location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
-    });
-  }
-</script>
+  </script>
 </body>
 </html>
