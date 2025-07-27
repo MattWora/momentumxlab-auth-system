@@ -79,9 +79,11 @@
     </p>
   </div>
 
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script>
     const firebaseConfig = {
       // Replace with your actual Firebase config
@@ -94,10 +96,13 @@
     const btnLogin   = document.getElementById('btn-login');
     const statusEl   = document.getElementById('status');
 
+    // Get redirect target from URL parameter (fallback to dashboard.html)
+    const params = new URLSearchParams(window.location.search);
+    const redirectTo = params.get('redirect') || 'dashboard.html';
+
     btnLogin.addEventListener('click', async () => {
       const email = emailInput.value.trim();
       const password = passInput.value;
-
       statusEl.textContent = '';
       btnLogin.disabled = true;
 
@@ -112,22 +117,22 @@
 
         const result = await Swal.fire({
           icon: 'success',
-          title: 'Success',
-          text: 'Logged in successfully!',
+          title: 'Login Successful',
+          text: 'Click to proceed to dashboard',
           confirmButtonText: 'Go to Dashboard'
         });
 
         if (result.isConfirmed) {
-          window.location.href = 'dashboard.html';
+          window.location.href = redirectTo;
         }
 
       } catch (err) {
         if (err.code === 'auth/user-not-found') {
           const result = await Swal.fire({
             icon: 'warning',
-            title: 'Account not found',
+            title: 'Account Not Found',
             text: 'Would you like to sign up?',
-            confirmButtonText: 'Sign up',
+            confirmButtonText: 'Sign Up',
             showCancelButton: true,
             cancelButtonText: 'Cancel'
           });
@@ -135,6 +140,7 @@
           if (result.isConfirmed) {
             window.location.href = 'signup.html';
           }
+
         } else if (err.code === 'auth/wrong-password') {
           statusEl.textContent = 'Incorrect password';
         } else {
