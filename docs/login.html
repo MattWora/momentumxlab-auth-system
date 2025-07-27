@@ -1,72 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login – MomentumXLab</title>
-  <link rel="icon" href="favicon.ico"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background: radial-gradient(circle at top, #1e1e2f, #0f0f1b);
+      font-family: 'Orbitron', sans-serif;
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #d4af37;
+      width: 320px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    input {
+      background: #2d2d42;
+      color: #fff;
+    }
+    button {
+      background: linear-gradient(135deg, #d4af37, #89753f);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    button:hover {
+      background: linear-gradient(135deg, #e6c85b, #a88f4f);
+    }
+    .signup-link {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .signup-link a {
+      color: #f5d76e;
+      text-decoration: underline;
+    }
+    #status {
+      min-height: 20px;
+      margin-top: 8px;
+      text-align: center;
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Log In to MomentumXLab</h1>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="btn-login">🚀 LOGIN</button>
+    <p id="status"></p>
+    <p class="signup-link">
+      ยังไม่มีบัญชีใช่ไหม? <a href="signup.html">สมัครที่นี่</a>
+    </p>
+  </div>
 
-  <!-- Firebase & SweetAlert2 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-  <h1>Log In to Your Account</h1>
-  <input id="email"    type="email"    placeholder="Email"    required/>
-  <input id="password" type="password" placeholder="Password" required/>
-  <button id="btn-login">Log In</button>
-  <p id="status"></p>
-
   <script>
-    // 1) Firebase config
-    const firebaseConfig = {
-      apiKey:      "YOUR_API_KEY",
-      authDomain:  "momentumxlab-37ce2.firebaseapp.com",
-      projectId:   "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId:       "1:1234567890:web:YOUR_APPID"
-    };
+    const firebaseConfig = {/* your config here */};
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // 2) อ่าน redirect URL จาก ?redirect=
-    const urlParams   = new URLSearchParams(location.search);
-    const redirectUrl = urlParams.get('redirect') || 'pro4.html';
-
-    // 3) Login handler
     const emailInput = document.getElementById('email');
     const passInput  = document.getElementById('password');
     const btnLogin   = document.getElementById('btn-login');
     const statusEl   = document.getElementById('status');
 
+    const redirectTo = 'dashboard.html';
+
     btnLogin.addEventListener('click', async () => {
-      const email    = emailInput.value.trim();
+      const email = emailInput.value.trim();
       const password = passInput.value;
+
       statusEl.textContent = '';
       btnLogin.disabled = true;
 
+      if (!email || !password) {
+        statusEl.textContent = 'กรุณากรอกข้อมูลให้ครบ';
+        btnLogin.disabled = false;
+        return;
+      }
+
       try {
-        // ให้จำ session ข้ามหน้า
-        await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-
-        // ล็อกอิน
         await auth.signInWithEmailAndPassword(email, password);
-
-        // แจ้งสำเร็จ
-        await Swal.fire('Success', 'Login successful!', 'success');
-
-        // ย้อนกลับไปหน้าเดิม
-        window.location.href = redirectUrl;
+        await Swal.fire('Success','Logged in successfully!','success');
+        window.open(redirectTo, '_blank'); // เปิด dashboard แท็บใหม่
       } catch (err) {
-        statusEl.textContent = err.message;
-      } finally {
+        if (err.code === 'auth/user-not-found') {
+          const { isConfirmed } = await Swal.fire({
+            icon: 'warning',
+            title: 'ไม่พบบัญชีนี้',
+            text: 'คุณยังไม่ได้สมัครใช่หรือไม่?',
+            confirmButtonText: 'ไปสมัคร',
+            showCancelButton: true,
+            cancelButtonText: 'ยกเลิก'
+          });
+          if (isConfirmed) {
+            window.location.href = 'signup.html';
+          }
+        }
+        else if (err.code === 'auth/wrong-password') {
+          statusEl.textContent = 'รหัสผ่านไม่ถูกต้อง';
+        }
+        else {
+          statusEl.textContent = err.message;
+        }
+      }
+      finally {
         btnLogin.disabled = false;
       }
     });
