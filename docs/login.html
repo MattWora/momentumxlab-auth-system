@@ -112,7 +112,7 @@
       try {
         await auth.signInWithEmailAndPassword(email, password);
         await Swal.fire('Success','Logged in successfully!','success');
-        window.open(redirectTo, '_blank'); // Open dashboard in new tab
+        window.location.href = redirectTo; // Redirect to dashboard
       } catch (err) {
         if (err.code === 'auth/user-not-found') {
           const { isConfirmed } = await Swal.fire({
