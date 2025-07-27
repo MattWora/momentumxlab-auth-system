@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -75,7 +75,7 @@
     <button id="btn-login">🚀 LOGIN</button>
     <p id="status"></p>
     <p class="signup-link">
-      ยังไม่มีบัญชีใช่ไหม? <a href="signup.html">สมัครที่นี่</a>
+      Don't have an account? <a href="signup.html">Sign up here</a>
     </p>
   </div>
 
@@ -83,7 +83,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    const firebaseConfig = {/* your config here */};
+    const firebaseConfig = {
+      // Replace with your Firebase config
+    };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
@@ -102,7 +104,7 @@
       btnLogin.disabled = true;
 
       if (!email || !password) {
-        statusEl.textContent = 'กรุณากรอกข้อมูลให้ครบ';
+        statusEl.textContent = 'Please fill in both fields';
         btnLogin.disabled = false;
         return;
       }
@@ -110,23 +112,23 @@
       try {
         await auth.signInWithEmailAndPassword(email, password);
         await Swal.fire('Success','Logged in successfully!','success');
-        window.open(redirectTo, '_blank'); // เปิด dashboard แท็บใหม่
+        window.open(redirectTo, '_blank'); // Open dashboard in new tab
       } catch (err) {
         if (err.code === 'auth/user-not-found') {
           const { isConfirmed } = await Swal.fire({
             icon: 'warning',
-            title: 'ไม่พบบัญชีนี้',
-            text: 'คุณยังไม่ได้สมัครใช่หรือไม่?',
-            confirmButtonText: 'ไปสมัคร',
+            title: 'Account not found',
+            text: 'Would you like to sign up?',
+            confirmButtonText: 'Sign up',
             showCancelButton: true,
-            cancelButtonText: 'ยกเลิก'
+            cancelButtonText: 'Cancel'
           });
           if (isConfirmed) {
             window.location.href = 'signup.html';
           }
         }
         else if (err.code === 'auth/wrong-password') {
-          statusEl.textContent = 'รหัสผ่านไม่ถูกต้อง';
+          statusEl.textContent = 'Incorrect password';
         }
         else {
           statusEl.textContent = err.message;
