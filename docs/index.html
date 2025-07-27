@@ -404,27 +404,27 @@ navLogout?.addEventListener("click", e => {
 });
   // --- 6) Start 15-Day Free Trial Handler ---
   btnTrial.addEventListener("click", e => {
-    e.preventDefault();
+  e.preventDefault();
+  if (auth.currentUser) {
+    // If logged in → go to Dashboard directly
+    window.location.href = "https://mattwora.github.io/momentumxlab-auth-system/dashboard.html";
+  } else {
+    // Not logged in → show alert and open login page
+    Swal.fire({
+      title: "Sign in required",
+      text: "To activate the Free Trial, please log in first.",
+      icon: "info",
+      confirmButtonText: "Go to Login",
+      showCancelButton: true,
+      cancelButtonText: "Cancel"
+    }).then(result => {
+      if (result.isConfirmed) {
+        window.open("https://mattwora.github.io/momentumxlab-auth-system/login.html?redirect=dashboard.html", "_blank");
+      }
+    });
+  }
+});
 
-    if (auth.currentUser) {
-      // ถ้าล็อกอินแล้ว → ไป Dashboard
-      window.location.href = "https://mattwora.github.io/momentumxlab-auth-system/dashboard.html";
-    } else {
-      // ยังไม่ล็อกอิน → แจ้งให้ล็อกอิน แล้วเปิด Login ในแท็บใหม่
-      Swal.fire({
-        title: "Please sign in first",
-        text:  "You need an account to download the trial.",
-        icon:  "info",
-        confirmButtonText: "Go to Login",
-        showCancelButton:  true,
-        cancelButtonText:  "Cancel"
-      }).then(result => {
-        if (result.isConfirmed) {
-          window.open(navLogin.href, navLogin.target);
-        }
-      });
-    }
-  });
 </script>
 
 </body>
