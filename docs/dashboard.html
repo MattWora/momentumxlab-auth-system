@@ -2,156 +2,153 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MomentumXLab Dashboard</title>
+  <link rel="icon" href="favicon.ico" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
-  <link rel="icon" href="favicon.ico" type="image/x-icon"/>
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
-      background-color: #111;
-      color: #f2f2f2;
+      background: linear-gradient(to bottom right, #0f0f1b, #1e1e2f);
+      color: #f0f0f0;
       text-align: center;
-      padding-top: 60px;
+      padding: 40px;
     }
     h1 {
-      font-size: 32px;
-      color: #00ffff;
-      text-shadow: 0 0 8px #0ff;
+      font-size: 24px;
+      margin-bottom: 10px;
     }
-    .overview {
-      margin-top: 40px;
-      line-height: 1.6;
-      font-size: 18px;
-    }
-    .info-block {
-      margin: 12px 0;
-    }
-    .info-label {
-      font-weight: bold;
-      color: #0af;
+    .status-box {
+      margin: 20px auto;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 0 10px #d4af37;
     }
     .download-link {
-      display: block;
-      margin: 20px auto;
-      width: 280px;
-      max-width: 90%;
-      padding: 14px;
-      background-color: #0af;
-      color: #fff;
-      font-weight: bold;
-      text-transform: uppercase;
+      display: inline-block;
+      margin: 20px 0;
+      padding: 12px 20px;
+      background: linear-gradient(135deg, #d4af37, #89753f);
       border: none;
-      border-radius: 6px;
-      box-shadow: 0 0 10px #0af;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #fff;
       text-decoration: none;
-      transition: 0.3s;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     }
     .download-link:hover {
-      background-color: #08d;
-      box-shadow: 0 0 16px #0cf;
+      background: linear-gradient(135deg, #e6c85b, #a88f4f);
     }
-    #logout {
-      margin-top: 40px;
-      font-size: 16px;
-      background: transparent;
-      border: 2px solid #f00;
-      color: #f00;
-      padding: 10px 20px;
-      border-radius: 6px;
+    .logout {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #f5d76e;
+      text-decoration: underline;
       cursor: pointer;
-      transition: 0.3s;
-    }
-    #logout:hover {
-      background-color: #f00;
-      color: #fff;
     }
   </style>
 </head>
 <body>
   <h1>MomentumXLab Dashboard</h1>
-  <div id="user-email" class="overview"></div>
-  <div class="overview">
-    <div class="info-block"><span class="info-label">Plan:</span> <span id="plan-name">Loading...</span></div>
-    <div class="info-block"><span class="info-label">Status:</span> <span id="status">Checking...</span></div>
-    <div class="info-block"><span class="info-label" id="payment-label">Last Payment:</span> <span id="last-paid">Loading...</span></div>
+
+  <div class="status-box">
+    <p>Welcome, <span id="user-email">...</span></p>
+    <p>Plan: Free</p>
+    <p>Status: Active</p>
+    <p>Status: No payment made yet</p>
   </div>
 
-  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5" 
-    class="download-link" download>
-    Download Pro-4 Trial</a>
-  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" 
-    class="download-link" download>
-    Download Optimization Guide</a>
+  <a href="#" id="btn-pro4" class="download-link">Download Pro-4 Trial</a><br/>
+  <a href="download/optimization-guide.pdf" class="download-link">Download Optimization Guide</a>
 
-  <button id="logout">Logout</button>
+  <div class="logout" id="logout-btn">Logout</div>
 
-  <!-- Firebase SDK v8 -->
+  <!-- Firebase & SweetAlert2 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    document.addEventListener('DOMContentLoaded', () => {
+      const firebaseConfig = {
+        apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+        authDomain: "momentumxlab-37ce2.firebaseapp.com",
+        projectId: "momentumxlab-37ce2",
+        storageBucket: "momentumxlab-37ce2.appspot.com",
+        messagingSenderId: "1049046345603",
+        appId: "1:1049046345603:web:9ef0b93be481e0d045dfff"
+      };
+      firebase.initializeApp(firebaseConfig);
 
-    const emailEl = document.getElementById('user-email');
-    const planEl = document.getElementById('plan-name');
-    const statusEl = document.getElementById('status');
-    const paidEl = document.getElementById('last-paid');
-    const paymentLabelEl = document.getElementById('payment-label');
-    const logoutBtn = document.getElementById('logout');
+      const auth = firebase.auth();
+      const emailEl = document.getElementById('user-email');
+      const trialBtn = document.getElementById('btn-pro4');
+      const logoutBtn = document.getElementById('logout-btn');
 
-    auth.onAuthStateChanged(async user => {
-      if (!user) {
-        Swal.fire("Not signed in", "Redirecting to login…", "warning");
-        return location.href = "login.html";
-      }
-
-      emailEl.textContent = `Welcome, ${user.email}`;
-      try {
-        const doc = await db.collection("users").doc(user.uid).get();
-        if (!doc.exists) throw new Error("User data not found");
-
-        const data = doc.data();
-        const plan = data.plan || "Free";
-        const paidDate = data.paidDate ? new Date(data.paidDate) : null;
-        const status = data.activated ? "Active" : "Inactive";
-
-        planEl.textContent = plan;
-        statusEl.textContent = status;
-
-        if (plan === "Free") {
-          paymentLabelEl.textContent = "Status:";
-          paidEl.textContent = "No payment made yet";
-        } else if (plan === "Trial" && paidDate) {
-          paymentLabelEl.textContent = "Trial started:";
-          paidEl.textContent = paidDate.toDateString();
-        } else if (paidDate) {
-          paidEl.textContent = paidDate.toDateString();
+      // Listen for auth state
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          emailEl.textContent = user.email;
         } else {
-          paidEl.textContent = "No payment data available";
+          Swal.fire({
+            icon: 'info',
+            title: 'Please log in first',
+            text: 'You must be logged in to view this dashboard.',
+            confirmButtonText: 'Go to Login'
+          }).then(result => {
+            if (result.isConfirmed) window.location.href = 'login.html?redirect=dashboard.html';
+          });
+        }
+      });
+
+      // Free Trial Download Button
+      trialBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+
+        if (!user) {
+          await Swal.fire({
+            icon: 'warning',
+            title: 'Session expired',
+            text: 'Please log in again to activate your trial.',
+            confirmButtonText: 'Login'
+          });
+          return;
         }
 
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error", "Could not load your account data", "error");
-        planEl.textContent = "Error";
-        statusEl.textContent = "Unavailable";
-        paidEl.textContent = "N/A";
-      }
-    });
+        const email = user.email;
+        const plan = "Free";
 
-    logoutBtn.addEventListener("click", () => {
-      auth.signOut().then(() => {
-        location.href = "index.html";
+        const result = await Swal.fire({
+          icon: 'info',
+          title: 'Pro-4 Trial Activated',
+          text: 'Ready to download your trial package?',
+          confirmButtonText: 'Download Now',
+          showCancelButton: true,
+          cancelButtonText: 'Cancel'
+        });
+
+        if (result.isConfirmed) {
+          window.location.href = `download/pro-4-trial.zip?email=${encodeURIComponent(email)}&plan=${plan}`;
+        }
+      });
+
+      // Logout
+      logoutBtn.addEventListener('click', () => {
+        auth.signOut().then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Logged Out',
+            text: 'Redirecting to login...',
+            timer: 1500,
+            showConfirmButton: false
+          });
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 1600);
+        });
       });
     });
   </script>
