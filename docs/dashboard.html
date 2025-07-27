@@ -27,7 +27,7 @@
     }
     .download-link {
       display: inline-block;
-      margin: 20px 0;
+      margin: 20px 10px;
       padding: 12px 20px;
       background: linear-gradient(135deg, #d4af37, #89753f);
       border: none;
@@ -52,28 +52,24 @@
 </head>
 <body>
   <h1>MomentumXLab Dashboard</h1>
-
   <div class="status-box">
     <p>Welcome, <span id="user-email">...</span></p>
     <p>Plan: Free</p>
     <p>Status: Active</p>
     <p>Status: No payment made yet</p>
   </div>
-
-  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5" download>
-  Download Pro-4 Trial
+  
+  <a href="#" class="download-link" id="btn-pro4">Download Pro-4 Trial</a>
+  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" download class="download-link">
+    Download Optimization Guide
   </a>
-  <a href="https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" download>
-  Download Optimization Guide
-  </a>
-
+  
   <div class="logout" id="logout-btn">Logout</div>
 
   <!-- Firebase & SweetAlert2 -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const firebaseConfig = {
@@ -85,13 +81,11 @@
         appId: "1:1049046345603:web:9ef0b93be481e0d045dfff"
       };
       firebase.initializeApp(firebaseConfig);
-
       const auth = firebase.auth();
       const emailEl = document.getElementById('user-email');
       const trialBtn = document.getElementById('btn-pro4');
       const logoutBtn = document.getElementById('logout-btn');
 
-      // Listen for auth state
       auth.onAuthStateChanged(user => {
         if (user) {
           emailEl.textContent = user.email;
@@ -102,16 +96,15 @@
             text: 'You must be logged in to view this dashboard.',
             confirmButtonText: 'Go to Login'
           }).then(result => {
-            if (result.isConfirmed) window.location.href = 'login.html?redirect=dashboard.html';
+            if (result.isConfirmed)
+              window.location.href = 'login.html?redirect=dashboard.html';
           });
         }
       });
 
-      // Free Trial Download Button
       trialBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         const user = auth.currentUser;
-
         if (!user) {
           await Swal.fire({
             icon: 'warning',
@@ -122,24 +115,20 @@
           return;
         }
 
-        const email = user.email;
-        const plan = "Free";
-
         const result = await Swal.fire({
-          icon: 'info',
+          icon: 'success',
           title: 'Pro-4 Trial Activated',
-          text: 'Ready to download your trial package?',
-          confirmButtonText: 'Download Now',
+          text: 'Ready to download your trial version?',
+          confirmButtonText: 'Download',
           showCancelButton: true,
           cancelButtonText: 'Cancel'
         });
 
         if (result.isConfirmed) {
-          window.location.href = `download/pro-4-trial.zip?email=${encodeURIComponent(email)}&plan=${plan}`;
+          window.open("https://mattwora.github.io/momentumxlab-auth-system/docs/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5", "_blank");
         }
       });
 
-      // Logout
       logoutBtn.addEventListener('click', () => {
         auth.signOut().then(() => {
           Swal.fire({
