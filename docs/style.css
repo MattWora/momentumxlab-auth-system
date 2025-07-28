@@ -1,197 +1,148 @@
-/* === GENERAL === */
-body {
-  margin: 0;
-  font-family: 'Orbitron', sans-serif;
-  background: linear-gradient(to bottom right, #0d0d0d, #1a1a1a); /* ✅ ดำเมทัลลิก */
-  color: #eee;
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MomentumXLab Dashboard</title>
 
-/* === MAIN LAYOUT === */
-.pro4-section {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 60px 40px;
-  gap: 40px;
-}
+  <!-- ✅ ฟอนต์ Kanit -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
 
-.left-content {
-  flex: 1 1 60%;
-  max-width: 60%;
-}
+  <!-- ✅ CSS ในตัวไฟล์ -->
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #FFD700;
+      font-family: 'Kanit', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-.right-content {
-  flex: 1 1 40%;
-  max-width: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+      text-align: center;
+    }
 
-/* === TEXT STYLE === */
-h2, h3 {
-  color: #00c98d;
-  margin-bottom: 20px;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
+    .headline {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #FFD700;
+    }
 
-.feature-list {
-  list-style: none;
-  padding-left: 0;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #eee;
-}
+    .status-section {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
 
-.feature-list li {
-  margin-bottom: 12px;
-}
+    .status-card {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      width: 150px;
+      text-align: center;
+    }
 
-/* === IMAGE MOCKUP (Expanded 20%) === */
-.mockup-wrapper img {
-  width: 100%;
-  max-width: 432px; /* ✅ เดิม ~360px +20% */
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-  margin-top: 0;
-}
+    .online {
+      background-color: #003d00;
+      color: #80ff80;
+      border: 1px solid #80ff80;
+    }
 
-/* === TABLE STYLE === */
-.info-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 24px 0;
-  font-size: 14px;
-  background-color: #181818;
-  border: 1px solid #444;
-}
+    .offline {
+      background-color: #3d0000;
+      color: #ff8080;
+      border: 1px solid #ff8080;
+    }
 
-.info-table th {
-  background-color: #222;
-  color: #00c98d;
-  padding: 10px;
-  text-align: center;
-  font-weight: 600;
-  font-family: 'Orbitron', sans-serif;
-}
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
 
-.info-table td {
-  padding: 10px;
-  text-align: center;
-  color: #ddd;
-  border-top: 1px solid #333;
-}
+    .btn-gold, .btn-silver {
+      text-decoration: none;
+      padding: 12px;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
 
-/* === CTA BUTTONS === */
-.btn-group {
-  margin: 32px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
+    .btn-gold {
+      background-color: #FFD700;
+      color: #000000;
+    }
 
-.cta-btn {
-  background-color: #00c98d;
-  color: #0f0f0f;
-  font-weight: bold;
-  padding: 10px 24px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-  font-family: 'Orbitron', sans-serif;
-}
+    .btn-gold:hover {
+      background-color: #e5c100;
+    }
 
-.cta-btn:hover {
-  background-color: #00b27c;
-}
+    .btn-silver {
+      background-color: #999999;
+      color: #ffffff;
+    }
 
-.roi-note {
-  margin-top: 16px;
-  font-size: 13px;
-  color: #ccc;
-  font-family: 'Orbitron', sans-serif;
-}
+    .btn-silver:hover {
+      background-color: #777777;
+    }
 
-/* === FOOTER STYLE === */
-.footer-section {
-  background-color: #fff;
-  color: #000;
-  padding: 8px 20px;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid #ccc;
-}
+    .footer-note {
+      font-size: 14px;
+      color: #888888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="headline">MomentumXLab Terminal</h1>
 
-.footer-logo-left img {
-  width: 80px;
-  opacity: 0.9;
-}
+    <div class="status-section">
+      <div class="status-card online">🟢 Core-T EA: Active</div>
+      <div class="status-card offline">🔴 Pro-4 EA: Standby</div>
+    </div>
 
-.footer-text {
-  flex: 1;
-  max-width: 800px;
-  text-align: left;
-}
+    <div class="button-group">
+      <a href="#" class="btn-gold" id="btn-pro4">🧪 Download Pro-4 Trial</a>
+      <a href="downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
+         class="btn-silver"
+         download>
+        📘 Optimization Guide
+      </a>
+    </div>
 
-.footer-text p {
-  margin: 4px 0;
-  color: #333;
-  font-family: 'Orbitron', sans-serif;
-}
+    <div class="footer-note">
+      ⚡ Dashboard powered by ApexXAU | Updated: July 2025
+    </div>
+  </div>
 
-.footer-text p:first-child {
-  font-size: 15px; /* ✅ ขยายข้อความ disclaimer เล็กน้อย */
-  font-weight: 500;
-}
-
-/* === RESPONSIVE VIEW === */
-@media screen and (max-width: 768px) {
-  .pro4-section {
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .left-content, .right-content {
-    max-width: 100%;
-  }
-
-  .mockup-wrapper img {
-    max-width: 80%;
-    margin: 0 auto;
-  }
-}
-.order-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group input,
-.form-group select {
-  padding: 0.6rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.checkbox-group {
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.status-text {
-  text-align: center;
-  margin-top: 0.5rem;
-}
+  <!-- ✅ SweetAlert -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.getElementById("btn-pro4").addEventListener("click", () => {
+      Swal.fire({
+        title: "Download Trial?",
+        text: "Includes signal & trade modules for backtesting.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Yes, download",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.open(
+            "downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5",
+            "_blank"
+          );
+        }
+      });
+    });
+  </script>
+</body>
+</html>
