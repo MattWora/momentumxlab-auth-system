@@ -4,43 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MomentumXLab Dashboard</title>
-
-  <!-- 🔗 ใช้ style.css ภายใน docs ถูกต้องตามโครงสร้าง -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- ฟอนต์ Kanit ภาษาไทย -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="container">
-    <h1>MomentumXLab - Your EA Tools</h1>
+    <h1 class="headline">MomentumXLab Terminal</h1>
 
-    <!-- 🔽 ปุ่มโหลด Trial ผ่าน SweetAlert -->
-    <a href="#" class="download-link" id="btn-pro4">Download Pro-4 Trial</a>
+    <div class="status-section">
+      <div class="status-card online">🟢 Core-T EA: Active</div>
+      <div class="status-card offline">🔴 Pro-4 EA: Standby</div>
+    </div>
 
-    <!-- 📘 ปุ่มดาวน์โหลด Optimization Guide -->
-    <a href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
-       class="download-link"
-       download>
-      Download Optimization Guide
-    </a>
+    <div class="button-group">
+      <a href="#" class="btn-gold" id="btn-pro4">🧪 Download Pro-4 Trial</a>
+      <a href="downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
+         class="btn-silver"
+         download>
+        📘 Optimization Guide
+      </a>
+    </div>
+
+    <div class="footer-note">
+      ⚡ Dashboard powered by ApexXAU | Updated: July 2025
+    </div>
   </div>
 
-  <!-- ✅ SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    const btnPro4 = document.getElementById("btn-pro4");
-    btnPro4.addEventListener("click", () => {
+    document.getElementById("btn-pro4").addEventListener("click", () => {
       Swal.fire({
-        title: "Download Pro-4 Trial?",
-        text: "This version includes signal and trade modules for testing.",
+        title: "Download Trial?",
+        text: "Includes signal & trade modules for backtesting.",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText: "Download",
+        confirmButtonText: "Yes, download",
       }).then((result) => {
         if (result.isConfirmed) {
           window.open(
-            "https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5",
+            "downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5",
             "_blank"
           );
         }
