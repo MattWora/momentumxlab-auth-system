@@ -4,11 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MomentumXLab Dashboard</title>
-
-  <!-- ✅ ฟอนต์ Kanit -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
 
-  <!-- ✅ CSS ในตัวไฟล์ -->
   <style>
     body {
       background-color: #0f0f0f;
@@ -30,35 +27,8 @@
 
     .headline {
       font-size: 32px;
-      margin-bottom: 20px;
-      color: #FFD700;
-    }
-
-    .status-section {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
       margin-bottom: 30px;
-    }
-
-    .status-card {
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-weight: bold;
-      width: 150px;
-      text-align: center;
-    }
-
-    .online {
-      background-color: #003d00;
-      color: #80ff80;
-      border: 1px solid #80ff80;
-    }
-
-    .offline {
-      background-color: #3d0000;
-      color: #ff8080;
-      border: 1px solid #ff8080;
+      color: #FFD700;
     }
 
     .button-group {
@@ -105,11 +75,6 @@
   <div class="container">
     <h1 class="headline">MomentumXLab Terminal</h1>
 
-    <div class="status-section">
-      <div class="status-card online">🟢 Core-T EA: Active</div>
-      <div class="status-card offline">🔴 Pro-4 EA: Standby</div>
-    </div>
-
     <div class="button-group">
       <a href="#" class="btn-gold" id="btn-pro4">🧪 Download Pro-4 Trial</a>
       <a href="downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
@@ -124,7 +89,6 @@
     </div>
   </div>
 
-  <!-- ✅ SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     document.getElementById("btn-pro4").addEventListener("click", () => {
