@@ -5,65 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MomentumXLab Dashboard</title>
 
-  <!-- ✅ ธีมเดิม -->
-  <link rel="stylesheet" href="../style.css" />
+  <!-- 🔗 ใช้ style.css ภายใน docs ถูกต้องตามโครงสร้าง -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ฟอนต์ Kanit ภาษาไทย -->
   <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: 'Kanit', sans-serif;
-      background-color: #f7f7f7;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      width: 90%;
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
-      background-color: #ffffff;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      text-align: center;
-    }
-    h1 {
-      font-size: 28px;
-      margin-bottom: 30px;
-      color: #333333;
-    }
-    .download-link {
-      display: block;
-      margin: 15px auto;
-      padding: 12px 20px;
-      background-color: #0078D4;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      width: fit-content;
-      transition: background-color 0.3s ease;
-    }
-    .download-link:hover {
-      background-color: #005EA2;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
     <h1>MomentumXLab - Your EA Tools</h1>
 
-    <!-- 🔽 Trial Version -->
+    <!-- 🔽 ปุ่มโหลด Trial ผ่าน SweetAlert -->
     <a href="#" class="download-link" id="btn-pro4">Download Pro-4 Trial</a>
 
-    <!-- 📘 Optimization Guide -->
+    <!-- 📘 ปุ่มดาวน์โหลด Optimization Guide -->
     <a href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
-       class="download-link" download>
+       class="download-link"
+       download>
       Download Optimization Guide
     </a>
   </div>
 
-  <!-- ✅ SweetAlert CDN -->
+  <!-- ✅ SweetAlert -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
-    // ดาวน์โหลด Trial ผ่าน SweetAlert
     const btnPro4 = document.getElementById("btn-pro4");
     btnPro4.addEventListener("click", () => {
       Swal.fire({
@@ -74,7 +39,10 @@
         confirmButtonText: "Download",
       }).then((result) => {
         if (result.isConfirmed) {
-          window.open("https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5", "_blank");
+          window.open(
+            "https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5",
+            "_blank"
+          );
         }
       });
     });
