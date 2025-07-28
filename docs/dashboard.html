@@ -84,6 +84,7 @@
       };
       firebase.initializeApp(firebaseConfig);
       const auth = firebase.auth();
+
       const userEmail = document.getElementById('user-email');
       const trialDays = document.getElementById('trial-days');
       const logoutBtn = document.getElementById('logout-btn');
@@ -92,7 +93,13 @@
       auth.onAuthStateChanged(user => {
         if (user) {
           userEmail.textContent = user.email;
-          trialDays.textContent = 7; // Can connect to Firestore later
+          
+          // Trial calculation based on creation date
+          const creationDate = new Date(user.metadata.creationTime);
+          const now = new Date();
+          const diff = Math.floor((now - creationDate) / (1000 * 60 * 60 * 24));
+          const remaining = Math.max(0, 7 - diff); // 7-day trial
+          trialDays.textContent = remaining;
         } else {
           window.location.href = 'login.html';
         }
