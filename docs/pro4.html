@@ -1,124 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pro-4 | MomentumXLab</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
+  <style>
+    .section-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 40px 60px;
+    }
+    .left-content {
+      flex: 1;
+      min-width: 300px;
+      order: 1;
+    }
+    .right-content {
+      flex: 1;
+      min-width: 300px;
+      order: 2;
+      display: flex;
+      justify-content: center;
+    }
+    .mockup-wrapper img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0px 4px 12px rgba(0,0,0,0.3);
+    }
+  </style>
 </head>
 <body>
-  <!-- Pro-4 Main Section -->
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5 platform</h2>
-      <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX threshold</li>
-        <li><strong>Adaptive Exit Strategy:</strong> ATR-based trailing stop & dynamic TP</li>
-        <li><strong>Intelligent Closure:</strong> Closes grouped positions at floating drawdown</li>
-        <li><strong>Risk Adjustment:</strong> ADX-based modulation of entry & trailing</li>
-        <li><strong>Zero-Redundancy Filtering:</strong> Prevents trade overlap for precision</li>
-      </ul>
 
-      <h3>Backtest Performance</h3>
-      <table class="info-table">
-        <thead>
-          <tr><th>Test Period</th><th>Initial Deposit</th><th>Total Net Profit</th><th>% Growth</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Jan–Dec 2024</td><td>USDc 5,000.00</td><td>USDc 39,851.78</td><td>+797.04%</td></tr>
-          <tr><td>Jan–Jun 2025</td><td>USDc 5,000.00</td><td>USDc 9,842.60</td><td>+196.85%</td></tr>
-        </tbody>
-      </table>
+<section class="section-container">
+  <div class="left-content">
+    <h2>Key Features of ApexXAU Pro-4 for MT5</h2>
+    <ul>
+      <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX filter</li>
+      <li><strong>Adaptive Exit Strategy:</strong> ATR trailing stop & dynamic TP</li>
+      <li><strong>Grouped Closure:</strong> Exit at floating drawdown with logic filter</li>
+      <li><strong>Risk Modulation:</strong> ADX-based control on entry size & exit</li>
+      <li><strong>Zero-Redundancy:</strong> Prevents overlapping trades, preserves margin</li>
+    </ul>
 
-      <h3>Subscription Plans</h3>
-      <table class="info-table">
-        <thead>
-          <tr><th>Plan</th><th>Price</th><th>Avg/Month</th><th>Discount</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Monthly</td><td>$19.99</td><td>$19.99</td><td>—</td></tr>
-          <tr><td>6-Month</td><td>$106.99</td><td>$17.83</td><td>~10.8%</td></tr>
-          <tr><td>12-Month</td><td>$193.99</td><td>$16.17</td><td>~19.1%</td></tr>
-        </tbody>
-      </table>
+    <h3>Backtest Summary</h3>
+    <p>2024 ROI: <strong>+797.04%</strong><br>2025 Jan–Jun ROI: <strong>+196.85%</strong></p>
 
-      <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">Subscribe Monthly</button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">Subscribe 6 Months</button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">Subscribe 12 Months</button>
-      </div>
+    <h3>Plans</h3>
+    <table>
+      <tr><th>Plan</th><th>Price</th><th>Monthly Avg</th></tr>
+      <tr><td>Monthly</td><td>$19.99</td><td>$19.99</td></tr>
+      <tr><td>6-Month</td><td>$106.99</td><td>$17.83</td></tr>
+      <tr><td>12-Month</td><td>$193.99</td><td>$16.17</td></tr>
+    </table>
 
-      <p class="roi-note">Backtested monthly return: <strong>$33.20</strong> — keep over 50% of your gains.</p>
+    <div class="btn-group">
+      <button class="cta-btn pro4-checkout-btn" data-plan="monthly">Subscribe Monthly</button>
+      <button class="cta-btn pro4-checkout-btn" data-plan="6m">Subscribe 6 Months</button>
+      <button class="cta-btn pro4-checkout-btn" data-plan="annual">Subscribe 12 Months</button>
     </div>
+    <p class="roi-note">Projected Monthly Return: <strong>$33.20</strong> — You keep over 50% of it.</p>
+  </div>
 
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup"/>
-        <p class="edition custom">Ideal for XAUUSDc with minimal starting capital (5,000 USDc) — fully compatible with XAUUSD at $5,000 deposit.</p>
-      </div>
-    </div>
-  </section>
+  <div class="right-content mockup-wrapper">
+    <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup"/>
+    <p class="edition custom">Tailored for XAUUSDc scalping with a $5,000 startup — also works with XAUUSD classic mode.</p>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="footer-section">
-    <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
-    <div class="footer-text">
-      <p>Past performance does not guarantee future results.<br/> Use with discretion and risk management.</p>
-      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
-    </div>
-  </footer>
+<footer class="footer-section">
+  <div class="footer-logo-left"><img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/></div>
+  <div class="footer-text">
+    <p>Past performance is not indicative of future results.<br/> Use with discretion and proper risk settings.</p>
+    <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+  </div>
+</footer>
 
-  <!-- Load SweetAlert2 & Firebase -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<!-- SweetAlert2 & Firebase Auth -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+    authDomain: "momentumxlab-37ce2.firebaseapp.com",
+    projectId: "momentumxlab-37ce2"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
 
-  <script>
-    // Firebase init
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
+  let currentUser = null;
+  auth.onAuthStateChanged(user => { currentUser = user; });
 
-    // Track current user
-    let currentUser = null;
-    auth.onAuthStateChanged(user => { currentUser = user; });
-
-    // Map plan + package → redirect to confirm-order
-    document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.preventDefault();
-        const packageInput = btn.dataset.plan; // 'monthly', '6m', 'annual'
-        const pkgMap = { monthly: "monthly", "6m": "6m", annual: "12m" };
-        const finalPackage = pkgMap[packageInput] || "monthly";
-        const plan = "pro4"; // fix รุ่นในหน้านี้
-
-        if (!currentUser) {
-          Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          }).then(r => {
-            const redirectBack = encodeURIComponent(location.href);
-            if (r.isConfirmed) {
-              window.location.href = `${AUTH_BASE_URL}/login.html?redirect=${redirectBack}`;
-            } else if (r.isDenied) {
-              window.location.href = `${AUTH_BASE_URL}/signup.html?redirect=${redirectBack}`;
-            }
-          });
-        } else {
-          window.location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}&package=${finalPackage}`;
-        }
-      });
+  document.querySelectorAll('.pro4-checkout-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const packageInput = btn.dataset.plan;
+      const pkgMap = { monthly: "monthly", "6m": "6m", annual: "12m" };
+      const finalPackage = pkgMap[packageInput] || "monthly";
+      const plan = "pro4";
+      if (!currentUser) {
+        Swal.fire({
+          title: 'Please Sign Up or Login',
+          text: 'You must sign in before choosing a package.',
+          icon: 'info',
+          showDenyButton: true,
+          confirmButtonText: 'Login',
+          denyButtonText: 'Signup'
+        }).then(r => {
+          const redirectBack = encodeURIComponent(location.href);
+          if (r.isConfirmed) {
+            window.location.href = `${AUTH_BASE_URL}/login.html?redirect=${redirectBack}`;
+          } else if (r.isDenied) {
+            window.location.href = `${AUTH_BASE_URL}/signup.html?redirect=${redirectBack}`;
+          }
+        });
+      } else {
+        window.location.href = `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}&package=${finalPackage}`;
+      }
     });
-  </script>
+  });
+</script>
 </body>
 </html>
