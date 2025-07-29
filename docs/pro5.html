@@ -7,9 +7,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
+    .footer-logo-left {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
     .footer-logo-left img {
-      width: 10%;
+      width: 20%;
       height: auto;
+    }
+    .footer-logo-left .footer-text-inline {
+      margin-left: 20px;
+    }
+    .footer-logo-left .footer-text-inline p {
+      margin: 0;
     }
   </style>
 </head>
@@ -74,10 +86,11 @@
   <footer class="footer-section">
     <div class="footer-logo-left">
       <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
-    </div>
-    <div class="footer-text">
-      <p>Past performance does not guarantee future results.<br/>Use with discretion and risk management.</p>
-      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
+      <div class="footer-text-inline">
+        <p>Past performance does not guarantee future results.</p>
+        <p>Use with discretion and risk management.</p>
+        <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
+      </div>
     </div>
   </footer>
 </body>
