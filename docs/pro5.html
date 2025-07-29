@@ -7,26 +7,28 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .footer-content-wrapper {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 30px 40px;
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
       background-color: #0B0F1A;
       color: #E4E6EB;
-      font-family: 'Orbitron', sans-serif;
+    }
+    .footer-section {
+      padding: 0 40px;
     }
     .footer-disclaimer {
       font-size: 0.95em;
       line-height: 1.6;
+      margin-top: 40px;
+      margin-left: 40px;
+      margin-right: 40px;
     }
     .footer-copyright {
       text-align: center;
       font-size: 0.85em;
       color: #aaa;
-      margin-top: 20px;
+      margin-top: 40px;
+      padding-bottom: 30px;
       font-family: 'Orbitron', sans-serif;
     }
   </style>
@@ -79,7 +81,13 @@
         <a href="confirm-order.html?plan=pro5&package=12m" class="cta-btn">Subscribe 12 Months</a>
       </div>
       <p class="roi-note">Backtested monthly return: <strong>$122.40</strong> — retain up to 80% of your gains with built-in risk controls.</p>
+
+      <div class="footer-disclaimer">
+        <p>Past performance does not guarantee future results.</p>
+        <p>Use with discretion and risk management.</p>
+      </div>
     </div>
+
     <div class="right-content">
       <div class="mockup-wrapper">
         <img src="Pro5_CollectorEdition_whiteBG.png" alt="Pro-5 Mockup" />
@@ -88,16 +96,11 @@
     </div>
   </section>
 
-  <!-- 🧾 Footer Section -->
   <footer>
-    <div class="footer-content-wrapper">
-      <div class="footer-disclaimer">
-        <p>Past performance does not guarantee future results.</p>
-        <p>Use with discretion and risk management.</p>
+    <div class="footer-section">
+      <div class="footer-copyright">
+        &copy; 2025 MomentumXLab. All rights reserved.
       </div>
-    </div>
-    <div class="footer-copyright">
-      &copy; 2025 MomentumXLab. All rights reserved.
     </div>
   </footer>
 </body>
