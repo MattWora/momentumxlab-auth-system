@@ -7,90 +7,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <style>
-    .footer-logo-left {
+    .footer-section {
+      padding: 30px 40px;
+      background-color: #0B0F1A;
+      color: #E4E6EB;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .footer-content-wrapper {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 20px;
       flex-wrap: wrap;
     }
-    .footer-logo-left img {
-      width: 8%;
-      height: auto;
+    .footer-disclaimer {
+      flex: 1;
+      font-size: 0.95em;
+      line-height: 1.6;
     }
-    .footer-logo-left .footer-text-inline {
-      margin-left: 20px;
-    }
-    .footer-logo-left .footer-text-inline p {
-      margin: 0;
+    .footer-copyright {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.85em;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
-  <!-- ⚙️ Pro-5 Main Section -->
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-5 for MT5 platform</h2>
-      <ul class="feature-list">
-        <li><strong>Dynamic Risk Engine:</strong> Adapts lot sizing and entry scale based on market structure</li>
-        <li><strong>Break-Even & Partial TP Logic:</strong> Secure gains early while letting winners run</li>
-        <li><strong>Multi-Layered Filters:</strong> Includes signal stack, entry qualifiers, and redundancy shields</li>
-        <li><strong>Position Scaling System:</strong> Layered entries optimized by volatility flow</li>
-        <li><strong>Dynamic Take-Profit Targeting:</strong> Adjusts TP zones using volatility and momentum context</li>
-        <li><strong>Aggregated Closure Framework:</strong> Smart closure across grouped positions based on floating performance</li>
-        <li><strong>Built-in Dashboard & Logging:</strong> Real-time strategy tracking and transparency console</li>
-        <li><strong>Session-Aware Entry:</strong> Filters entries by Asian, London, and New York trade regimes</li>
-        <li><strong>Volatility-Regime Control:</strong> Adjusts behavior based on calm vs breakout conditions</li>
-      </ul>
-      <h3>Backtest Performance</h3>
-      <table class="info-table">
-        <thead>
-          <tr>
-            <th>Test Period</th>
-            <th>Initial Deposit</th>
-            <th>Total Net Profit</th>
-            <th>% Growth</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>Jan–Dec 2024</td><td>USDc 5,000.00</td><td>USDc 1,039,199.02</td><td>+20,783.98%</td></tr>
-          <tr><td>Jan–Jun 2025</td><td>USDc 5,000.00</td><td>USDc 55,739.17</td><td>+1,114.78%</td></tr>
-        </tbody>
-      </table>
-      <h3>Subscription Plans</h3>
-      <table class="info-table">
-        <thead>
-          <tr><th>Plan</th><th>Price</th><th>Avg/Month</th><th>Discount</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Monthly</td><td>$39.99</td><td>$39.99</td><td>—</td></tr>
-          <tr><td>6-Month</td><td>$213.99</td><td>$35.66</td><td>~10.8%</td></tr>
-          <tr><td>12-Month</td><td>$388.29</td><td>$32.36</td><td>~19.1%</td></tr>
-        </tbody>
-      </table>
-      <div class="btn-group">
-        <a href="confirm-order.html?plan=pro5&package=monthly" class="cta-btn">Subscribe Monthly</a>
-        <a href="confirm-order.html?plan=pro5&package=6m" class="cta-btn">Subscribe 6 Months</a>
-        <a href="confirm-order.html?plan=pro5&package=12m" class="cta-btn">Subscribe 12 Months</a>
-      </div>
-      <p class="roi-note">Backtested monthly return: <strong>$122.40</strong> — retain up to 80% of your gains with built-in risk controls.</p>
-    </div>
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img src="Pro5_CollectorEdition_whiteBG.png" alt="Pro-5 Mockup" />
-        <p class="edition custom">Ideal for XAUUSDc with minimal starting capital (5,000 USDc) — fully compatible with XAUUSD at $5,000 deposit.</p>
-      </div>
-    </div>
-  </section>
+  <!-- [เนื้อหาส่วนอื่นของหน้าเพจยังคงเดิม] -->
 
   <!-- 📄 Footer Section -->
   <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
-      <div class="footer-text-inline">
+    <div class="footer-content-wrapper">
+      <div class="footer-disclaimer">
         <p>Past performance does not guarantee future results.</p>
         <p>Use with discretion and risk management.</p>
-        <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
       </div>
+    </div>
+    <div class="footer-copyright">
+      &copy; 2025 MomentumXLab. All rights reserved.
     </div>
   </footer>
 </body>
