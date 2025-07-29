@@ -2,197 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pro-4 | MomentumXLab</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
   <meta
     name="description"
-    content="Discover ApexXAU Pro-4: A state-of-the-art MT5 EA for XAUUSDc. Explore features, backtest results, and flexible subscription plans."
+    content="Precision-engineered gold trading automation for MetaTrader 5. 15-day free trial available."
   />
-  <!-- Google Font -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
+  <meta property="og:title" content="ApexXAU Intelligent Pro-4 | MomentumXLab" />
+  <meta
+    property="og:description"
+    content="Experience gold trading automation on MT5 with MomentumXLab’s AI-enhanced Expert Advisor."
   />
-  <!-- Main stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <meta property="og:type" content="website" />
+  <title>ApexXAU Intelligent Pro-4 | MomentumXLab</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
 </head>
 <body>
-  <!-- SITE HEADER -->
-  <header class="top-header" role="banner">
-    <div class="container header-inner">
-      <a href="/" class="logo-link" aria-label="MomentumXLab Home">
-        <img
-          src="momentumxlab-logo.png"
-          alt="MomentumXLab Logo"
-          class="logo-img"
-        />
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo" aria-label="MomentumXLab Home">
+        <img src="assets/images/logo.svg" alt="MomentumXLab Logo" />
       </a>
+      <nav class="site-nav">
+        <a href="/signup" class="btn btn-outline">Sign Up</a>
+        <a href="/login" class="btn btn-primary">Login</a>
+      </nav>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main role="main">
-    <!-- HERO / INTRO -->
-    <section id="hero" class="hero-section">
-      <div class="container hero-inner">
-        <div class="hero-content">
-          <h1>ApexXAU Pro-4</h1>
-          <p class="tagline">Advanced EA for XAUUSDc Trading on MT5</p>
-          <a href="#plans" class="btn btn-primary">View Plans</a>
-        </div>
-        <div class="hero-image">
-          <img
-            src="Pro4_CollectorEdition_whiteBG.png"
-            alt="ApexXAU Pro-4 Mockup"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- KEY FEATURES -->
-    <section id="features" class="section features-section">
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
       <div class="container">
-        <h2>Key Features of ApexXAU Pro-4</h2>
-        <ul class="feature-list">
-          <li>
-            <strong>Multi-Signal Entry Logic:</strong>
-            Uses CCI, MACD, RSI + ADX threshold
-          </li>
-          <li>
-            <strong>Adaptive Exit Strategy:</strong>
-            ATR-based trailing stop & dynamic TP
-          </li>
-          <li>
-            <strong>Aggregated Intelligent Closure:</strong>
-            Closes grouped positions at floating drawdown
-          </li>
-          <li>
-            <strong>ADX-Based Risk Adjustment:</strong>
-            Modulates entry and trailing intensity
-          </li>
-          <li>
-            <strong>Zero-Redundancy Filtering:</strong>
-            Prevents trade overlap, ensures precision
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- BACKTEST PERFORMANCE -->
-    <section id="backtest" class="section backtest-section">
-      <div class="container">
-        <h2>Backtest Performance (Set B)</h2>
-        <div class="table-responsive">
-          <table class="info-table">
-            <thead>
-              <tr>
-                <th>Test Period</th>
-                <th>Initial Deposit</th>
-                <th>Total Net Profit</th>
-                <th>% Growth</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Jan–Dec 2024</td>
-                <td>USDc 5,000.00</td>
-                <td>USDc 9,842.60</td>
-                <td class="growth-positive">+196.85%</td>
-              </tr>
-              <tr>
-                <td>Jan–Jun 2025</td>
-                <td>USDc 5,000.00</td>
-                <td>USDc 39,851.78</td>
-                <td class="growth-positive">+797.04%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUBSCRIPTION PLANS -->
-    <section id="plans" class="section plans-section">
-      <div class="container">
-        <h2>Subscription Plans</h2>
-        <div class="pricing-table">
-          <table class="info-table">
-            <thead>
-              <tr>
-                <th>Plan</th>
-                <th>Price</th>
-                <th>Avg/Month</th>
-                <th>Discount</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Monthly</td>
-                <td>$19.99</td>
-                <td>$19.99</td>
-                <td>—</td>
-              </tr>
-              <tr>
-                <td>6-Month</td>
-                <td>$106.99</td>
-                <td>$17.83</td>
-                <td>~10.8%</td>
-              </tr>
-              <tr>
-                <td>12-Month</td>
-                <td>$193.99</td>
-                <td>$16.17</td>
-                <td>~19.1%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          class="btn-group"
-          role="group"
-          aria-label="Subscription Options"
-        >
-          <a
-            href="subscribe.html?plan=monthly"
-            class="btn btn-secondary"
-            >Subscribe Monthly</a
-          >
-          <a
-            href="subscribe.html?plan=6month"
-            class="btn btn-secondary"
-            >Subscribe 6 Months</a
-          >
-          <a
-            href="subscribe.html?plan=12month"
-            class="btn btn-secondary"
-            >Subscribe 12 Months</a
-          >
-        </div>
-
-        <p class="roi-note">
-          Backtested monthly return:
-          <strong>$33.20</strong> — keep over 50% of your gains.
+        <h1>ApexXAU Intelligent Pro-4</h1>
+        <p>
+          Precision-engineered gold trading automation on MetaTrader 5.
+          Free trial available for 15 days.
         </p>
+        <div class="hero-actions">
+          <a href="/signup" class="btn btn-primary">Start 15-Day Free Trial</a>
+          <a href="mailto:contact@momentumxlab.com" class="btn btn-outline"
+            >Contact Us</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Pro-5 Teaser -->
+    <section class="product-preview">
+      <div class="container">
+        <h2>ApexXAU Intelligent Pro-5</h2>
+        <p>Adaptive &amp; dynamic-based risk management. Launching this September.</p>
+        <a href="#notify-pro5" class="btn btn-outline">Notify Me When Pro-5 Launches 📧</a>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Core-X Teaser -->
+    <section class="product-preview">
+      <div class="container">
+        <h2>ApexXAU Intelligent Core-X</h2>
+        <p>
+          AI-powered filters with adaptive &amp; dynamic-based risk management.
+          Currently in calibration and testing.
+        </p>
+        <a href="/corex-calibration" class="btn btn-outline">Learn More</a>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="footer-section" role="contentinfo">
+  <footer class="site-footer">
     <div class="container">
       <p>
-        This product is intended for educational and analytical purposes
-        only.<br />
-        All performance results shown are based on historical backtesting
-        using real XAU/USD data.<br />
-        Past performance does not guarantee future results. Use with
-        discretion and risk management.
-      </p>
-      <p class="copyright">
-        &copy; 2025 MomentumXLab. All rights reserved.
+        © 2025 MomentumXLab. All rights reserved. Contact us at
+        <a href="mailto:contact@momentumxlab.com">contact@momentumxlab.com</a>
       </p>
     </div>
   </footer>
+
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
+```
