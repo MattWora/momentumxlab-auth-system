@@ -4,26 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pro-4 | MomentumXLab</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Pro-4 Main Section -->
+
+  <!-- 🔹 Logo -->
+  <header class="top-header">
+    <a href="/">
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" class="logo-img" />
+    </a>
+  </header>
+
+  <!-- ⚙️ Pro-4 Main Section -->
   <section class="pro4-section">
     <div class="left-content">
-      <h2>Key Features of ApexXAU Pro-4 for MT5 platform</h2>
+      <h2>Key Features of ApexXAU Pro-4</h2>
       <ul class="feature-list">
-        <li><strong>Multi-Signal Entry Logic:</strong> CCI, MACD, RSI + ADX threshold</li>
+        <li><strong>Multi-Signal Entry Logic:</strong> Uses CCI, MACD, RSI + ADX threshold</li>
         <li><strong>Adaptive Exit Strategy:</strong> ATR-based trailing stop & dynamic TP</li>
-        <li><strong>Intelligent Closure:</strong> Closes grouped positions at floating drawdown</li>
-        <li><strong>Risk Adjustment:</strong> ADX-based modulation of entry & trailing</li>
-        <li><strong>Zero-Redundancy Filtering:</strong> Prevents trade overlap for precision</li>
+        <li><strong>Aggregated Intelligent Closure:</strong> Closes grouped positions at floating drawdown</li>
+        <li><strong>ADX-Based Risk Adjustment:</strong> Modulates entry and trailing intensity</li>
+        <li><strong>Zero-Redundancy Filtering:</strong> Prevents trade overlap, ensures precision</li>
       </ul>
 
-      <h3>Backtest Performance</h3>
+      <h3>Backtest Performance (Set B)</h3>
       <table class="info-table">
         <thead>
           <tr>
@@ -37,14 +42,14 @@
           <tr>
             <td>Jan–Dec 2024</td>
             <td>USDc 5,000.00</td>
-            <td>USDc 39,851.78</td>
-            <td>+797.04%</td>
+            <td>USDc 9,842.60</td>
+            <td><strong>+196.85%</strong></td>
           </tr>
           <tr>
             <td>Jan–Jun 2025</td>
             <td>USDc 5,000.00</td>
-            <td>USDc 9,842.60</td>
-            <td>+196.85%</td>
+            <td>USDc 39,851.78</td>
+            <td><strong>+797.04%</strong></td>
           </tr>
         </tbody>
       </table>
@@ -82,99 +87,27 @@
       </table>
 
       <div class="btn-group">
-        <button class="cta-btn pro4-checkout-btn" data-plan="monthly">
-          Subscribe Monthly
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="6m">
-          Subscribe 6 Months
-        </button>
-        <button class="cta-btn pro4-checkout-btn" data-plan="annual">
-          Subscribe 12 Months
-        </button>
+        <button class="cta-btn">Subscribe Monthly</button>
+        <button class="cta-btn">Subscribe 6 Months</button>
+        <button class="cta-btn">Subscribe 12 Months</button>
       </div>
-
-      <p class="roi-note">
-        Backtested monthly return: <strong>$33.20</strong> — keep over 50% of your gains.
-      </p>
+      <p class="roi-note">Backtested monthly return: <strong>$33.20</strong> — keep over 50% of your gains.</p>
     </div>
 
     <div class="right-content">
       <div class="mockup-wrapper">
         <img src="Pro4_CollectorEdition_whiteBG.png" alt="Pro-4 Mockup" />
-        <p class="edition custom">
-          Ideal for XAUUSDc with minimal starting capital (5,000 USDc) — fully
-          compatible with XAUUSD at $5,000 deposit.
-        </p>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- 📝 Footer Note + Copyright -->
   <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" />
-    </div>
-    <div class="footer-text">
-      <p>
-        Past performance does not guarantee future results.<br />
-        Use with discretion and risk management.
-      </p>
-      <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
-    </div>
+    <p>This product is intended for educational and analytical purposes only.<br>
+    All performance results shown are based on historical backtesting using real XAU/USD data.<br>
+    Past performance does not guarantee future results. Use with discretion and risk management.</p>
+    <p class="copyright">&copy; 2025 MomentumXLab. All rights reserved.</p>
   </footer>
 
-  <!-- Scripts: SweetAlert2 + Firebase Auth (compat) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    // Base URL for your auth pages repo
-    const AUTH_BASE_URL = 'https://mattwora.github.io/momentumxlab-auth-system';
-
-    // Firebase config (replace with your own)
-    const firebaseConfig = {
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2",
-      storageBucket: "momentumxlab-37ce2.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    const auth = firebase.auth();
-
-    // Handle subscribe button clicks
-    document.querySelectorAll('.pro4-checkout-btn').forEach(button => {
-      button.addEventListener('click', async e => {
-        e.preventDefault();
-        const plan = button.dataset.plan;
-        const user = auth.currentUser;
-
-        if (!user) {
-          // Prompt login or signup
-          const result = await Swal.fire({
-            title: 'Please Sign Up or Login',
-            text: 'You must sign in before choosing a package.',
-            icon: 'info',
-            showDenyButton: true,
-            confirmButtonText: 'Login',
-            denyButtonText: 'Signup'
-          });
-
-          if (result.isConfirmed) {
-            window.location.href = `${AUTH_BASE_URL}/login.html`;
-          } else if (result.isDenied) {
-            window.location.href = `${AUTH_BASE_URL}/signup.html`;
-          }
-
-        } else {
-          // User is signed in → go to confirm-order
-          window.location.href = 
-            `${AUTH_BASE_URL}/confirm-order.html?plan=${plan}`;
-        }
-      });
-    });
-  </script>
 </body>
 </html>
