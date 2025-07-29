@@ -1,112 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MomentumXLab Dashboard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: #0B0F1A;
+  color: #E4E6EB;
+  margin: 0;
+  padding: 0;
+}
 
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #FFD700;
-      font-family: 'Kanit', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+.pro4-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 4em 5%;
+  gap: 2em;
+}
 
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 30px;
-      background-color: #1a1a1a;
-      border-radius: 12px;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
-      text-align: center;
-    }
+.left-content, .right-content {
+  flex: 1 1 48%;
+}
 
-    .headline {
-      font-size: 32px;
-      margin-bottom: 30px;
-      color: #FFD700;
-    }
+.left-content h2, .left-content h3, .left-content h4 {
+  color: #00FFE0;
+  margin-bottom: 1em;
+}
 
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 25px;
-    }
+.feature-list {
+  list-style: none;
+  padding: 0;
+}
 
-    .btn-gold, .btn-silver {
-      text-decoration: none;
-      padding: 12px;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
-    }
+.feature-list li {
+  margin: 0.6em 0;
+  border-left: 4px solid #00FFE0;
+  padding-left: 1em;
+}
 
-    .btn-gold {
-      background-color: #FFD700;
-      color: #000000;
-    }
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #131A2B;
+  margin: 1.5em 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-    .btn-gold:hover {
-      background-color: #e5c100;
-    }
+.info-table th, .info-table td {
+  padding: 1em;
+  text-align: left;
+  border-bottom: 1px solid #2A354D;
+}
 
-    .btn-silver {
-      background-color: #999999;
-      color: #ffffff;
-    }
+.info-table th {
+  background: #1F2638;
+  color: #00FFE0;
+}
 
-    .btn-silver:hover {
-      background-color: #777777;
-    }
+.cta-btn {
+  background-color: #00FFE0;
+  color: #0B0F1A;
+  padding: 0.8em 1.4em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-    .footer-note {
-      font-size: 14px;
-      color: #888888;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1 class="headline">MomentumXLab Terminal</h1>
+.cta-btn:hover {
+  background-color: #00cbb5;
+}
 
-    <div class="button-group">
-      <a href="#" class="btn-gold" id="btn-pro4">🧪 Download Pro-4 Trial</a>
-      <a href="downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
-         class="btn-silver"
-         download>
-        📘 Optimization Guide
-      </a>
-    </div>
+.roi-note {
+  margin-top: 1.5em;
+  font-size: 1.1em;
+  color: #B8C1CC;
+}
 
-    <div class="footer-note">
-      ⚡ Dashboard powered by ApexXAU | Updated: July 2025
-    </div>
-  </div>
+.mockup-wrapper {
+  text-align: center;
+  background: #131A2B;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 0 20px #00FFE050;
+}
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    document.getElementById("btn-pro4").addEventListener("click", () => {
-      Swal.fire({
-        title: "Download Trial?",
-        text: "Includes signal & trade modules for backtesting.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Yes, download",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.open(
-            "downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5",
-            "_blank"
-          );
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+.mockup-wrapper img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1em;
+}
+
+.edition.custom {
+  font-size: 0.95em;
+  color: #D1D5E0;
+  font-style: italic;
+}
