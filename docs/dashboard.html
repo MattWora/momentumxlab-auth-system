@@ -2,75 +2,160 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MomentumXLab Dashboard</title>
-  <link rel="stylesheet" href="/styles/dashboard.css" />
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+  <title>Dashboard – MomentumXLab</title>
+  <link rel="icon" href="favicon.ico" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background: radial-gradient(circle at top, #1e1e2f, #0f0f1b);
+      color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .dashboard-box {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #3fae89;
+      width: 340px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+    .info, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .info {
+      background: #2d2d42;
+      color: #fff;
+    }
+    button {
+      background: linear-gradient(135deg, #3fae89, #1c8f68);
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(135deg, #58cba2, #2bb57e);
+    }
+    #status {
+      min-height: 20px;
+      margin-top: 8px;
+      text-align: center;
+      color: orange;
+    }
+  </style>
 </head>
 <body>
-  <main class="main-container">
-    <form id="subscriptionForm" class="form-section">
-      <label>Email</label>
-      <input type="email" id="email" readonly />
+  <div class="dashboard-box">
+    <h1>Welcome to MomentumXLab</h1>
+    <div class="info">Email: <span id="user-email">Loading...</span></div>
+    <div class="info">Plan: <span id="user-plan">ApexXAU Intelligent Pro-4 Trial Version</span></div>
+    <div class="info">Trial Ends In: <span id="trial-days">-</span> days</div>
 
-      <label>Plan</label>
-      <input type="text" id="planName" readonly />
+    <!-- Download Buttons -->
+    <a href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5"
+      <button> Download >ApexXAU Intelligent Pro-4 Trial Version</button>
+    </a>
+    <a href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf"
+      <button> Download >ApexXAU Intelligent Pro-4 Optimization Guide</button>
+    </a>
+    <a 
+  href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Trial%20Version.ex5" 
+  download
+>
+  <button>Download ApexXAU Intelligent Pro-4 Trial Version</button>
+</a>
 
-      <label>Package</label>
-      <input type="text" id="pkg" readonly />
+<a 
+  href="https://mattwora.github.io/momentumxlab-auth-system/downloads/ApexXAU%20Intelligent%20Pro-4%20Optimization%20Guide.pdf" 
+  download
+>
+  <button>Download ApexXAU Intelligent Pro-4 Optimization Guide</button>
+</a>
 
-      <label>Price</label>
-      <input type="text" id="price" readonly />
+    <button id="logout-btn"> LOGOUT</button>
+    <p id="status"></p>
+  </div>
 
-      <label>Expiry Date</label>
-      <input type="text" id="expiry" readonly />
-
-      <button type="submit">Submit</button>
-    </form>
-  </main>
-
-  <!-- footer โลโก้ถูกลบตามคำขอ -->
-  <footer class="footer-section">
-    <div class="footer-text">
-      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
-    </div>
-  </footer>
-
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const planKey = (urlParams.get("plan") || "").toLowerCase();
-    const pkgKey = (urlParams.get("package") || "").toLowerCase();
+    document.addEventListener('DOMContentLoaded', () => {
+      const firebaseConfig = {
+        apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+        authDomain: "momentumxlab-37ce2.firebaseapp.com",
+        projectId: "momentumxlab-37ce2",
+        storageBucket: "momentumxlab-37ce2.appspot.com",
+        messagingSenderId: "1049046345603",
+        appId: "1:1049046345603:web:9ef0b93be481e0d045dfff"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
 
-    const planNames = {
-      pro4: "ApexXAU Intelligent Pro-4",
-      pro5: "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
-    };
+      const userEmail = document.getElementById('user-email');
+      const trialDays = document.getElementById('trial-days');
+      const logoutBtn = document.getElementById('logout-btn');
+      const statusEl = document.getElementById('status');
 
-    const priceMap = {
-      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
-    };
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          userEmail.textContent = user.email;
 
-    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
+          const creationDate = new Date(user.metadata.creationTime);
+          const now = new Date();
+          const diff = Math.floor((now - creationDate) / (1000 * 60 * 60 * 24));
+          const remaining = Math.max(0, 15 - diff); // 15-day trial
+          trialDays.textContent = remaining;
 
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) return;
+          const creationStr = creationDate.toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+          });
 
-      document.getElementById("email").value = user.email || "";
-      document.getElementById("planName").value = planNames[planKey] || planKey;
-      document.getElementById("pkg").value = pkgKey;
-      const priceVal = ((priceMap[planKey] || {})[pkgKey]) || 0;
-      document.getElementById("price").value = `$${priceVal.toFixed(2)}`;
+          const expiryDate = new Date(creationDate);
+          expiryDate.setDate(expiryDate.getDate() + 15);
 
-      const expDate = new Date();
-      expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey] || 0));
-      const dd = String(expDate.getDate()).padStart(2, "0");
-      const mm = String(expDate.getMonth() + 1).padStart(2, "0");
-      const yyyy = expDate.getFullYear();
-      document.getElementById("expiry").value = `${dd}/${mm}/${yyyy}`;
+          const expiryStr = expiryDate.toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric'
+          });
+
+          Swal.fire({
+            icon: 'info',
+            title: 'Trial Info',
+            html: `You downloaded ApexXAU Pro-4 Trial on <strong>${creationStr}</strong>.<br>Your trial expires on <strong>${expiryStr}</strong>.`,
+            confirmButtonText: 'OK'
+          });
+        } else {
+          window.location.href = 'login.html';
+        }
+      });
+
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          await auth.signOut();
+          statusEl.textContent = 'Logged out';
+          window.location.href = 'login.html';
+        } catch (err) {
+          console.error('Logout error:', err);
+          statusEl.textContent = err.message;
+        }
+      });
     });
   </script>
 </body>
