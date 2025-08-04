@@ -21,15 +21,25 @@
     }
 
     /* Layout */
-    .pro4-section {
-      display: flex;
-      flex-wrap: wrap;
-      max-width: 1200px;
-      margin: 2rem auto;
-      gap: 2rem;
-    }
+.confirm-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
 
-    .left-content,
+@media (min-width: 768px) {
+  .confirm-page-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .left-content,
+  .right-content {
+    width: 50%;
+  }
+}
+
+
     .right-content {
       background: #fff;
       border-radius: 8px;
@@ -358,6 +368,7 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
+
 
 
 
