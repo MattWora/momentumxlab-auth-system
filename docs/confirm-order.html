@@ -117,15 +117,6 @@
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
-  <section class="confirm-order">
-    <div class="container">
-      <h1>Confirm Your Order</h1>
-      
-      <div class="package-info">
-        <h2>Selected Package</h2>
-        <input id="package" type="text" disabled />
-      </div>
-
   <section class="pro4-section">
     <!-- Left column: order form -->
     <div class="left-content">
@@ -158,53 +149,20 @@
           <input type="text" id="brokerServer" required/>
         </div>
         <div class="form-group">
-          <label>EA ชื่อ</label>
+          <label>EA Model</label>
           <input type="text" id="planName" readonly/>
         </div>
         <div class="form-group">
           <label>Package</label>
           <input type="text" id="pkg" readonly/>
-          <label for="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            readonly
-            required
-            value="testuser@momentumxlab.com"
-          />
         </div>
-      <!-- Removed Email Field -->
-      <!-- Removed Plan Name Field -->
-
         <div class="form-group">
           <label>Price (USD)</label>
           <input type="text" id="price" readonly/>
-          <label for="plan">Plan</label>
-          <input
-            type="text"
-            id="plan"
-            name="plan"
-            readonly
-            value="ApexXAU Intelligent Pro-4 (6 Months)"
-          />
         </div>
-      <div class="license-info">
-        <h2>License Key</h2>
-        <input id="licenseKey" type="text" placeholder="Enter your license key" />
-      </div>
-
         <div class="form-group">
           <label>Expiry Date</label>
           <input type="text" id="expiry" readonly required/>
-          <label for="price">Price</label>
-          <input
-            type="text"
-            id="price"
-            name="price"
-            readonly
-            value="$106.99 USD"
-          />
         </div>
         <div class="form-group checkbox-group">
           <input type="checkbox" id="agree"/>
@@ -394,3 +352,4 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
+
