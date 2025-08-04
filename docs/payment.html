@@ -1,37 +1,160 @@
-<!-- confirm-order.html -->
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ยืนยันคำสั่งซื้อ</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Confirm Payment – MomentumXLab</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Prompt', sans-serif;
+      background-color: #0d0d0d;
+      color: #f5d47a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .payment-box {
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+      width: 100%;
+      max-width: 560px;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .field {
+      margin-bottom: 0.75rem;
+    }
+
+    .field strong {
+      display: inline-block;
+      width: 170px;
+      font-weight: 600;
+    }
+
+    .status {
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .pay-btn {
+      display: block;
+      width: 100%;
+      background-color: transparent;
+      border: 2px solid #f5d47a;
+      color: #f5d47a;
+      font-size: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .pay-btn:hover {
+      background-color: #f5d47a;
+      color: #111;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 1rem;
+      text-align: center;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h2>ยืนยันคำสั่งซื้อ</h2>
-    
-    <div class="order-info">
-      <p><strong>สินค้า:</strong> <span id="productName"></span></p>
-      <p><strong>จำนวน:</strong> <span id="quantity"></span></p>
-      <p><strong>ราคาต่อหน่วย:</strong> <span id="unitPrice"></span></p>
-      <p><strong>รวมทั้งหมด:</strong> <span id="totalPrice"></span></p>
-    </div>
+  <div class="payment-box">
+    <h2>Confirm Payment</h2>
 
-    <button class="confirm-btn">ยืนยันคำสั่งซื้อ</button>
+    <div class="field"><strong>EA Model:</strong> <span id="ea-name">—</span></div>
+    <div class="field"><strong>Package:</strong> <span id="pkg-name">—</span></div>
+    <div class="field"><strong>Price (USD):</strong> <span id="price-usd">—</span></div>
+    <div class="field"><strong>Status:</strong> Pending</div>
+
+    <button class="pay-btn" id="pay-btn">Pay Now</button>
+
+    <div class="note">Your license will activate immediately after payment is completed.</div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const product = params.get('product') || '-';
-    const quantity = parseInt(params.get('qty')) || 0;
-    const unitPrice = parseFloat(params.get('price')) || 0;
-    const total = quantity * unitPrice;
+    const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
+    const params = new URLSearchParams(location.search);
+    const plan = params.get("plan")?.toLowerCase();
+    const pkg  = params.get("package")?.toLowerCase();
 
-    document.getElementById('productName').textContent = product;
-    document.getElementById('quantity').textContent = quantity;
-    document.getElementById('unitPrice').textContent = unitPrice.toFixed(2);
-    document.getElementById('totalPrice').textContent = total.toFixed(2);
+    const meta = {
+      pro4:  "ApexXAU Intelligent Pro-4",
+      pro5:  "ApexXAU Intelligent Pro-5",
+      corex: "ApexXAU Intelligent Core-X"
+    };
+
+    const prices = {
+      pro4:  { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+      pro5:  { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
+    };
+
+    const eaEl = document.getElementById("ea-name");
+    const pkgEl = document.getElementById("pkg-name");
+    const priceEl = document.getElementById("price-usd");
+    const payBtn = document.getElementById("pay-btn");
+
+    if (!meta[plan] || !prices[plan]?.[pkg]) {
+      eaEl.textContent = "Invalid";
+      pkgEl.textContent = "Invalid";
+      priceEl.textContent = "Invalid";
+      payBtn.disabled = true;
+    } else {
+      eaEl.textContent    = meta[plan];
+      pkgEl.textContent   = pkg.toUpperCase();
+      priceEl.textContent = `$${prices[plan][pkg].toFixed(2)}`;
+    }
+
+    payBtn.addEventListener("click", async () => {
+      payBtn.disabled = true;
+      try {
+        const res = await fetch(
+          "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ plan, package: pkg })
+          }
+        );
+        if (!res.ok) throw new Error("Server Error");
+        const { sessionId } = await res.json();
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        if (error) throw error;
+      } catch (err) {
+        Swal.fire("Payment Error", err.message || "Please try again later", "error");
+        payBtn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
