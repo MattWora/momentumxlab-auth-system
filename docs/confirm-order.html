@@ -1,143 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Confirm Order – MomentumX Lab</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link
-    rel="stylesheet"
-    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    integrity="sha384-JcKb8q3iqJ61gNVpCFbZJdGm0D3ad5RFSJ1O6bDkmN5E6Ml+0o8XlXWlXRx7rFVE"
-    crossorigin="anonymous"
-  >
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm Your Order – MomentumXLab</title>
+  <link rel="stylesheet" href="style.css" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Confirm Order</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 500px;
+      margin: auto;
+    }
+    label, input, button {
+      display: block;
+      width: 100%;
+      margin-bottom: .75rem;
+      font-size: 1rem;
+    }
+    input[readonly] {
+      background: #f2f2f2;
+    }
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+    .checkbox-group label {
+      margin-left: .5rem;
+    }
+    button {
+      padding: .75rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mt-5">
-    <h1 class="mb-4">Confirm Your Order</h1>
-    <div class="row">
-      <div class="col-md-6">
-        <img
-          src="../images/mockup.png"
-          alt="Product Mockup"
-          class="img-fluid"
-        >
-        <!-- Order summary removed -->
-      </div>
-      <div class="col-md-6">
-        <form
-          id="confirm_form"
-          action="/orders/confirm"
-          method="POST"
-        >
-          <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              class="form-control"
-              required
-            >
-          </div>
+  
+  <h2>Confirm Your Order</h2>
+  <form id="order-form">
+    <input id="email" placeholder="Email (readonly)" readonly />
+    <input id="fullName" placeholder="Full Name" />
+    <input id="phone" placeholder="Phone" />
+    <input id="mt5Account" placeholder="MT5 Account" />
+    <input id="brokerServer" placeholder="Broker Server" />
+    <input id="package" placeholder="Package" readonly />
+    <input id="price" placeholder="Price" readonly />
+    <input id="expiry" type="date" placeholder="Expiry Date" readonly />
+    
+  <h1>Confirm Your Order</h1>
+  <form id="confirm-form">
+    <label for="email">Email</label>
+    <input type="email" id="email" readonly />
 
-          <div class="form-group">
-            <label for="account">MT5 Account Number</label>
-            <input
-              type="text"
-              id="account"
-              name="account"
-              class="form-control"
-              required
-            >
-          </div>
+    <label for="planName">EA รุ่น</label>
+    <input type="text" id="planName" readonly />
 
-          <div class="form-group">
-            <label for="server">Broker Server</label>
-            <input
-              type="text"
-              id="server"
-              name="server"
-              class="form-control"
-              required
-            >
-          </div>
+    <label for="pkg">Package</label>
+    <input type="text" id="pkg" readonly />
 
-          <div class="form-group">
-            <label for="eaName">EA Name</label>
-            <input
-              type="text"
-              id="eaName"
-              name="eaName"
-              class="form-control"
-              required
-            >
-          </div>
+    <label for="price">สรุปราคา (USD)</label>
+    <input type="text" id="price" readonly />
 
-          <div class="form-group">
-            <label for="package">Package</label>
-            <input
-              type="text"
-              id="package"
-              name="package"
-              class="form-control"
-              readonly
-            >
-          </div>
+    <label for="expiry">วันหมดอายุ</label>
+    <input type="text" id="expiry" readonly />
 
-          <!-- Removed duplicate Email field (kept the earlier Email field only) -->
+    <label for="mt5acc">MT5 Account</label>
+    <input type="text" id="mt5acc" required />
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-control"
-              required
-            >
-          </div>
+    <label for="broker">Broker Server</label>
+    <input type="text" id="broker" required />
 
-          <div class="form-group">
-            <label for="price">Price (USD)</label>
-            <input
-              type="text"
-              id="price"
-              name="price"
-              class="form-control"
-              readonly
-            >
-          </div>
-
-          <!-- Removed duplicate lower Price field -->
-          <!-- Removed Plan field -->
-          <!-- Removed Expiry Date and Order Summary if inconsistent -->
-
-          <button
-            type="submit"
-            class="btn btn-success btn-block"
-          >
-            Confirm Order
-          </button>
-        </form>
-      </div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="agree" />
+      <label for="agree">I agree to the terms and conditions</label>
+      <label for="agree">ยอมรับเงื่อนไขและข้อกำหนด</label>
     </div>
-  </div>
+    
+    <button id="btn-confirm" disabled>Confirm</button>
 
-  <script src="../js/app.js"></script>
+    <button type="submit">Confirm</button>
+  </form>
+  
+
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Firebase Compat -->
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+  
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var user          = window.authSystem.user;
-      var selectedPlan  = window.authSystem.selectedPlan;
-      var selectedPrice = window.authSystem.selectedPrice;
+    // Initialize Firebase
+    // 1. Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      // ... ของคุณจาก Firebase console
+    };
+    firebase.initializeApp(firebaseConfig);
+    
 
-      // Populate fields
-      document.getElementById('email').value   = user.email;
-      document.getElementById('package').value = selectedPlan;
-      document.getElementById('price').value   = selectedPrice;
+    const auth = firebase.auth();
+    const firestore = firebase.firestore();
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Parse URL params
+      const params = new URLSearchParams(location.search);
+      const plan = params.get("plan") || "";
+      const pkg  = params.get("package") || "";
+  
+      // 2. Display package code
+      document.getElementById("package").value = pkg;
+  
+      // 3. Map package → price
+      const packagePrices = {
+        pro4: { "1m": 500,  "6m": 2500, "12m": 4500 },
+        pro5: { "1m": 600,  "6m": 3000, "12m": 5500 }
+      };
+      const price = (
+        packagePrices[plan] &&
+        packagePrices[plan][pkg]
+      ) || 0;
+      document.getElementById("price").value = price;
+  
+      // 4. Compute expiry date
+      const months = parseInt(pkg, 10);
+      let expiryStr = "";
+      if (!isNaN(months)) {
+        const expDate = new Date();
+        expDate.setMonth(expDate.getMonth() + months);
+        expiryStr = expDate.toISOString().split("T")[0];
+    const db   = firebase.firestore();
 
-      // Removed logic for Plan, second Price, Expiry, and duplicate Email
+    // 2. แผน ราค และระยะเวลา
+    const planNames = {
+      pro3: 'EA Pro 3',
+      pro4: 'EA Pro 4',
+      core: 'EA Core X'
+    };
+    const priceMap = {
+      monthly: 100,
+      '6m': 540,
+      '12m': 1000
+    };
+    const monthMap = {
+      monthly: 1,
+      '6m': 6,
+      '12m': 12
+    };
+
+    // 3. ตรวจสอบล็อกอิน
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'กรุณาเข้าสู่ระบบ',
+          text: 'คุณต้องล็อกอินก่อนดำเนินการ',
+          confirmButtonText: 'ไปยังหน้าเข้าสู่ระบบ'
+        }).then(() => {
+          const redirect = encodeURIComponent(window.location.href);
+          window.location.href = `login.html?redirect=${redirect}`;
+        });
+      } else {
+        initForm(user);
+      }
+      document.getElementById("expiry").value = expiryStr;
+  
+      // 5. Enable button when checkbox checked
+      document.getElementById("agree").addEventListener("change", e => {
+        document.getElementById("btn-confirm").disabled = !e.target.checked;
+      });
+  
+      // 6. Fill user profile fields with proper fallbacks
+      auth.onAuthStateChanged(async user => {
+        if (!user) {
+          location.href = `login.html?redirect=${encodeURIComponent(location.href)}`;
+          return;
+        }
+  
+        // Email always from auth
+        document.getElementById("email").value = user.email || "";
+  
+        // Fetch or create user doc
+        const userRef  = firestore.collection("users").doc(user.uid);
+        let snapshot   = await userRef.get();
+  
+        if (!snapshot.exists) {
+          await userRef.set({
+            fullName: "",
+            phone: "",
+            createdAt: Date.now()
+          });
+          snapshot = await userRef.get();
+        }
+  
+        const data = snapshot.data() || {};
+        // Use firestore fullName, fallback to auth.displayName, then empty string
+        const fullName = data.fullName ?? user.displayName ?? "";
+        const phone    = data.phone    ?? "";
+  
+        document.getElementById("fullName").value = fullName;
+        document.getElementById("phone").value    = phone;
+      });
+  
+      // 7. Handle form submission
+      document.getElementById("order-form").addEventListener("submit", async e => {
     });
+
+    // 4. ดึง params, เติมฟอร์ม และตั้ง handler
+    function initForm(user) {
+      const qs      = new URLSearchParams(window.location.search);
+      const planKey = qs.get('plan')    || '';
+      const pkgKey  = qs.get('package') || '';
+
+      // เติมค่าฟอร์ม
+      document.getElementById('email').value     = user.email;
+      document.getElementById('planName').value = planNames[planKey] || planKey;
+      document.getElementById('pkg').value       = pkgKey;
+      const priceVal = priceMap[pkgKey] || 0;
+      document.getElementById('price').value     = priceVal + ' USD';
+
+      // คำนวณวันหมดอายุ
+      const expiry = new Date();
+      expiry.setMonth(expiry.getMonth() + (monthMap[pkgKey] || 0));
+      document.getElementById('expiry').value = expiry.toLocaleDateString('th-TH');
+
+      // 5. สร้าง order เมื่อ submit
+      document.getElementById('confirm-form').addEventListener('submit', async e => {
+        e.preventDefault();
+  
+        const user = auth.currentUser;
+        if (!user) {
+          Swal.fire("Please log in first", "", "warning");
+          return;
+
+        if (!document.getElementById('agree').checked) {
+          return Swal.fire('กรุณายอมรับเงื่อนไขก่อน');
+        }
+  
+        const orderData = {
+          userId:       user.uid,
+          email:        user.email,
+          fullName:     document.getElementById("fullName").value,
+          phone:        document.getElementById("phone").value,
+          mt5Account:   document.getElementById("mt5Account").value,
+          brokerServer: document.getElementById("brokerServer").value,
+          plan,
+          package:      pkg,
+          price,
+          expiry:       new Date(document.getElementById("expiry").value).getTime(),
+          status:       "pending",
+          createdAt:    Date.now()
+        };
+  
+        const mt5Acc = document.getElementById('mt5acc').value.trim();
+        const broker = document.getElementById('broker').value.trim();
+        if (!mt5Acc || !broker) {
+          return Swal.fire('กรุณากรอก MT5 Account และ Broker Server ให้ครบ');
+        }
+
+        try {
+          await firestore.collection("orders").add(orderData);
+          Swal.fire("Order Confirmed", "Your order has been placed.", "success")
+            .then(() => location.href = "dashboard.html");
+          await db.collection('orders').add({
+            uid:       user.uid,
+            email:     user.email,
+            plan:      planKey,
+            package:   pkgKey,
+            price:     priceVal,
+            expiry:    firebase.firestore.Timestamp.fromDate(expiry),
+            mt5Acc,
+            broker,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+
+          Swal.fire('สำเร็จ', 'สร้างคำสั่งซื้อเรียบร้อย', 'success')
+            .then(() => window.location.href = 'dashboard.html');
+        } catch (err) {
+          Swal.fire("Error", err.message, "error");
+          console.error(err);
+          Swal.fire('เกิดข้อผิดพลาด', err.message, 'error');
+        }
+      });
+    });
+    }
   </script>
+  
 </body>
 </html>
