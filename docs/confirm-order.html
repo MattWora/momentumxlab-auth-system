@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="th">
+<html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
   <link rel="stylesheet" href="style.css"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MomentumXLab Dashboard</title>
+  <link rel="stylesheet" href="/styles/dashboard.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
 </head>
 <body>
   <section class="pro4-section">
@@ -61,42 +68,11 @@
         </a>
       </form>
     </div>
+  <main class="main-container">
+    <form id="subscriptionForm" class="form-section">
+      <label>Email</label>
+      <input type="email" id="email" readonly />
 
-<section class="pro4-section">
-  <div class="left-content">
-    <h2>Confirm Your Order</h2>
-    <form id="order-form" class="order-form">
-      <div class="form-group"><label>Email</label>
-        <input type="email" id="email" readonly required/>
-      </div>
-      <div class="form-group"><label>Full Name</label>
-        <input type="text" id="fullName" required/>
-      </div>
-      <div class="form-group"><label>Phone Number</label>
-        <input type="tel" id="phone" required/>
-      </div>
-      <div class="form-group"><label>MT5 Account Number</label>
-        <input type="text" id="mt5Account" required pattern="\d+"/>
-      </div>
-      <div class="form-group"><label>Broker Server</label>
-        <input type="text" id="brokerServer" required/>
-      </div>
-      <div class="form-group"><label>EA รุ่น</label>
-        <input type="text" id="planName" readonly/>
-      </div>
-      <div class="form-group"><label>Package</label>
-        <input type="text" id="pkg" readonly/>
-      </div>
-      <div class="form-group"><label>Price (USD)</label>
-        <input type="text" id="price" readonly/>
-      </div>
-      <div class="form-group"><label>Expiry Date</label>
-        <input type="text" id="expiry" readonly required/>
-      </div>
-
-      <div class="form-group checkbox-group">
-        <input type="checkbox" id="agree"/>
-        <label for="agree">I acknowledge the terms and certify that the above information is accurate.</label>
     <div class="right-content">
       <div class="mockup-wrapper">
         <img id="product-image" src="" alt="Product Box"/>
@@ -106,123 +82,27 @@
       </div>
     </div>
   </section>
+      <label>Plan</label>
+      <input type="text" id="planName" readonly />
 
-      <button class="cta-btn" type="submit" id="btn-confirm" disabled>
-        Confirm and Generate License
-      </button>
-      <a id="download-btn" href="#" class="cta-btn" style="display:none;">
-        Download
-      </a>
+      <label>Package</label>
+      <input type="text" id="pkg" readonly />
+
+      <label>Price</label>
+      <input type="text" id="price" readonly />
+
+      <label>Expiry Date</label>
+      <input type="text" id="expiry" readonly />
+
+      <button type="submit">Submit</button>
     </form>
-  </div>
+  </main>
 
-  <div class="right-content">
-    <div class="mockup-wrapper">
-      <img id="product-image" src="" alt="Product Box"/>
-      <p class="edition custom">
-        Your license will activate upon payment and remain valid until its expiration date.
-      </p>
+  <!-- footer โลโก้ถูกลบตามคำขอ -->
   <footer class="footer-section">
     <div class="footer-logo-left">
       <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
     </div>
-  </div>
-</section>
-
-<footer class="footer-section">
-  <div class="footer-logo-left">
-    <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
-  </div>
-  <div class="footer-text">
-    <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
-    <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
-  </div>
-</footer>
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Firebase Compat SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
-
-<script>
-  // Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-    authDomain: "momentumxlab-37ce2.firebaseapp.com",
-    projectId: "momentumxlab-37ce2"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db   = firebase.firestore();
-
-  // product data
-  const planNames = {
-    pro4: "ApexXAU Intelligent Pro-4",
-    pro5: "ApexXAU Intelligent Pro-5",
-    corex: "ApexXAU Intelligent Core-X"
-  };
-  const planImages = {
-    pro4: "Pro4_CollectorEdition_whiteBG.png",
-    pro5: "Pro5_CollectorEdition_whiteBG.png",
-    corex: "CoreX_PerformanceEdition_whiteBG.png"
-  };
-  const priceMap = {
-    pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-    pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-    corex:{ monthly: 49.99, "6m": 267.49, "12m": 485.42 }
-  };
-  const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
-
-  // on load
-  document.addEventListener("DOMContentLoaded", () => {
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        Swal.fire({
-          icon: "warning",
-          title: "กรุณาเข้าสู่ระบบ",
-          text: "คุณต้องล็อกอินก่อนดำเนินการ",
-          confirmButtonText: "ไปหน้าเข้าสู่ระบบ"
-        }).then(() => {
-          const redirect = encodeURIComponent(window.location.href);
-          location.href = `login.html?redirect=${redirect}`;
-        });
-      } else {
-        initForm(user);
-      }
-    });
-  });
-
-  function initForm(user) {
-    const qs      = new URLSearchParams(location.search);
-    const planKey = (qs.get("plan")||"").toLowerCase();
-    const pkgKey  = (qs.get("package")||"").toLowerCase();
-
-    // fill left
-    document.getElementById("email").value    = user.email || "";
-    document.getElementById("planName").value = planNames[planKey] || planKey;
-    document.getElementById("pkg").value      = pkgKey;
-
-    const priceVal = ((priceMap[planKey]||{})[pkgKey])||0;
-    document.getElementById("price").value = `$${priceVal.toFixed(2)}`;
-
-    // expiry in Gregorian
-    const expDate = new Date();
-    expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey]||0));
-    const dd   = String(expDate.getDate()).padStart(2,"0");
-    const mm   = String(expDate.getMonth()+1).padStart(2,"0");
-    const yyyy = expDate.getFullYear();
-    document.getElementById("expiry").value = `${dd}/${mm}/${yyyy}`;
-
-    // show mockup
-    const img = document.getElementById("product-image");
-    img.src = planImages[planKey] || "";
-    img.alt = planNames[planKey] || "";
-
-    // checkbox enables button
-    document.getElementById("agree").addEventListener("change", e => {
-      document.getElementById("btn-confirm").disabled = !e.target.checked;
     <div class="footer-text">
       <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
       <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
@@ -246,6 +126,9 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    const urlParams = new URLSearchParams(window.location.search);
+    const planKey = (urlParams.get("plan") || "").toLowerCase();
+    const pkgKey = (urlParams.get("package") || "").toLowerCase();
 
     // product data
     const planNames = {
@@ -258,6 +141,7 @@
       pro5: "Pro5_CollectorEdition_whiteBG.png",
       corex: "CoreX_PerformanceEdition_whiteBG.png"
     };
+
     const priceMap = {
       pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
       pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
@@ -283,25 +167,33 @@
         }
       });
     });
+    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
 
     function initForm(user) {
       const qs = new URLSearchParams(location.search);
       const planKey = (qs.get("plan") || "").toLowerCase();
       const pkgKey  = (qs.get("package") || "").toLowerCase();
       const status  = (qs.get("status") || "").toLowerCase(); // <— new
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) return;
 
       // เติมข้อมูลลงฟอร์ม
       document.getElementById("email").value    = user.email || "";
+      document.getElementById("email").value = user.email || "";
       document.getElementById("planName").value = planNames[planKey] || planKey;
       document.getElementById("pkg").value      = pkgKey;
+      document.getElementById("pkg").value = pkgKey;
       const priceVal = ((priceMap[planKey] || {})[pkgKey]) || 0;
       document.getElementById("price").value    = `$${priceVal.toFixed(2)}`;
+      document.getElementById("price").value = `$${priceVal.toFixed(2)}`;
 
       // คำนวณวันหมดอายุ
       const expDate = new Date();
       expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey] || 0));
       const dd   = String(expDate.getDate()).padStart(2, "0");
       const mm   = String(expDate.getMonth() + 1).padStart(2, "0");
+      const dd = String(expDate.getDate()).padStart(2, "0");
+      const mm = String(expDate.getMonth() + 1).padStart(2, "0");
       const yyyy = expDate.getFullYear();
       document.getElementById("expiry").value = `${dd}/${mm}/${yyyy}`;
 
@@ -367,6 +259,7 @@
           }
         });
     }
+    });
   </script>
 </body>
 </html>
