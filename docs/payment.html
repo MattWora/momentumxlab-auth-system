@@ -1,109 +1,97 @@
+<!-- ✅ payment.html (Refactored Version Using Original URL Parameter Logic) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Payment – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Confirm Payment</h2>
-      <div class="info-box" id="info-box">
-        <p><strong>Product:</strong> <span id="package-name">—</span></p>
-        <p><strong>Price:</strong> <span id="package-price">—</span></p>
+  <section class="payment-section">
+    <div class="left-panel">
+      <h2>Confirm Your Order</h2>
+      <div id="details-box">
+        <p><strong>EA Model:</strong> <span id="ea-name">—</span></p>
+        <p><strong>Package:</strong> <span id="pkg-name">—</span></p>
+        <p><strong>Price (USD):</strong> <span id="price-value">—</span></p>
         <p><strong>Status:</strong> Pending</p>
       </div>
-      <button class="cta-btn" id="pay-btn">Pay Now</button>
-      <p class="note">Your license will activate immediately after payment is completed.</p>
+      <button id="pay-btn" class="cta-btn">Pay Now</button>
     </div>
 
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img id="product-image" src="" alt="Product Visual"/>
-      </div>
+    <div class="right-panel">
+      <img id="ea-image" src="" alt="EA Preview" />
     </div>
   </section>
 
-  <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
-    </div>
-    <div class="footer-text">
-      <p>Please ensure the accuracy of your order before payment.</p>
-      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
-    </div>
+  <footer>
+    <p>Double check your order before payment.</p>
+    <p>© MomentumXLab</p>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
+    const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i...");
 
-    const params = new URLSearchParams(window.location.search);
-    const plan = params.get("plan")?.toLowerCase();
-    const pkg  = params.get("package")?.toLowerCase();
+    const params = new URLSearchParams(location.search);
+    const ea     = params.get("plan")?.toLowerCase();
+    const pkg    = params.get("package")?.toLowerCase();
 
-    const planNames = {
-      pro4: "ApexXAU Intelligent Pro-4",
-      pro5: "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
+    const meta = {
+      pro4:  { name: "ApexXAU Intelligent Pro-4",  img: "Pro4_CollectorEdition_whiteBG.png" },
+      pro5:  { name: "ApexXAU Intelligent Pro-5",  img: "Pro5_CollectorEdition_whiteBG.png" },
+      corex: { name: "ApexXAU Intelligent Core-X", img: "CoreX_PerformanceEdition_whiteBG.png" }
     };
 
-    const packagePrices = {
+    const pricing = {
       pro4:  { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
       pro5:  { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
       corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
     };
 
-    const planImages = {
-      pro4:  "Pro4_CollectorEdition_whiteBG.png",
-      pro5:  "Pro5_CollectorEdition_whiteBG.png",
-      corex: "CoreX_PerformanceEdition_whiteBG.png"
-    };
-
-    const nameEl  = document.getElementById("package-name");
-    const priceEl = document.getElementById("package-price");
-    const imageEl = document.getElementById("product-image");
+    const nameEl  = document.getElementById("ea-name");
+    const pkgEl   = document.getElementById("pkg-name");
+    const priceEl = document.getElementById("price-value");
+    const imgEl   = document.getElementById("ea-image");
     const payBtn  = document.getElementById("pay-btn");
-    const infoBox = document.getElementById("info-box");
 
-    if (!planNames[plan] || !packagePrices[plan]?.[pkg]) {
-      infoBox.innerHTML = `<p>❌ Invalid package selection. Please check your link.</p>`;
-      payBtn.style.display = "none";
-    } else {
-      nameEl.textContent  = `${planNames[plan]} – ${pkg.toUpperCase()}`;
-      priceEl.textContent = `$${packagePrices[plan][pkg].toFixed(2)}`;
-      imageEl.src         = planImages[plan];
-      imageEl.alt         = planNames[plan];
-      payBtn.addEventListener("click", onPayNow);
+    function renderPackageDetails() {
+      if (!meta[ea] || !pricing[ea]?.[pkg]) {
+        document.getElementById("details-box").innerHTML = "<p>⚠️ Invalid order data.</p>";
+        payBtn.style.display = "none";
+        return;
+      }
+
+      nameEl.textContent  = meta[ea].name;
+      pkgEl.textContent   = pkg.toUpperCase();
+      priceEl.textContent = `$${pricing[ea][pkg].toFixed(2)}`;
+      imgEl.src           = meta[ea].img;
+      imgEl.alt           = meta[ea].name;
     }
 
-    async function onPayNow() {
+    async function handleStripePayment() {
       payBtn.disabled = true;
       try {
-        const res = await fetch(
-          "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ plan, package: pkg })
-          }
-        );
+        const res = await fetch("https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ plan: ea, package: pkg })
+        });
 
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        if (!res.ok) throw new Error(`Stripe error (${res.status})`);
         const { sessionId } = await res.json();
-
         const { error } = await stripe.redirectToCheckout({ sessionId });
         if (error) throw error;
       } catch (err) {
-        console.error("Stripe Error:", err);
-        Swal.fire("Payment Error", err.message || "Please try again later", "error");
+        Swal.fire("Payment Error", err.message || "Please try again", "error");
         payBtn.disabled = false;
       }
     }
+
+    renderPackageDetails();
+    payBtn.addEventListener("click", handleStripePayment);
   </script>
 </body>
 </html>
-
