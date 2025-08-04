@@ -4,9 +4,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirm Order</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
   <link rel="stylesheet" href="style.css"/>
@@ -115,23 +112,12 @@
       font-size: 1.1rem;
     }
   </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm Order</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" />
 </head>
-<body class="bg-gray-100">
-  <div class="max-w-4xl mx-auto py-8 px-4">
-    <h1 class="text-2xl font-bold mb-6">Confirm Your Order</h1>
-
-    <!-- Package -->
-    <div class="mb-4">
-      <label class="block mb-1 font-medium text-gray-700">Package:</label>
-      <p id="package" class="font-semibold text-gray-900">Loading...</p>
-    </div>
 <body>
 
-    <!-- License Key -->
-    <div class="mb-4">
-      <label class="block mb-1 font-medium text-gray-700">License Key:</label>
-      <p id="license-key" class="font-semibold text-gray-900">Loading...</p>
-    </div>
   <section class="pro4-section">
     <!-- Left column: order form -->
     <div class="left-content">
@@ -194,10 +180,6 @@
           />
         </div>
 
-    <!-- Expiry -->
-    <div class="mb-4">
-      <label class="block mb-1 font-medium text-gray-700">Expiry:</label>
-      <p id="expiry" class="font-semibold text-gray-900">Loading...</p>
         <div class="form-group">
           <label>Expiry Date</label>
           <input type="text" id="expiry" readonly required/>
@@ -218,6 +200,15 @@
         </div>
         <button class="cta-btn" type="submit" id="btn-confirm" disabled>
           Confirm and Generate License
+<body class="bg-gray-100">
+  <div class="max-w-4xl mx-auto py-8 px-4">
+    <h1 class="text-2xl font-bold mb-6">Confirm Your Order</h1>
+
+    <!-- Package -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium text-gray-700">Package:</label>
+      <p id="package" class="font-semibold text-gray-900">Loading...</p>
+    </div>
 
         <button type="submit" class="submit-btn">
           Confirm Purchase
@@ -226,12 +217,12 @@
           Download
         </a>
       </form>
+    <!-- License Key -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium text-gray-700">License Key:</label>
+      <p id="license-key" class="font-semibold text-gray-900">Loading...</p>
     </div>
 
-    <!-- Image Preview -->
-    <div class="mb-4">
-      <label class="block mb-1 font-medium text-gray-700">Mockup:</label>
-      <img id="mockup-image" alt="Preview Image" class="w-full max-w-md rounded shadow" />
     <!-- Right column: summary -->
     <div class="right-content">
       <div class="mockup-wrapper">
@@ -248,33 +239,65 @@
           <li><strong>Total</strong><strong>$106.99 USD</strong></li>
         </ul>
       </div>
+    <!-- Expiry -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium text-gray-700">Expiry:</label>
+      <p id="expiry" class="font-semibold text-gray-900">Loading...</p>
     </div>
   </section>
 
-    <!-- Confirm Button -->
-    <button id="confirm-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-      Confirm and Download
-    </button>
-  </div>
   <footer class="footer-section">
     <div class="footer-text">
       <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
       <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+    <!-- Image Preview -->
+    <div class="mb-4">
+      <label class="block mb-1 font-medium text-gray-700">Mockup:</label>
+      <img id="mockup-image" alt="Preview Image" class="w-full max-w-md rounded shadow" />
     </div>
   </footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+    <!-- Confirm Button -->
+    <button id="confirm-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Confirm and Download
+    </button>
+  </div>
 
   <script>
     // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
+      authDomain: "momentumxlab-37ce2.firebaseapp.com",
+      projectId: "momentumxlab-37ce2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+    // product data
+    const planNames = {
+      pro4: "ApexXAU Intelligent Pro-4",
+      pro5: "ApexXAU Intelligent Pro-5",
+      corex: "ApexXAU Intelligent Core-X"
+    };
+    const planImages = {
+      pro4: "Pro4_CollectorEdition_whiteBG.png",
+      pro5: "Pro5_CollectorEdition_whiteBG.png",
+      corex: "CoreX_PerformanceEdition_whiteBG.png"
+    };
+    const priceMap = {
+      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
+      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
+      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_AUTH_DOMAIN",
@@ -283,14 +306,25 @@
       storageBucket: "YOUR_STORAGE_BUCKET",
       messagingSenderId: "YOUR_MSG_SENDER_ID",
       appId: "YOUR_APP_ID"
-      apiKey: "AIzaSyDeUaFNrqo5DKQWuWz1kiru1MVOSuRHDmk",
-      authDomain: "momentumxlab-37ce2.firebaseapp.com",
-      projectId: "momentumxlab-37ce2"
     };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
 
+    document.addEventListener("DOMContentLoaded", () => {
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          Swal.fire({
+            icon: "warning",
+            title: "กรุณาเข้าสู่ระบบ",
+            text: "ต้องเข้าสู่ระบบก่อนดำเนินการ",
+            confirmButtonText: "ไปที่หน้าล็อกอิน"
+          }).then(() => {
+            const redirect = encodeURIComponent(window.location.href);
+            location.href = `login.html?redirect=${redirect}`;
+          });
+        } else {
+          initForm(user);
+        }
+      });
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const orderRef = ref(db, 'orders/order123'); // replace with actual path
@@ -312,45 +346,6 @@
       if (data.imageURL) {
         document.getElementById('mockup-image').src = data.imageURL;
       }
-    });
-    // product data
-    const planNames = {
-      pro4: "ApexXAU Intelligent Pro-4",
-      pro5: "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
-    };
-    const planImages = {
-      pro4: "Pro4_CollectorEdition_whiteBG.png",
-      pro5: "Pro5_CollectorEdition_whiteBG.png",
-      corex: "CoreX_PerformanceEdition_whiteBG.png"
-    };
-    const priceMap = {
-      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
-    };
-    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
-
-    document.getElementById('confirm-btn').addEventListener('click', () => {
-      // trigger download or confirm logic
-      alert("Order confirmed and file will download.");
-      // You may implement actual file download or redirection here
-    document.addEventListener("DOMContentLoaded", () => {
-      auth.onAuthStateChanged(user => {
-        if (!user) {
-          Swal.fire({
-            icon: "warning",
-            title: "กรุณาเข้าสู่ระบบ",
-            text: "ต้องเข้าสู่ระบบก่อนดำเนินการ",
-            confirmButtonText: "ไปที่หน้าล็อกอิน"
-          }).then(() => {
-            const redirect = encodeURIComponent(window.location.href);
-            location.href = `login.html?redirect=${redirect}`;
-          });
-        } else {
-          initForm(user);
-        }
-      });
     });
 
     function initForm(user) {
@@ -436,6 +431,11 @@
           }
         });
     }
+    document.getElementById('confirm-btn').addEventListener('click', () => {
+      // trigger download or confirm logic
+      alert("Order confirmed and file will download.");
+      // You may implement actual file download or redirection here
+    });
   </script>
 </body>
 </html>
