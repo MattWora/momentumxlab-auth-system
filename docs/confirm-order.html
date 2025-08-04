@@ -21,25 +21,15 @@
     }
 
     /* Layout */
-.confirm-page-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+    .pro4-section {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 2rem auto;
+      gap: 2rem;
+    }
 
-@media (min-width: 768px) {
-  .confirm-page-container {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .left-content,
-  .right-content {
-    width: 50%;
-  }
-}
-
-
+    .left-content,
     .right-content {
       background: #fff;
       border-radius: 8px;
@@ -127,21 +117,14 @@
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
-  <div class="confirm-page-container">
-    <div class="product-image">
-      <img src="..." alt="Product">
-    </div>
-    <div class="order-form">
-      <!-- Form Elements -->
-    </div>
-  </div>
-</body>
- <section class="pro4-section">
-  <div class="confirm-page-container">
-    <div class="left-content"> ... </div>
-    <div class="right-content"> ... </div>
-  </div>
-</section>
+  <section class="pro4-section">
+    <!-- Left column: order form -->
+    <div class="left-content">
+      <img
+        src="momentumxlab-logo.png"
+        alt="MomentumXLab Logo"
+        class="logo"
+      />
       <h2>Confirm Your Order</h2>
 
       <form id="order-form" class="order-form">
@@ -187,6 +170,12 @@
             I acknowledge the terms and certify that the above information is accurate.
           </label>
         </div>
+        <button type="submit" class="submit-btn">
+          Confirm Purchase
+        </button>
+        </a>
+      </form>
+    </div>
         <button type="button" class="submit-btn" onclick="goToPaymentPage()">
   Confirm Purchase
 </button>
@@ -223,7 +212,7 @@
 </section>
 
   <footer class="footer-section">
- 
+
   </footer>
 
   <!-- SweetAlert2 -->
@@ -368,15 +357,3 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
