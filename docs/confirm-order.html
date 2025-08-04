@@ -176,16 +176,6 @@
         </a>
       </form>
     </div>
-        <button type="button" class="submit-btn" onclick="goToPaymentPage()">
-  Confirm Purchase
-</button>
-
-<script>
-  function goToPaymentPage() {
-    const orderId = "XYZ123"; // หรือดึงจากตัวแปรในระบบคุณ
-    window.location.href = `payment.html?order_id=${orderId}`;
-  }
-</script>
 
     <!-- Right column: summary -->
 <div class="right-content">
@@ -212,7 +202,11 @@
 </section>
 
   <footer class="footer-section">
-
+    <div class="footer-text">
+      <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
+      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
+    </div>
+ 
   </footer>
 
   <!-- SweetAlert2 -->
