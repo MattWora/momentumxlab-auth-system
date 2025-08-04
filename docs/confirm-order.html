@@ -4,9 +4,6 @@
 <head>
   <meta charset="UTF-8"/>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirm Order</title>
-  <link rel="stylesheet" href="../css/style.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
   <link rel="stylesheet" href="style.css"/>
@@ -115,6 +112,9 @@
       font-size: 1.1rem;
     }
   </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm Order</title>
+  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
   <section class="confirm-order">
@@ -126,8 +126,6 @@
         <input id="package" type="text" disabled />
       </div>
 
-      <!-- Removed Email Field -->
-      <!-- Removed Plan Name Field -->
   <section class="pro4-section">
     <!-- Left column: order form -->
     <div class="left-content">
@@ -138,10 +136,6 @@
       />
       <h2>Confirm Your Order</h2>
 
-      <div class="license-info">
-        <h2>License Key</h2>
-        <input id="licenseKey" type="text" placeholder="Enter your license key" />
-      </div>
       <form id="order-form" class="order-form">
         <div class="form-group">
           <label>Email</label>
@@ -180,8 +174,9 @@
             value="testuser@momentumxlab.com"
           />
         </div>
+      <!-- Removed Email Field -->
+      <!-- Removed Plan Name Field -->
 
-      <!-- Removed Price Field -->
         <div class="form-group">
           <label>Price (USD)</label>
           <input type="text" id="price" readonly/>
@@ -194,8 +189,11 @@
             value="ApexXAU Intelligent Pro-4 (6 Months)"
           />
         </div>
+      <div class="license-info">
+        <h2>License Key</h2>
+        <input id="licenseKey" type="text" placeholder="Enter your license key" />
+      </div>
 
-      <button id="confirm-btn">Confirm Order</button>
         <div class="form-group">
           <label>Expiry Date</label>
           <input type="text" id="expiry" readonly required/>
@@ -216,6 +214,7 @@
         </div>
         <button class="cta-btn" type="submit" id="btn-confirm" disabled>
           Confirm and Generate License
+      <!-- Removed Price Field -->
 
         <button type="submit" class="submit-btn">
           Confirm Purchase
@@ -242,10 +241,10 @@
           <li><strong>Total</strong><strong>$106.99 USD</strong></li>
         </ul>
       </div>
+      <button id="confirm-btn">Confirm Order</button>
     </div>
   </section>
 
-  <!-- Removed Order Summary -->
   <footer class="footer-section">
     <div class="footer-text">
       <p>By submitting this form, you acknowledge the terms and certify accuracy of the information.</p>
@@ -364,8 +363,8 @@
               "กรุณากรอก MT5 Account และ Broker Server ให้ครบ"
             );
           }
+  <!-- Removed Order Summary -->
 
-  <script src="../js/confirm-order.js"></script>
           try {
             await db.collection("orders").add({
               uid:           user.uid,
@@ -392,5 +391,6 @@
         });
     }
   </script>
+  <script src="../js/confirm-order.js"></script>
 </body>
 </html>
