@@ -85,6 +85,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="payment-box">
     <h2>Confirm Payment</h2>
@@ -93,6 +94,13 @@
     <div class="field"><strong>Package:</strong> <span id="pkg-name">—</span></div>
     <div class="field"><strong>Price (USD):</strong> <span id="price-usd">—</span></div>
     <div class="field"><strong>Status:</strong> Pending</div>
+
+    <!-- ✅ ฟิลด์ที่เพิ่มเข้าไป -->
+    <div class="field"><strong>Email:</strong> <span id="user-email">—</span></div>
+    <div class="field"><strong>Full Name:</strong> <span id="user-name">—</span></div>
+    <div class="field"><strong>Phone:</strong> <span id="user-phone">—</span></div>
+    <div class="field"><strong>MT5 Account:</strong> <span id="user-mt5">—</span></div>
+    <div class="field"><strong>Broker Server:</strong> <span id="user-broker">—</span></div>
 
     <button class="pay-btn" id="pay-btn">Pay Now</button>
 
@@ -104,8 +112,8 @@
   <script>
     const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
     const params = new URLSearchParams(location.search);
-    const plan = params.get("plan")?.toLowerCase();
-    const pkg  = params.get("package")?.toLowerCase();
+    const plan   = params.get("plan")?.toLowerCase();
+    const pkg    = params.get("package")?.toLowerCase();
 
     const meta = {
       pro4:  "ApexXAU Intelligent Pro-4",
@@ -119,20 +127,34 @@
       corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
     };
 
-    const eaEl = document.getElementById("ea-name");
-    const pkgEl = document.getElementById("pkg-name");
-    const priceEl = document.getElementById("price-usd");
-    const payBtn = document.getElementById("pay-btn");
+    const eaEl     = document.getElementById("ea-name");
+    const pkgEl    = document.getElementById("pkg-name");
+    const priceEl  = document.getElementById("price-usd");
+    const payBtn   = document.getElementById("pay-btn");
+
+    // ✅ ตัวแปรสำหรับข้อมูลเพิ่มเติม
+    const emailEl  = document.getElementById("user-email");
+    const nameEl   = document.getElementById("user-name");
+    const phoneEl  = document.getElementById("user-phone");
+    const mt5El    = document.getElementById("user-mt5");
+    const brokerEl = document.getElementById("user-broker");
 
     if (!meta[plan] || !prices[plan]?.[pkg]) {
-      eaEl.textContent = "Invalid";
-      pkgEl.textContent = "Invalid";
+      eaEl.textContent    = "Invalid";
+      pkgEl.textContent   = "Invalid";
       priceEl.textContent = "Invalid";
-      payBtn.disabled = true;
+      payBtn.disabled     = true;
     } else {
       eaEl.textContent    = meta[plan];
       pkgEl.textContent   = pkg.toUpperCase();
       priceEl.textContent = `$${prices[plan][pkg].toFixed(2)}`;
+
+      // ✅ เติมค่าข้อมูลจาก URL
+      emailEl.textContent  = params.get("email")  || "—";
+      nameEl.textContent   = params.get("name")   || "—";
+      phoneEl.textContent  = params.get("phone")  || "—";
+      mt5El.textContent    = params.get("mt5")    || "—";
+      brokerEl.textContent = params.get("broker") || "—";
     }
 
     payBtn.addEventListener("click", async () => {
