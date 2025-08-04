@@ -3,88 +3,136 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Payment – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Confirm Payment – MomentumXLab</title>
+
+  <!-- 💅 Custom Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Prompt', sans-serif;
+      background-color: #111;
+      color: #f5d47a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .payment-box {
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+      width: 100%;
+      max-width: 500px;
+      animation: fadeIn 0.7s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .payment-box h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .field {
+      margin-bottom: 0.75rem;
+    }
+
+    .field strong {
+      display: inline-block;
+      width: 150px;
+      font-weight: 600;
+    }
+
+    .status {
+      font-weight: bold;
+      color: #f5d47a;
+      margin: 1rem 0;
+    }
+
+    .pay-btn {
+      display: block;
+      width: 100%;
+      background-color: transparent;
+      border: 2px solid #f5d47a;
+      color: #f5d47a;
+      font-size: 1rem;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .pay-btn:hover {
+      background-color: #f5d47a;
+      color: #111;
+    }
+
+    .note {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 1rem;
+      text-align: center;
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .field strong {
+        display: block;
+        margin-bottom: 0.2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <section class="pro4-section">
-    <div class="left-content">
-      <h2>Confirm Payment</h2>
-      <div class="info-box">
-        <p><strong>Product:</strong> <span id="package-name">—</span></p>
-        <p><strong>Price:</strong> <span id="package-price">—</span></p>
-        <p><strong>Status:</strong> Pending</p>
-      </div>
-      <button class="cta-btn" id="pay-btn">Pay Now</button>
-      <p class="note">
-        Your license will activate immediately after payment is completed.
-      </p>
-    </div>
 
-    <div class="right-content">
-      <div class="mockup-wrapper">
-        <img id="product-image" src="" alt="Product Visual"/>
-      </div>
-    </div>
-  </section>
+  <div class="payment-box">
+    <h2>Confirm Payment</h2>
 
-  <footer class="footer-section">
-    <div class="footer-logo-left">
-      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo"/>
-    </div>
-    <div class="footer-text">
-      <p>Please ensure the accuracy of your order before payment.</p>
-      <p class="copyright">© 2025 MomentumXLab. All rights reserved.</p>
-    </div>
-  </footer>
+    <div class="field"><strong>Email:</strong> matthagapong@gmail.com</div>
+    <div class="field"><strong>Full Name:</strong> Matthagapong Woraharn</div>
+    <div class="field"><strong>Phone Number:</strong> 0898926089</div>
+    <div class="field"><strong>MT5 Account Number:</strong> 159448081</div>
+    <div class="field"><strong>Broker Server:</strong> Exness-MT5Real20</div>
+    <div class="field"><strong>EA Model:</strong> ApexXAU Intelligent Pro-4</div>
+    <div class="field"><strong>Package:</strong> monthly</div>
+    <div class="field"><strong>Price (USD):</strong> $19.99</div>
+    <div class="field"><strong>Expiry Date:</strong> 05/09/2025</div>
 
-  <!-- SweetAlert2 for user-friendly alerts -->
+    <div class="status">Status: Pending</div>
+
+    <button class="pay-btn" id="pay-btn">Pay Now</button>
+
+    <div class="note">
+      Your license will activate immediately after payment is completed.
+    </div>
+  </div>
+
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Stripe.js -->
   <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-    // ✅ Replace this with your actual Stripe Publishable Key
     const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
 
-    const params = new URLSearchParams(location.search);
-    const plan   = (params.get("plan") || "").toLowerCase();
-    const pkg    = (params.get("package") || "").toLowerCase();
+    const plan = "pro4"; // from confirm-order
+    const pkg  = "monthly";
 
-    const planNames = {
-      pro4: "ApexXAU Intelligent Pro-4",
-      pro5: "ApexXAU Intelligent Pro-5",
-      corex:"ApexXAU Intelligent Core-X"
-    };
-    const packagePrices = {
-      pro4:  { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-      pro5:  { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
-    };
-    const planImages = {
-      pro4:  "Pro4_CollectorEdition_whiteBG.png",
-      pro5:  "Pro5_CollectorEdition_whiteBG.png",
-      corex: "CoreX_PerformanceEdition_whiteBG.png"
-    };
-
-    const nameEl  = document.getElementById("package-name");
-    const priceEl = document.getElementById("package-price");
-    const imageEl = document.getElementById("product-image");
-    const payBtn  = document.getElementById("pay-btn");
-
-    if (!planNames[plan] || !packagePrices[plan]?.[pkg]) {
-      document.querySelector(".info-box").innerHTML = `<p>Invalid package selection. Please check your link.</p>`;
-      payBtn.style.display = "none";
-    } else {
-      nameEl.textContent   = `${planNames[plan]} – ${pkg.toUpperCase()}`;
-      priceEl.textContent  = `$${packagePrices[plan][pkg].toFixed(2)}`;
-      imageEl.src          = planImages[plan];
-      imageEl.alt          = planNames[plan];
-      payBtn.addEventListener("click", onPayNow);
-    }
-
-    async function onPayNow() {
-      payBtn.disabled = true;
+    document.getElementById("pay-btn").addEventListener("click", async () => {
+      const btn = document.getElementById("pay-btn");
+      btn.disabled = true;
       try {
         const res = await fetch(
           "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
@@ -95,17 +143,17 @@
           }
         );
 
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        if (!res.ok) throw new Error("Server Error");
         const { sessionId } = await res.json();
 
         const { error } = await stripe.redirectToCheckout({ sessionId });
         if (error) throw error;
       } catch (err) {
-        console.error("Stripe Error:", err);
         Swal.fire("Payment Error", err.message || "Please try again later", "error");
-        payBtn.disabled = false;
+        btn.disabled = false;
       }
-    }
+    });
   </script>
 </body>
 </html>
+
