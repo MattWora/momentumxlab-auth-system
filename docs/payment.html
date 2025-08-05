@@ -2,179 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirm Payment – MomentumXLab</title>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet"/>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Prompt', sans-serif;
-      background-color: #0d0d0d;
-      color: #f5d47a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-
-    .payment-box {
-      background-color: #1a1a1a;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
-      width: 100%;
-      max-width: 560px;
-      animation: fadeIn 0.7s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-    }
-
-    .field {
-      margin-bottom: 0.75rem;
-    }
-
-    .field strong {
-      display: inline-block;
-      width: 170px;
-      font-weight: 600;
-    }
-
-    .status {
-      font-weight: bold;
-      margin: 1rem 0;
-    }
-
-    .pay-btn {
-      display: block;
-      width: 100%;
-      background-color: transparent;
-      border: 2px solid #f5d47a;
-      color: #f5d47a;
-      font-size: 1rem;
-      padding: 0.8rem 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-    }
-
-    .pay-btn:hover {
-      background-color: #f5d47a;
-      color: #111;
-    }
-
-    .note {
-      font-size: 0.85rem;
-      color: #aaa;
-      margin-top: 1rem;
-      text-align: center;
-      font-style: italic;
-    }
-  </style>
+  <title>Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
-<body>
-  <div class="payment-box">
-    <h2>Confirm Payment</h2>
-
-    <div class="field"><strong>EA Model:</strong> <span id="ea-name">—</span></div>
-    <div class="field"><strong>Package:</strong> <span id="pkg-name">—</span></div>
-    <div class="field"><strong>Price (USD):</strong> <span id="price-usd">—</span></div>
-    <div class="field"><strong>Status:</strong> Pending</div>
-
-    <!-- ✅ ฟิลด์ที่เพิ่มเข้าไป -->
-    <div class="field"><strong>Email:</strong> <span id="user-email">—</span></div>
-    <div class="field"><strong>Full Name:</strong> <span id="user-name">—</span></div>
-    <div class="field"><strong>Phone:</strong> <span id="user-phone">—</span></div>
-    <div class="field"><strong>MT5 Account:</strong> <span id="user-mt5">—</span></div>
-    <div class="field"><strong>Broker Server:</strong> <span id="user-broker">—</span></div>
-
-    <button class="pay-btn" id="pay-btn">Pay Now</button>
-
-    <div class="note">Your license will activate immediately after payment is completed.</div>
+<body class="dark-theme">
+  <div class="container">
+    <h1>Complete Your Payment</h1>
+    <form id="paymentForm">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="text" id="fullName" placeholder="Full Name" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <input type="text" id="mt5Account" placeholder="MT5 Account Number" required />
+      <input type="text" id="server" placeholder="Broker Server" required />
+      <button type="submit" id="payBtn">Pay Now</button>
+    </form>
+    <div id="errorBox"></div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
-    const params = new URLSearchParams(location.search);
-    const plan   = params.get("plan")?.toLowerCase();
-    const pkg    = params.get("package")?.toLowerCase();
-
-    const meta = {
-      pro4:  "ApexXAU Intelligent Pro-4",
-      pro5:  "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
+    // Load stored values
+    window.onload = function () {
+      const fields = ['email', 'fullName', 'phone', 'mt5Account', 'server'];
+      fields.forEach(f => {
+        const value = localStorage.getItem(f);
+        if (value) document.getElementById(f).value = value;
+      });
     };
 
-    const prices = {
-      pro4:  { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-      pro5:  { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
-    };
+    // Stripe integration
+    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = {
+        email: email.value,
+        fullName: fullName.value,
+        phone: phone.value,
+        mt5Account: mt5Account.value,
+        server: server.value
+      };
 
-    const eaEl     = document.getElementById("ea-name");
-    const pkgEl    = document.getElementById("pkg-name");
-    const priceEl  = document.getElementById("price-usd");
-    const payBtn   = document.getElementById("pay-btn");
-
-    // ✅ ตัวแปรสำหรับข้อมูลเพิ่มเติม
-    const emailEl  = document.getElementById("user-email");
-    const nameEl   = document.getElementById("user-name");
-    const phoneEl  = document.getElementById("user-phone");
-    const mt5El    = document.getElementById("user-mt5");
-    const brokerEl = document.getElementById("user-broker");
-
-    if (!meta[plan] || !prices[plan]?.[pkg]) {
-      eaEl.textContent    = "Invalid";
-      pkgEl.textContent   = "Invalid";
-      priceEl.textContent = "Invalid";
-      payBtn.disabled     = true;
-    } else {
-      eaEl.textContent    = meta[plan];
-      pkgEl.textContent   = pkg.toUpperCase();
-      priceEl.textContent = `$${prices[plan][pkg].toFixed(2)}`;
-
-      // ✅ เติมค่าข้อมูลจาก URL
-      emailEl.textContent  = params.get("email")  || "—";
-      nameEl.textContent   = params.get("name")   || "—";
-      phoneEl.textContent  = params.get("phone")  || "—";
-      mt5El.textContent    = params.get("mt5")    || "—";
-      brokerEl.textContent = params.get("broker") || "—";
-    }
-
-    payBtn.addEventListener("click", async () => {
-      payBtn.disabled = true;
       try {
-        const res = await fetch(
-          "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ plan, package: pkg })
-          }
-        );
-        if (!res.ok) throw new Error("Server Error");
-        const { sessionId } = await res.json();
-        const { error } = await stripe.redirectToCheckout({ sessionId });
-        if (error) throw error;
+        // Optional: Store formData if needed later
+        Object.keys(formData).forEach(key => localStorage.setItem(key, formData[key]));
+
+        // Replace with actual Stripe logic
+        const response = await fetch('/create-checkout-session', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(formData)
+        });
+        const session = await response.json();
+        if (session?.id) {
+          window.location.href = session.url;
+        } else {
+          throw new Error('Stripe session error');
+        }
       } catch (err) {
-        Swal.fire("Payment Error", err.message || "Please try again later", "error");
-        payBtn.disabled = false;
+        document.getElementById('errorBox').innerText = 'Payment failed. Please try again.';
       }
     });
   </script>
