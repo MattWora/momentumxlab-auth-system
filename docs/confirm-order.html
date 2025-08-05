@@ -164,6 +164,10 @@
           <label>Expiry Date</label>
           <input type="text" id="expiry" readonly required/>
         </div>
+localStorage.setItem("orderDetails", JSON.stringify({
+  email, Full Name, Phone Number, MT5 Account Number, Broker Server, EA Model, Package, Price (USD), Expiry Date,
+}));
+        
         <div class="form-group checkbox-group">
           <input type="checkbox" id="agree"/>
           <label for="agree">
@@ -347,4 +351,5 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
+
 
