@@ -2,64 +2,92 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Payment</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <title>Confirm Payment | MomentumXLab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: #0d0d0d;
+      color: #f5d47a;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .field {
+      margin-bottom: 1rem;
+    }
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+    .value {
+      padding: 0.6rem;
+      background: #111;
+      border-radius: 6px;
+    }
+    .btn {
+      display: block;
+      margin: 1.5rem auto 0;
+      width: 100%;
+      padding: 0.8rem;
+      background: transparent;
+      color: #f5d47a;
+      border: 2px solid #f5d47a;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #f5d47a;
+      color: #000;
+    }
+  </style>
 </head>
-<body class="dark-theme">
+<body>
   <div class="container">
-    <h1>Complete Your Payment</h1>
-    <form id="paymentForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="text" id="fullName" placeholder="Full Name" required />
-      <input type="tel" id="phone" placeholder="Phone Number" required />
-      <input type="text" id="mt5Account" placeholder="MT5 Account Number" required />
-      <input type="text" id="server" placeholder="Broker Server" required />
-      <button type="submit" id="payBtn">Pay Now</button>
-    </form>
-    <div id="errorBox"></div>
+    <h1>Confirm Payment</h1>
+
+    <div class="field"><label>Email</label><div class="value" id="email">—</div></div>
+    <div class="field"><label>Full Name</label><div class="value" id="name">—</div></div>
+    <div class="field"><label>Phone Number</label><div class="value" id="phone">—</div></div>
+    <div class="field"><label>MT5 Account</label><div class="value" id="mt5">—</div></div>
+    <div class="field"><label>Broker Server</label><div class="value" id="broker">—</div></div>
+    <div class="field"><label>EA Model</label><div class="value" id="plan">—</div></div>
+    <div class="field"><label>Package</label><div class="value" id="package">—</div></div>
+
+    <button class="btn" id="payBtn">Pay Now</button>
   </div>
 
+  <script src="https://js.stripe.com/v3/"></script>
   <script>
-    // Load stored values
-    window.onload = function () {
-      const fields = ['email', 'fullName', 'phone', 'mt5Account', 'server'];
-      fields.forEach(f => {
-        const value = localStorage.getItem(f);
-        if (value) document.getElementById(f).value = value;
+    const keys = ["email", "name", "phone", "mt5", "broker", "plan", "package"];
+    const data = JSON.parse(localStorage.getItem("orderDetails") || "{}");
+
+    keys.forEach(key => {
+      const el = document.getElementById(key);
+      el.textContent = data[key] || "—";
+    });
+
+    const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
+
+    document.getElementById("payBtn").addEventListener("click", async () => {
+      const res = await fetch("https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: data.plan, package: data.package })
       });
-    };
-
-    // Stripe integration
-    document.getElementById('paymentForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = {
-        email: email.value,
-        fullName: fullName.value,
-        phone: phone.value,
-        mt5Account: mt5Account.value,
-        server: server.value
-      };
-
-      try {
-        // Optional: Store formData if needed later
-        Object.keys(formData).forEach(key => localStorage.setItem(key, formData[key]));
-
-        // Replace with actual Stripe logic
-        const response = await fetch('/create-checkout-session', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(formData)
-        });
-        const session = await response.json();
-        if (session?.id) {
-          window.location.href = session.url;
-        } else {
-          throw new Error('Stripe session error');
-        }
-      } catch (err) {
-        document.getElementById('errorBox').innerText = 'Payment failed. Please try again.';
-      }
+      const { sessionId } = await res.json();
+      await stripe.redirectToCheckout({ sessionId });
     });
   </script>
 </body>
