@@ -330,6 +330,8 @@
               brokerServer:  broker,
               createdAt:     firebase.firestore.FieldValue.serverTimestamp()
             });
+        localStorage.setItem("orderDetails", JSON.stringify(orderDetails));
+
             Swal.fire(
               "License Activated!",
               "Your license is confirmed.",
@@ -347,6 +349,7 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
+
 
 
 
