@@ -123,8 +123,7 @@
       <img
         src="momentumxlab-logo.png"
         alt="MomentumXLab Logo"
-        class="logo"
-      />
+        class="logo"/>
       <h2>Confirm Your Order</h2>
 
       <form id="order-form" class="order-form">
@@ -170,39 +169,37 @@
             I acknowledge the terms and certify that the above information is accurate.
           </label>
         </div>
-        <button type="submit" class="submit-btn">
+        <button type="submit" class="submit-btn" id="btn-confirm">
           Confirm Purchase
         </button>
-        </a>
       </form>
     </div>
 
     <!-- Right column: summary -->
-<div class="right-content">
-  <div class="mockup-wrapper">
-    <img id="product-image" src="" alt="Product Box"/>
-    <p class="edition custom">
-      Your license will activate upon payment and remain valid until its expiration date.
-    </p>
-  </div>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img id="product-image" src="" alt="Product Box"/>
+        <p class="edition custom">
+          Your license will activate upon payment and remain valid until its expiration date.
+        </p>
+      </div>
 
-  <p class="product-description">
-    MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
-    optimized to adapt across global market dynamics and even navigate unprecedented futures.
-  </p>
+      <p class="product-description">
+        MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
+        optimized to adapt across global market dynamics and even navigate unprecedented futures.
+      </p>
 
-  <br><br><br><br>
+      <br><br><br><br>
 
-  <p class="form-note">
-    By submitting this form, you acknowledge the terms and certify accuracy of the information.
-    <br><br>
-    © 2025 MomentumXLab. All rights reserved.
-  </p>
-</div>
-</section>
+      <p class="form-note">
+        By submitting this form, you acknowledge the terms and certify accuracy of the information.
+        <br><br>
+        © 2025 MomentumXLab. All rights reserved.
+      </p>
+    </div>
+  </section>
 
   <footer class="footer-section">
-
   </footer>
 
   <!-- SweetAlert2 -->
@@ -298,7 +295,22 @@
 
           // 1) ถ้ายังไม่จ่ายเงิน → พาไป payment.html
           if (status !== "paid") {
-            window.location.href = 
+            // เก็บข้อมูล order ไว้ใน localStorage
+            const orderData = {
+              email:       document.getElementById("email").value,
+              fullName:    document.getElementById("fullName").value,
+              phone:       document.getElementById("phone").value,
+              mt5Account:  document.getElementById("mt5Account").value,
+              brokerServer:document.getElementById("brokerServer").value,
+              planName:    document.getElementById("planName").value,
+              pkg:         document.getElementById("pkg").value,
+              price:       document.getElementById("price").value,
+              expiry:      document.getElementById("expiry").value
+            };
+            localStorage.setItem("orderData", JSON.stringify(orderData));
+
+            // ไปยังหน้าชำระเงิน
+            window.location.href =
               `payment.html?plan=${planKey}&package=${pkgKey}`;
             return;
           }
@@ -316,7 +328,6 @@
               "กรุณากรอก MT5 Account และ Broker Server ให้ครบ"
             );
           }
-  <!-- Removed Order Summary -->
 
           try {
             await db.collection("orders").add({
@@ -347,4 +358,3 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
-
