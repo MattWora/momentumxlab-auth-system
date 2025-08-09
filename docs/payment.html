@@ -70,24 +70,52 @@
 
   <script src="https://js.stripe.com/v3/"></script>
   <script>
+    // Load order details from localStorage
     const keys = ["email", "name", "phone", "mt5", "broker", "plan", "package"];
     const data = JSON.parse(localStorage.getItem("orderDetails") || "{}");
 
+    // If essential data is missing, redirect back
+    if (!data.plan || !data.package) {
+      alert("ไม่มีข้อมูลการสั่งซื้อ กรุณากลับไปยังหน้าคอนเฟิร์ม");
+      window.location.href = "confirm-order.html";
+    }
+
+    // Populate fields
     keys.forEach(key => {
       const el = document.getElementById(key);
       el.textContent = data[key] || "—";
     });
 
+    // Initialize Stripe
     const stripe = Stripe("pk_test_51RmdQFFN9S7UG3y8i70joQpqj2tKpfKlwEnABZ7HLJnJ1mdP05CEvH4EgOf6upF3Uerntndt7qffCRluU0Od7vrm00LmoYYkdB");
+    const payBtn = document.getElementById("payBtn");
 
-    document.getElementById("payBtn").addEventListener("click", async () => {
-      const res = await fetch("https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: data.plan, package: data.package })
-      });
-      const { sessionId } = await res.json();
-      await stripe.redirectToCheckout({ sessionId });
+    payBtn.addEventListener("click", async () => {
+      // Prevent multiple clicks & show processing state
+      payBtn.disabled = true;
+      const originalText = payBtn.textContent;
+      payBtn.textContent = "Processing...";
+
+      try {
+        const res = await fetch(
+          "https://us-central1-momentumxlab-37ce2.cloudfunctions.net/createStripeSession",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ plan: data.plan, package: data.package })
+          }
+        );
+
+        if (!res.ok) throw new Error("Network response was not ok");
+
+        const { sessionId } = await res.json();
+        await stripe.redirectToCheckout({ sessionId });
+      } catch (err) {
+        console.error(err);
+        alert("เกิดข้อผิดพลาดในการสร้างเซสชันการชำระเงิน กรุณาลองใหม่อีกครั้ง");
+        payBtn.disabled = false;
+        payBtn.textContent = originalText;
+      }
     });
   </script>
 </body>
