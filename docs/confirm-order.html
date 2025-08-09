@@ -178,28 +178,28 @@
     </div>
 
     <!-- Right column: summary -->
-<div class="right-content">
-  <div class="mockup-wrapper">
-    <img id="product-image" src="" alt="Product Box"/>
-    <p class="edition custom">
-      Your license will activate upon payment and remain valid until its expiration date.
-    </p>
-  </div>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img id="product-image" src="" alt="Product Box"/>
+        <p class="edition custom">
+          Your license will activate upon payment and remain valid until its expiration date.
+        </p>
+      </div>
 
-  <p class="product-description">
-    MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
-    optimized to adapt across global market dynamics and even navigate unprecedented futures.
-  </p>
+      <p class="product-description">
+        MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
+        optimized to adapt across global market dynamics and even navigate unprecedented futures.
+      </p>
 
-  <br><br><br><br>
+      <br><br><br><br>
 
-  <p class="form-note">
-    By submitting this form, you acknowledge the terms and certify accuracy of the information.
-    <br><br>
-    © 2025 MomentumXLab. All rights reserved.
-  </p>
-</div>
-</section>
+      <p class="form-note">
+        By submitting this form, you acknowledge the terms and certify accuracy of the information.
+        <br><br>
+        © 2025 MomentumXLab. All rights reserved.
+      </p>
+    </div>
+  </section>
 
   <footer class="footer-section">
 
@@ -211,7 +211,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
-
   <script>
     // Firebase config
     const firebaseConfig = {
@@ -298,7 +297,7 @@
 
           // 1) ถ้ายังไม่จ่ายเงิน → พาไป payment.html
           if (status !== "paid") {
-            window.location.href = 
+            window.location.href =
               `payment.html?plan=${planKey}&package=${pkgKey}`;
             return;
           }
@@ -347,4 +346,3 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
-
