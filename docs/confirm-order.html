@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="th">
-<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Confirm Your Order – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
-  <title>Confirm Your Order</title>
-  <!-- Google Font (replace with your theme’s font if different) -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ไฟล์ CSS หลัก -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google Font -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     /* Global resets and theme font */
     body {
@@ -20,7 +24,7 @@
       color: #333;
     }
 
-    /* Layout */
+    /* Layout: สองคอลัมน์ */
     .pro4-section {
       display: flex;
       flex-wrap: wrap;
@@ -29,30 +33,33 @@
       gap: 2rem;
     }
 
+    .pro4-section > .left-content,
+    .pro4-section > .right-content {
+      flex: 1 1 45%;
+      min-width: 300px;
+    }
+
+    /* —————————— สไตล์ต้นฉบับ —————————— */
     .left-content,
     .right-content {
       background: #fff;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       padding: 2rem;
-      flex: 1 1 300px;
     }
 
-    /* Logo styling */
     .left-content .logo {
       width: 15%;
       display: block;
       margin-bottom: 1rem;
     }
 
-    /* Section header */
     .left-content h2 {
       font-size: 2rem;
       font-weight: 600;
       margin-bottom: 1rem;
     }
 
-    /* Form styling */
     .order-form .form-group {
       margin-bottom: 1rem;
     }
@@ -88,7 +95,6 @@
       background: #0056b3;
     }
 
-    /* Order summary styling */
     .order-summary h3 {
       font-size: 1.5rem;
       font-weight: 600;
@@ -112,9 +118,6 @@
       font-size: 1.1rem;
     }
   </style>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirm Order</title>
-  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
   <section class="pro4-section">
@@ -129,43 +132,43 @@
 
       <form id="order-form" class="order-form">
         <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="email" readonly required/>
+          <label for="email">Email</label>
+          <input type="email" id="email" readonly required />
         </div>
         <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="fullName" required/>
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" required />
         </div>
         <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="phone" required/>
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required />
         </div>
         <div class="form-group">
-          <label>MT5 Account Number</label>
-          <input type="text" id="mt5Account" required pattern="\d+"/>
+          <label for="mt5Account">MT5 Account Number</label>
+          <input type="text" id="mt5Account" required pattern="\d+" />
         </div>
         <div class="form-group">
-          <label>Broker Server</label>
-          <input type="text" id="brokerServer" required/>
+          <label for="brokerServer">Broker Server</label>
+          <input type="text" id="brokerServer" required />
         </div>
         <div class="form-group">
-          <label>EA Model</label>
-          <input type="text" id="planName" readonly/>
+          <label for="planName">EA Model</label>
+          <input type="text" id="planName" readonly />
         </div>
         <div class="form-group">
-          <label>Package</label>
-          <input type="text" id="pkg" readonly/>
+          <label for="pkg">Package</label>
+          <input type="text" id="pkg" readonly />
         </div>
         <div class="form-group">
-          <label>Price (USD)</label>
-          <input type="text" id="price" readonly/>
+          <label for="price">Price (USD)</label>
+          <input type="text" id="price" readonly />
         </div>
         <div class="form-group">
-          <label>Expiry Date</label>
-          <input type="text" id="expiry" readonly required/>
+          <label for="expiry">Expiry Date</label>
+          <input type="text" id="expiry" readonly required />
         </div>
         <div class="form-group checkbox-group">
-          <input type="checkbox" id="agree"/>
+          <input type="checkbox" id="agree" />
           <label for="agree">
             I acknowledge the terms and certify that the above information is accurate.
           </label>
@@ -173,37 +176,38 @@
         <button type="submit" class="submit-btn">
           Confirm Purchase
         </button>
-        </a>
       </form>
     </div>
 
     <!-- Right column: summary -->
-<div class="right-content">
-  <div class="mockup-wrapper">
-    <img id="product-image" src="" alt="Product Box"/>
-    <p class="edition custom">
-      Your license will activate upon payment and remain valid until its expiration date.
-    </p>
-  </div>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img
+          id="product-image"
+          src=""
+          alt="Product Box"
+          style="width: 100%; height: auto;"
+        />
+        <p class="edition custom">
+          Your license will activate upon payment and remain valid until its expiration date.
+        </p>
+      </div>
 
-  <p class="product-description">
-    MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
-    optimized to adapt across global market dynamics and even navigate unprecedented futures.
-  </p>
+      <p class="product-description">
+        MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
+        optimized to adapt across global market dynamics and even navigate unprecedented
+        futures.
+      </p>
 
-  <br><br><br><br>
+      <p class="form-note">
+        By submitting this form, you acknowledge the terms and certify accuracy of the information.
+        <br /><br />
+        © 2025 MomentumXLab. All rights reserved.
+      </p>
+    </div>
+  </section>
 
-  <p class="form-note">
-    By submitting this form, you acknowledge the terms and certify accuracy of the information.
-    <br><br>
-    © 2025 MomentumXLab. All rights reserved.
-  </p>
-</div>
-</section>
-
-  <footer class="footer-section">
-
-  </footer>
+  <footer class="footer-section"></footer>
 
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -262,21 +266,21 @@
     function initForm(user) {
       const qs = new URLSearchParams(location.search);
       const planKey = (qs.get("plan") || "").toLowerCase();
-      const pkgKey  = (qs.get("package") || "").toLowerCase();
-      const status  = (qs.get("status") || "").toLowerCase(); // <— new
+      const pkgKey = (qs.get("package") || "").toLowerCase();
+      const status = (qs.get("status") || "").toLowerCase();
 
       // เติมข้อมูลลงฟอร์ม
-      document.getElementById("email").value    = user.email || "";
+      document.getElementById("email").value = user.email || "";
       document.getElementById("planName").value = planNames[planKey] || planKey;
-      document.getElementById("pkg").value      = pkgKey;
-      const priceVal = ((priceMap[planKey] || {})[pkgKey]) || 0;
-      document.getElementById("price").value    = `$${priceVal.toFixed(2)}`;
+      document.getElementById("pkg").value = pkgKey;
+      const priceVal = (priceMap[planKey] || {})[pkgKey] || 0;
+      document.getElementById("price").value = `$${priceVal.toFixed(2)}`;
 
       // คำนวณวันหมดอายุ
       const expDate = new Date();
       expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey] || 0));
-      const dd   = String(expDate.getDate()).padStart(2, "0");
-      const mm   = String(expDate.getMonth() + 1).padStart(2, "0");
+      const dd = String(expDate.getDate()).padStart(2, "0");
+      const mm = String(expDate.getMonth() + 1).padStart(2, "0");
       const yyyy = expDate.getFullYear();
       document.getElementById("expiry").value = `${dd}/${mm}/${yyyy}`;
 
@@ -286,20 +290,19 @@
       img.alt = planNames[planKey] || "";
 
       // เช็ค checkbox เพื่อปลดล็อกปุ่ม Confirm
-      document.getElementById("agree")
-        .addEventListener("change", e => {
-          document.getElementById("btn-confirm").disabled = !e.target.checked;
-        });
+      document.getElementById("agree").addEventListener("change", e => {
+        document.getElementById("btn-confirm").disabled = !e.target.checked;
+      });
 
       // Submit handler
-      document.getElementById("order-form")
+      document
+        .getElementById("order-form")
         .addEventListener("submit", async e => {
           e.preventDefault();
 
           // 1) ถ้ายังไม่จ่ายเงิน → พาไป payment.html
           if (status !== "paid") {
-            window.location.href = 
-              `payment.html?plan=${planKey}&package=${pkgKey}`;
+            window.location.href = `payment.html?plan=${planKey}&package=${pkgKey}`;
             return;
           }
 
@@ -309,33 +312,33 @@
             return Swal.fire("กรุณายอมรับเงื่อนไขก่อน");
           }
 
-          const mt5    = document.getElementById("mt5Account").value.trim();
-          const broker = document.getElementById("brokerServer").value.trim();
+          const mt5 = document.getElementById("mt5Account").value.trim();
+          const broker = document
+            .getElementById("brokerServer")
+            .value.trim();
           if (!mt5 || !broker) {
-            return Swal.fire(
-              "กรุณากรอก MT5 Account และ Broker Server ให้ครบ"
-            );
+            return Swal.fire("กรุณากรอก MT5 Account และ Broker Server ให้ครบ");
           }
-  <!-- Removed Order Summary -->
 
           try {
             await db.collection("orders").add({
-              uid:           user.uid,
-              email:         user.email,
-              plan:          planKey,
-              package:       pkgKey,
-              price:         priceVal,
-              expiry:        firebase.firestore.Timestamp.fromDate(expDate),
-              mt5Account:    mt5,
-              brokerServer:  broker,
-              createdAt:     firebase.firestore.FieldValue.serverTimestamp()
+              uid: user.uid,
+              email: user.email,
+              plan: planKey,
+              package: pkgKey,
+              price: priceVal,
+              expiry: firebase.firestore.Timestamp.fromDate(expDate),
+              mt5Account: mt5,
+              brokerServer: broker,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             Swal.fire(
               "License Activated!",
               "Your license is confirmed.",
               "success"
             ).then(() => {
-              document.getElementById("download-btn").style.display = "inline-block";
+              document.getElementById("download-btn").style.display =
+                "inline-block";
               document.getElementById("btn-confirm").disabled = true;
             });
           } catch (err) {
@@ -347,4 +350,3 @@
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
-
