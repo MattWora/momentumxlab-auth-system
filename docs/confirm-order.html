@@ -1,14 +1,9 @@
 <!DOCTYPE html>
-<html lang="th">
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
-  <link rel="stylesheet" href="style.css"/>
-  <title>Confirm Your Order</title>
-  <!-- Google Font (replace with your theme’s font if different) -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     /* Global resets and theme font */
@@ -20,7 +15,7 @@
       color: #333;
     }
 
-    /* Layout */
+    /* Container for two-column layout */
     .pro4-section {
       display: flex;
       flex-wrap: wrap;
@@ -29,40 +24,54 @@
       gap: 2rem;
     }
 
+    /* Default: full-width children */
     .left-content,
     .right-content {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       padding: 2rem;
-      flex: 1 1 300px;
+      flex: 1 1 100%;
     }
 
-    /* Logo styling */
+    /* On desktop: left 60%, right 35% */
+    @media (min-width: 768px) {
+      .left-content {
+        flex: 0 0 60%;
+      }
+      .right-content {
+        flex: 0 0 35%;
+      }
+    }
+
+    /* Logo */
     .left-content .logo {
       width: 15%;
       display: block;
       margin-bottom: 1rem;
     }
 
-    /* Section header */
+    /* Headings */
     .left-content h2 {
       font-size: 2rem;
       font-weight: 600;
       margin-bottom: 1rem;
     }
-
-    /* Form styling */
-    .order-form .form-group {
+    .order-summary h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
       margin-bottom: 1rem;
     }
 
+    /* Form */
+    .order-form .form-group {
+      margin-bottom: 1rem;
+    }
     .order-form label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-
     .order-form input {
       width: 100%;
       padding: 0.75rem;
@@ -71,8 +80,15 @@
       border-radius: 4px;
       background: #fafafa;
     }
-
-    .order-form button.submit-btn {
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+    .checkbox-group input {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+    .submit-btn {
       margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -83,48 +99,37 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
-    .order-form button.submit-btn:hover {
+    .submit-btn:hover {
       background: #0056b3;
     }
 
-    /* Order summary styling */
-    .order-summary h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
+    /* Summary */
+    .mockup-wrapper {
+      text-align: center;
+      margin-bottom: 1.5rem;
     }
-
-    .order-summary ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .mockup-wrapper img {
+      max-width: 100%;
+      height: auto;
+      display: inline-block;
     }
-
-    .order-summary li {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.75rem;
-      font-weight: 500;
+    .product-description {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 2rem;
     }
-
-    .order-summary li strong {
-      font-size: 1.1rem;
+    .form-note {
+      font-size: 0.875rem;
+      color: #666;
+      text-align: center;
     }
   </style>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Confirm Order</title>
-  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
   <section class="pro4-section">
     <!-- Left column: order form -->
     <div class="left-content">
-      <img
-        src="momentumxlab-logo.png"
-        alt="MomentumXLab Logo"
-        class="logo"
-      />
+      <img src="momentumxlab-logo.png" alt="MomentumXLab Logo" class="logo"/>
       <h2>Confirm Your Order</h2>
 
       <form id="order-form" class="order-form">
@@ -170,40 +175,33 @@
             I acknowledge the terms and certify that the above information is accurate.
           </label>
         </div>
-        <button type="submit" class="submit-btn">
-          Confirm Purchase
-        </button>
-        </a>
+        <button type="submit" id="btn-confirm" class="submit-btn">Confirm Purchase</button>
       </form>
     </div>
 
     <!-- Right column: summary -->
-<div class="right-content">
-  <div class="mockup-wrapper">
-    <img id="product-image" src="" alt="Product Box"/>
-    <p class="edition custom">
-      Your license will activate upon payment and remain valid until its expiration date.
-    </p>
-  </div>
+    <div class="right-content">
+      <div class="mockup-wrapper">
+        <img id="product-image" src="" alt="Product Box"/>
+        <p class="edition custom">
+          Your license will activate upon payment and remain valid until its expiration date.
+        </p>
+      </div>
 
-  <p class="product-description">
-    MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
-    optimized to adapt across global market dynamics and even navigate unprecedented futures.
-  </p>
+      <p class="product-description">
+        MomentumXLab designs rigorously validated Expert Advisors as strategic trading tools,
+        optimized to adapt across global market dynamics and even navigate unprecedented futures.
+      </p>
 
-  <br><br><br><br>
+      <p class="form-note">
+        By submitting this form, you acknowledge the terms and certify accuracy of the information.
+        <br><br>
+        © 2025 MomentumXLab. All rights reserved.
+      </p>
+    </div>
+  </section>
 
-  <p class="form-note">
-    By submitting this form, you acknowledge the terms and certify accuracy of the information.
-    <br><br>
-    © 2025 MomentumXLab. All rights reserved.
-  </p>
-</div>
-</section>
-
-  <footer class="footer-section">
-
-  </footer>
+  <footer class="footer-section"></footer>
 
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -263,16 +261,14 @@
       const qs = new URLSearchParams(location.search);
       const planKey = (qs.get("plan") || "").toLowerCase();
       const pkgKey  = (qs.get("package") || "").toLowerCase();
-      const status  = (qs.get("status") || "").toLowerCase(); // <— new
+      const status  = (qs.get("status") || "").toLowerCase();
 
-      // เติมข้อมูลลงฟอร์ม
       document.getElementById("email").value    = user.email || "";
       document.getElementById("planName").value = planNames[planKey] || planKey;
       document.getElementById("pkg").value      = pkgKey;
       const priceVal = ((priceMap[planKey] || {})[pkgKey]) || 0;
       document.getElementById("price").value    = `$${priceVal.toFixed(2)}`;
 
-      // คำนวณวันหมดอายุ
       const expDate = new Date();
       expDate.setMonth(expDate.getMonth() + (monthMap[pkgKey] || 0));
       const dd   = String(expDate.getDate()).padStart(2, "0");
@@ -280,30 +276,25 @@
       const yyyy = expDate.getFullYear();
       document.getElementById("expiry").value = `${dd}/${mm}/${yyyy}`;
 
-      // แสดงภาพ mockup
       const img = document.getElementById("product-image");
       img.src = planImages[planKey] || "";
       img.alt = planNames[planKey] || "";
 
-      // เช็ค checkbox เพื่อปลดล็อกปุ่ม Confirm
       document.getElementById("agree")
         .addEventListener("change", e => {
           document.getElementById("btn-confirm").disabled = !e.target.checked;
         });
 
-      // Submit handler
       document.getElementById("order-form")
         .addEventListener("submit", async e => {
           e.preventDefault();
 
-          // 1) ถ้ายังไม่จ่ายเงิน → พาไป payment.html
           if (status !== "paid") {
-            window.location.href = 
+            window.location.href =
               `payment.html?plan=${planKey}&package=${pkgKey}`;
             return;
           }
 
-          // 2) จ่ายแล้ว → สร้าง order + license
           if (!auth.currentUser) return;
           if (!document.getElementById("agree").checked) {
             return Swal.fire("กรุณายอมรับเงื่อนไขก่อน");
@@ -316,7 +307,6 @@
               "กรุณากรอก MT5 Account และ Broker Server ให้ครบ"
             );
           }
-  <!-- Removed Order Summary -->
 
           try {
             await db.collection("orders").add({
@@ -335,7 +325,6 @@
               "Your license is confirmed.",
               "success"
             ).then(() => {
-              document.getElementById("download-btn").style.display = "inline-block";
               document.getElementById("btn-confirm").disabled = true;
             });
           } catch (err) {
@@ -344,7 +333,5 @@
         });
     }
   </script>
-  <script src="../js/confirm-order.js"></script>
 </body>
 </html>
-
