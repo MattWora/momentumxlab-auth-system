@@ -85,6 +85,10 @@
       <label>Package</label>
       <div class="value" id="package">—</div>
     </div>
+    <div class="field">
+      <label>Price (USD)</label>
+      <div class="value" id="price">—</div>
+    </div>
 
     <button class="btn" id="payBtn">Pay Now</button>
   </div>
@@ -95,21 +99,22 @@
     // Load order details from sessionStorage
     const data = JSON.parse(sessionStorage.getItem("orderData") || "{}");
 
-    // If essential data is missing, redirect back
-    if (!data.planName || !data.pkg) {
+    // If essential data missing, redirect back
+    if (!data.planName || !data.pkg || !data.price) {
       alert("ไม่มีข้อมูลการสั่งซื้อ กรุณากลับไปยังหน้าคอนเฟิร์ม");
       window.location.href = "confirm-order.html";
     }
 
     // Map storage keys to DOM IDs
     const mapping = {
-      email: data.email,
-      name: data.fullName,
-      phone: data.phone,
-      mt5: data.mt5Account,
-      broker: data.brokerServer,
-      plan: data.planName,
-      package: data.pkg
+      email:   data.email,
+      name:    data.fullName,
+      phone:   data.phone,
+      mt5:     data.mt5Account,
+      broker:  data.brokerServer,
+      plan:    data.planName,
+      package: data.pkg,
+      price:   data.price
     };
 
     // Populate fields
