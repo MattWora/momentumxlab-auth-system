@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Confirm Your Order – MomentumXLab</title>
   <link rel="stylesheet" href="style.css"/>
-  <title>Confirm Your Order</title>
   <!-- Google Font (replace with your theme’s font if different) -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -56,13 +55,11 @@
     .order-form .form-group {
       margin-bottom: 1rem;
     }
-
     .order-form label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-
     .order-form input {
       width: 100%;
       padding: 0.75rem;
@@ -71,7 +68,6 @@
       border-radius: 4px;
       background: #fafafa;
     }
-
     .order-form button.submit-btn {
       margin-top: 1.5rem;
       padding: 0.75rem 1.5rem;
@@ -83,7 +79,6 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     .order-form button.submit-btn:hover {
       background: #0056b3;
     }
@@ -94,20 +89,17 @@
       font-weight: 600;
       margin-bottom: 1rem;
     }
-
     .order-summary ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
-
     .order-summary li {
       display: flex;
       justify-content: space-between;
       margin-bottom: 0.75rem;
       font-weight: 500;
     }
-
     .order-summary li strong {
       font-size: 1.1rem;
     }
@@ -170,10 +162,9 @@
             I acknowledge the terms and certify that the above information is accurate.
           </label>
         </div>
-        <button type="submit" class="submit-btn">
+        <button type="submit" class="submit-btn" id="btn-confirm" disabled>
           Confirm Purchase
         </button>
-        </a>
       </form>
     </div>
 
@@ -202,7 +193,6 @@
   </section>
 
   <footer class="footer-section">
-
   </footer>
 
   <!-- SweetAlert2 -->
@@ -211,6 +201,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore-compat.js"></script>
+
   <script>
     // Firebase config
     const firebaseConfig = {
@@ -223,22 +214,10 @@
     const db = firebase.firestore();
 
     // product data
-    const planNames = {
-      pro4: "ApexXAU Intelligent Pro-4",
-      pro5: "ApexXAU Intelligent Pro-5",
-      corex: "ApexXAU Intelligent Core-X"
-    };
-    const planImages = {
-      pro4: "Pro4_CollectorEdition_whiteBG.png",
-      pro5: "Pro5_CollectorEdition_whiteBG.png",
-      corex: "CoreX_PerformanceEdition_whiteBG.png"
-    };
-    const priceMap = {
-      pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 },
-      pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 },
-      corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 }
-    };
-    const monthMap = { monthly: 1, "6m": 6, "12m": 12 };
+    const planNames  = { pro4: "ApexXAU Intelligent Pro-4", pro5: "ApexXAU Intelligent Pro-5", corex: "ApexXAU Intelligent Core-X" };
+    const planImages = { pro4: "Pro4_CollectorEdition_whiteBG.png", pro5: "Pro5_CollectorEdition_whiteBG.png", corex: "CoreX_PerformanceEdition_whiteBG.png" };
+    const priceMap   = { pro4: { monthly: 19.99, "6m": 106.99, "12m": 193.99 }, pro5: { monthly: 39.99, "6m": 213.99, "12m": 388.29 }, corex: { monthly: 59.99, "6m": 321.09, "12m": 582.07 } };
+    const monthMap   = { monthly: 1, "6m": 6, "12m": 12 };
 
     document.addEventListener("DOMContentLoaded", () => {
       auth.onAuthStateChanged(user => {
@@ -259,10 +238,10 @@
     });
 
     function initForm(user) {
-      const qs = new URLSearchParams(location.search);
-      const planKey = (qs.get("plan") || "").toLowerCase();
+      const qs      = new URLSearchParams(location.search);
+      const planKey = (qs.get("plan")    || "").toLowerCase();
       const pkgKey  = (qs.get("package") || "").toLowerCase();
-      const status  = (qs.get("status") || "").toLowerCase(); // <— new
+      const status  = (qs.get("status")  || "").toLowerCase(); // <— new
 
       // เติมข้อมูลลงฟอร์ม
       document.getElementById("email").value    = user.email || "";
@@ -295,27 +274,34 @@
         .addEventListener("submit", async e => {
           e.preventDefault();
 
-          // 1) ถ้ายังไม่จ่ายเงิน → พาไป payment.html
+          // กรณียังไม่จ่ายเงิน → เก็บข้อมูลลง sessionStorage แล้วพาไป payment.html
           if (status !== "paid") {
-            window.location.href =
-              `payment.html?plan=${planKey}&package=${pkgKey}`;
+            const orderData = {
+              email:       document.getElementById("email").value.trim(),
+              fullName:    document.getElementById("fullName").value.trim(),
+              phone:       document.getElementById("phone").value.trim(),
+              mt5Account:  document.getElementById("mt5Account").value.trim(),
+              brokerServer:document.getElementById("brokerServer").value.trim(),
+              planName:    document.getElementById("planName").value,
+              pkg:         document.getElementById("pkg").value,
+              price:       document.getElementById("price").value,
+              expiry:      document.getElementById("expiry").value
+            };
+            sessionStorage.setItem("orderData", JSON.stringify(orderData));
+            window.location.href = "payment.html";
             return;
           }
 
-          // 2) จ่ายแล้ว → สร้าง order + license
+          // กรณีจ่ายเงินแล้ว → สร้าง order + license
           if (!auth.currentUser) return;
           if (!document.getElementById("agree").checked) {
             return Swal.fire("กรุณายอมรับเงื่อนไขก่อน");
           }
-
           const mt5    = document.getElementById("mt5Account").value.trim();
           const broker = document.getElementById("brokerServer").value.trim();
           if (!mt5 || !broker) {
-            return Swal.fire(
-              "กรุณากรอก MT5 Account และ Broker Server ให้ครบ"
-            );
+            return Swal.fire("กรุณากรอก MT5 Account และ Broker Server ให้ครบ");
           }
-  <!-- Removed Order Summary -->
 
           try {
             await db.collection("orders").add({
@@ -334,7 +320,6 @@
               "Your license is confirmed.",
               "success"
             ).then(() => {
-              document.getElementById("download-btn").style.display = "inline-block";
               document.getElementById("btn-confirm").disabled = true;
             });
           } catch (err) {
@@ -343,6 +328,7 @@
         });
     }
   </script>
+
   <script src="../js/confirm-order.js"></script>
 </body>
 </html>
